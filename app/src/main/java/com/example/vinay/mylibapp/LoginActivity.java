@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -40,10 +41,19 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
     Handler handler = new Handler();
 
 
+    AlertDialog.Builder alertDialogBuilder;
+    AlertDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Create a progressDialog instance for the activity to show during network operations
+        alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setView(R.layout.progress);
+        progressDialog = alertDialogBuilder.create();
+
 
         et_pid = findViewById(R.id.et_pid);
         et_pwd = findViewById(R.id.et_pwd);
@@ -60,6 +70,9 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
         btn_login_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                setProgressDialog(true);
+
                 pid = et_pid.getText().toString();
                 pwd = et_pwd.getText().toString();
 
@@ -81,11 +94,13 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
     @Override
     public void sendStudentNameToCaller(String name) {
+        setProgressDialog(false);
         tv_result_login.setText("SUCCESS LOGIN");
     }
 
     @Override
     public void passErrorsToCaller(int errorCode) {
+        setProgressDialog(false);
         tv_result_login.setText("Some error happened"+ errorCode);
     }
 
@@ -113,5 +128,11 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
     @Override
     public void userHasBorrowedNoBooks() {
 
+    }
+
+    private void setProgressDialog(boolean show){
+        // Sauce: https://stackoverflow.com/a/14853439/9485900
+        if (show) progressDialog.show();
+        else progressDialog.dismiss();
     }
 }
