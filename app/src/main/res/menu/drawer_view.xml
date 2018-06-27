@@ -2,16 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/frag1"
+            android:id="@+id/frag_issued_books"
             android:icon="@drawable/ic_launcher_foreground"
-            android:title="Frag 1"/>
+            android:title="Issued Books"/>
         <item
-            android:id="@+id/frag2"
+            android:id="@+id/frag_lib_extras"
             android:icon="@drawable/ic_launcher_foreground"
-            android:title="Frag 2"/>
+            android:title="Library Extras"/>
         <item
-            android:id="@+id/frag3"
+            android:id="@+id/frag_about"
             android:icon="@drawable/ic_launcher_foreground"
-            android:title="Frag 3"/>
+            android:title="About the developers"/>
+        <item
+            android:id="@+id/option_sign_out"
+            android:icon="@drawable/ic_launcher_foreground"
+            android:title="Sign out"/>
     </group>
 </menu>
