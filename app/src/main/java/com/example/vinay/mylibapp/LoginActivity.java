@@ -2,6 +2,9 @@ package com.example.vinay.mylibapp;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
@@ -15,6 +18,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
+
+import static com.example.vinay.mylibapp.GoGoGadget.ERROR_INCORRECT_PID_OR_PASSWORD;
 
 public class LoginActivity extends AppCompatActivity implements MyCallback{
 
@@ -46,10 +51,31 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
     AlertDialog.Builder alertDialogBuilder;
     Dialog loadingDialog;
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    final String titleSharedPrefs = "my_prefs";
+    final String KEY_PID = "pid";
+    final String KEY_PWD = "pwd";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Create SharedPreferences
+        sharedPreferences = getApplicationContext().getSharedPreferences(titleSharedPrefs, MODE_PRIVATE);
+        pid = sharedPreferences.getString(KEY_PID, null);
+        pwd = sharedPreferences.getString(KEY_PWD, null);
+
+        if(pid != null && pwd != null){
+            // There exists previous user
+
+            GoGoGadget goGoGadget = new GoGoGadget((MyCallback) LoginActivity.this,
+                    bundleURLs,
+                    GoGoGadget.LOGIN_AND_GET_COOKIES,
+                    handler);
+            new Thread(goGoGadget).start();
+        }
 
         // Create a loadingDialog instance for the activity to show during network operations
         alertDialogBuilder = new AlertDialog.Builder(this);
@@ -71,6 +97,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
         bundleURLs.putString(GoGoGadget.keyOutDocs, urlOutDocsPage);
 
 
+        //region btn_login_submit OnClickListener
         btn_login_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,6 +115,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
                 new Thread(goGoGadget).start();
             }
         });
+        //endregion
     }
 
     @Override
@@ -97,14 +125,35 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
     @Override
     public void sendStudentNameToCaller(String name) {
+        // This method will be called when login is correct
+
+
         setLoadingDialog(false);
         tv_result_login.setText("SUCCESS LOGIN");
+
+        // Go to MainActivity
+        final AlertDialog loginSuccessDialog = new AlertDialog.Builder(
+                this).create();
+        loginSuccessDialog.setTitle("Login Successful!");
+        loginSuccessDialog.setMessage("Welcome " + name);
+        loginSuccessDialog.setButton(Dialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int whichButton) {
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            }
+        });
+        loginSuccessDialog.show();
     }
 
     @Override
     public void passErrorsToCaller(int errorCode) {
         setLoadingDialog(false);
         tv_result_login.setText("Some error happened"+ errorCode);
+
+        switch (errorCode){
+            case ERROR_INCORRECT_PID_OR_PASSWORD:
+
+        }
     }
 
     @Override
