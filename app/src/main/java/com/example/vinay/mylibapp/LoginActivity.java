@@ -161,6 +161,9 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
             @Override
             public void onClick(DialogInterface dialogInterface, int whichButton) {
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+                // Since we don't want users to come back to this activity, after being logged in
+                finish();
             }
         });
         loginSuccessDialog.show();
