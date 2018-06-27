@@ -288,7 +288,7 @@ class GoGoGadget implements Runnable {
                         myCallback.sendBooksToCaller(books);
                         break;
                     case RETURN_NO_BORROWED_BOOKS:
-                        myCallback.userHasBorrowedNoBooks();
+                        myCallback.sendBooksToCaller(null);
                         break;
 
                     // ERRORS SECTION

@@ -1,6 +1,12 @@
 package com.example.vinay.mylibapp;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -14,19 +20,36 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.vinay.mylibapp.nav_drawer_fragments.IssuedBooksFragment;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.example.vinay.mylibapp.GoGoGadget.ERROR_INCORRECT_PID_OR_PASSWORD;
+import static com.example.vinay.mylibapp.GoGoGadget.ERROR_NOT_LOGGED_IN;
+import static com.example.vinay.mylibapp.GoGoGadget.ERROR_NO_INTERNET;
+import static com.example.vinay.mylibapp.GoGoGadget.ERROR_SERVER_UNREACHABLE;
+import static com.example.vinay.mylibapp.LoginActivity.KEY_COOKIES;
+
+public class MainActivity extends AppCompatActivity implements MyCallback{
 
     private DrawerLayout mDrawerLayout;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
 
+    DataHolder dataHolder = new DataHolder(false);
+    Handler handler = new Handler();
+
     // Loading Dialog
     AlertDialog.Builder alertDialogBuilder;
     Dialog loadingDialog;
+
+    Map<String, String> cookies;
+    List<Book> bookList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +69,28 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
+        //region Get outstanding documents for user before he requests it
+        Intent intent = getIntent();
+        // https://stackoverflow.com/a/7578313/9485900
+        cookies = (HashMap<String, String>)intent.getSerializableExtra(KEY_COOKIES);
+        // Now we have cookies, so get the data in the books
+        GoGoGadget gForBooks = new GoGoGadget((MyCallback) this,
+                dataHolder.getBundleURLs(),
+                GoGoGadget.GET_OUT_DOCS,
+                handler);
+
+        // Set the cookies needed for access
+        gForBooks.setCookies(cookies);
+
+        new Thread(gForBooks).start();
+
+        // Start a indefinite loading dialog
+        setLoadingDialog(true);
+
+        // This will be stopped in one of the callback methods
+
+        //endregion
 
 
 
@@ -140,5 +185,91 @@ public class MainActivity extends AppCompatActivity {
             loadingDialog.dismiss();
         }
     }
+
+    @Override
+    public void sendBooksToCaller(List<Book> books) {
+        bookList = books;
+        setLoadingDialog(false);
+
+        // TODO: Set issued books fragment here
+    }
+
+    @Override
+    public void sendStudentNameToCaller(String name) {
+        // Used only during login
+        // Will not be called in this activity
+    }
+
+    @Override
+    public void passErrorsToCaller(final int errorCode) {
+        setLoadingDialog(false);
+        switch (errorCode){
+            case ERROR_NO_INTERNET:
+            case ERROR_SERVER_UNREACHABLE:
+            case -8:
+
+                // Create AlertDialog for network failure
+                AlertDialog loginFailedDialog = new AlertDialog.Builder(this).create();
+                if ( errorCode == ERROR_NO_INTERNET) {
+                    loginFailedDialog.setTitle("You are not connected to the internet");
+                    loginFailedDialog.setMessage("Please connect to the internet and try again.");
+                } else if ( errorCode == ERROR_SERVER_UNREACHABLE) {
+                    loginFailedDialog.setTitle("Connection to the server failed!");
+                    loginFailedDialog.setMessage("Server is unreachable.");
+                }
+
+                loginFailedDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+
+                        if(errorCode == ERROR_NO_INTERNET || errorCode == ERROR_SERVER_UNREACHABLE){
+                            // Quit the app
+                            finish();
+                            System.exit(0);
+                        }
+
+                    }
+                });
+                break;
+
+            case ERROR_INCORRECT_PID_OR_PASSWORD:
+            case ERROR_NOT_LOGGED_IN:
+                throw new RuntimeException("If you have reached till MainActivity" +
+                        "then these errors will not come.\n" +
+                        "Check if you passed the cookies from the correct" +
+                        " login, to the MainActivity intent");
+            default:
+                    Toast.makeText(this,"Error" + errorCode, Toast.LENGTH_SHORT).show();
+
+        }
+
+    }
+
+    @Override
+    public String getPid() {
+        // Used only during login
+        // Will not be called in this activity
+        return null;
+    }
+
+    @Override
+    public String getPwd() {
+        // Used only during login
+        // Will not be called in this activity
+        return null;
+    }
+
+    @Override
+    public boolean isConnectedToInternet() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        return isConnected;
+    }
+
 
 }

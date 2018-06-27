@@ -14,5 +14,5 @@ public interface MyCallback {
     String getPid();
     String getPwd();
     boolean isConnectedToInternet();
-    void userHasBorrowedNoBooks();
+
 }

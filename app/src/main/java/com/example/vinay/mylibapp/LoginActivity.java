@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.HashMap;
 import java.util.List;
 
 import static com.example.vinay.mylibapp.GoGoGadget.ERROR_INCORRECT_PID_OR_PASSWORD;
@@ -26,6 +27,8 @@ import static com.example.vinay.mylibapp.GoGoGadget.ERROR_NO_INTERNET;
 import static com.example.vinay.mylibapp.GoGoGadget.ERROR_SERVER_UNREACHABLE;
 
 public class LoginActivity extends AppCompatActivity implements MyCallback{
+
+    public static final String KEY_COOKIES = "cookies";
 
     EditText et_pid;
     EditText et_pwd;
@@ -54,6 +57,8 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
     // In the full_screen_loading layout
     ProgressBar progressBar;
+
+    GoGoGadget goGoGadget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +89,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
             progressBar = findViewById(R.id.network_progress);
 
-            GoGoGadget goGoGadget = new GoGoGadget((MyCallback) LoginActivity.this,
+            goGoGadget = new GoGoGadget((MyCallback) LoginActivity.this,
                     dataHolder.getBundleURLs(),
                     GoGoGadget.LOGIN_AND_GET_COOKIES,
                     handler);
@@ -118,7 +123,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
                     pwd = et_pwd.getText().toString();
 
 
-                    final GoGoGadget goGoGadget = new GoGoGadget((MyCallback) LoginActivity.this,
+                    goGoGadget = new GoGoGadget((MyCallback) LoginActivity.this,
                             dataHolder.getBundleURLs(),
                             GoGoGadget.LOGIN_AND_GET_COOKIES,
                             handler);
@@ -160,7 +165,15 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
         loginSuccessDialog.setButton(Dialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int whichButton) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
+                // https://stackoverflow.com/a/7578313/9485900
+                // Convert logged in cookies to HashMap since
+                // HashMap is Serializable, but Map isn't
+                intent.putExtra(KEY_COOKIES,(HashMap<String, String>) goGoGadget.getCookies());
+
+                startActivity(intent);
 
                 // Since we don't want users to come back to this activity, after being logged in
                 finish();
@@ -266,10 +279,6 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
         return isConnected;
     }
 
-    @Override
-    public void userHasBorrowedNoBooks() {
-
-    }
 
     private void setLoadingDialog(boolean show){
         // Sauce for dialog creation, and this setter method:
