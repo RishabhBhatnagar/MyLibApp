@@ -29,21 +29,10 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
     TextView tv_result_login;
     String pid;
     String pwd;
+    
 
-    // Main Page where login Form is present
-    static String urlMainPage = "http://115.248.171.105:82/webopac/";
+    DataHolder dataHolder = new DataHolder(false);
 
-    // Complete url to the form action attribute
-    // where we send a POST
-    static String urlLoginFormAction = urlMainPage + "opac.asp?m_firsttime=Y&m_memchk_flg=T";
-
-    // Url of docs page
-    static String urlOutDocsPage = "http://115.248.171.105:82/webopac/l_renew.asp";
-
-    // Url where reissue form is sent
-    // static String urlOutDocsFormAction = l_renew1.asp;
-
-    Bundle bundleURLs;
 
     Handler handler = new Handler();
 
@@ -62,6 +51,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
         // Create SharedPreferences
         sharedPreferences = getApplicationContext().getSharedPreferences(titleSharedPrefs, MODE_PRIVATE);
         pid = sharedPreferences.getString(KEY_PID, null);
@@ -71,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
             // There exists previous user
 
             GoGoGadget goGoGadget = new GoGoGadget((MyCallback) LoginActivity.this,
-                    bundleURLs,
+                    dataHolder.getBundleURLs(),
                     GoGoGadget.LOGIN_AND_GET_COOKIES,
                     handler);
             new Thread(goGoGadget).start();
@@ -90,11 +80,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
         btn_login_submit = findViewById(R.id.btn_login_submit);
         tv_result_login = findViewById(R.id.tv_login_result);
 
-        // Create a bundle to pass in the URLs to the GoGoGadget object
-        bundleURLs = new Bundle();
-        bundleURLs.putString(GoGoGadget.keyMainPage, urlMainPage);
-        bundleURLs.putString(GoGoGadget.keyLoginForm, urlLoginFormAction);
-        bundleURLs.putString(GoGoGadget.keyOutDocs, urlOutDocsPage);
+
 
 
         //region btn_login_submit OnClickListener
@@ -109,7 +95,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
 
                 final GoGoGadget goGoGadget = new GoGoGadget((MyCallback) LoginActivity.this,
-                        bundleURLs,
+                        dataHolder.getBundleURLs(),
                         GoGoGadget.LOGIN_AND_GET_COOKIES,
                         handler);
                 new Thread(goGoGadget).start();
