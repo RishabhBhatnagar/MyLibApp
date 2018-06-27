@@ -21,6 +21,9 @@ import android.widget.TextView;
 import java.util.List;
 
 import static com.example.vinay.mylibapp.GoGoGadget.ERROR_INCORRECT_PID_OR_PASSWORD;
+import static com.example.vinay.mylibapp.GoGoGadget.ERROR_NOT_LOGGED_IN;
+import static com.example.vinay.mylibapp.GoGoGadget.ERROR_NO_INTERNET;
+import static com.example.vinay.mylibapp.GoGoGadget.ERROR_SERVER_UNREACHABLE;
 
 public class LoginActivity extends AppCompatActivity implements MyCallback{
 
@@ -164,28 +167,59 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
     }
 
     @Override
-    public void passErrorsToCaller(int errorCode) {
+    public void passErrorsToCaller(final int errorCode) {
         setLoadingDialog(false);
 //        tv_result_login.setText("Some error happened"+ errorCode);
 
         switch (errorCode){
             case ERROR_INCORRECT_PID_OR_PASSWORD:
+            case ERROR_NO_INTERNET:
+            case ERROR_SERVER_UNREACHABLE:
+            case -8: // This line is used only because the if else ladder below gives a warning for
+                // ERROR_SERVER_UNREACHABLE always true, since it's the last value for this case
+                // So, to avoid that warning, adding a impossible value here.
+
+                //region Handle errors by setting message on alert dialog
 
                 // Clear incorrect pid/pwd if present
                 // TODO: Maybe change editor.clear() to making null for those specific keys
-                editor.clear();
-                editor.apply();
+                if(errorCode == ERROR_INCORRECT_PID_OR_PASSWORD) {
+                    editor.clear();
+                    editor.apply();
+                }
 
 
                 // Create AlertDialog for login failure
                 AlertDialog loginFailedDialog = new AlertDialog.Builder(this).create();
                 loginFailedDialog.setTitle("Login Failed!");
-                loginFailedDialog.setMessage("Incorrect PID or password");
+
+                // Set reason for failure
+                if(errorCode == ERROR_INCORRECT_PID_OR_PASSWORD)
+                    loginFailedDialog.setMessage("Incorrect PID or password");
+                else if ( errorCode == ERROR_NO_INTERNET) {
+                    loginFailedDialog.setTitle("You are not connected to the internet");
+                    loginFailedDialog.setMessage("Please connect to the internet and try again.");
+                } else if ( errorCode == ERROR_SERVER_UNREACHABLE) {
+                    loginFailedDialog.setMessage("Server is unreachable.");
+                }
+
+
+
                 loginFailedDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
 
+                        if(errorCode == ERROR_NO_INTERNET || errorCode == ERROR_SERVER_UNREACHABLE){
+                            // Quit the app
+                            // If we don't quit here, and let the activity be recreated,
+                            // Then it will be stuck in a loop while there is no internet
+                            finish();
+                            System.exit(0);
+                        }
+
+
+                        // This should be the last statement in this block
                         // Restart activity
                         recreate();
                         // Now, since we have cleared the shared prefs,
@@ -196,10 +230,16 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
                 // Show the dialog
                 loginFailedDialog.show();
-                break;
-            //TODO: Other errors' handling remains
+            //endregion
+            break;
 
-        }
+            case ERROR_NOT_LOGGED_IN:
+                throw new RuntimeException("This error will arise if requesting outstanding docs" +
+                        "logging in.\n" +
+                        "You should not be trying to do that from this activity.;");
+            default:
+                throw new RuntimeException("Unknown Error code");
+        }// switch
     }
 
     @Override
