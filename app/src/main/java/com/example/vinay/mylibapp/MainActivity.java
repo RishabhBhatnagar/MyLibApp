@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
@@ -24,6 +25,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.vinay.mylibapp.nav_drawer_fragments.IssuedBooksFragment;
+import com.example.vinay.mylibapp.nav_drawer_fragments.LibExtrasFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +37,7 @@ import static com.example.vinay.mylibapp.GoGoGadget.ERROR_NOT_LOGGED_IN;
 import static com.example.vinay.mylibapp.GoGoGadget.ERROR_NO_INTERNET;
 import static com.example.vinay.mylibapp.GoGoGadget.ERROR_SERVER_UNREACHABLE;
 import static com.example.vinay.mylibapp.LoginActivity.KEY_COOKIES;
+import static com.example.vinay.mylibapp.LoginActivity.titleSharedPrefs;
 
 public class MainActivity extends AppCompatActivity implements MyCallback{
 
@@ -128,21 +131,65 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         Class fragmentClass;
         switch(menuItem.getItemId()) {
             case R.id.frag_issued_books:
-                default:
+            default:
 
                 //fragmentClass = FirstFragment.class;
                 // TODO: Insert book list in bundle
                 fragment = IssuedBooksFragment.newInstance(bookList);
                 break;
-//            case R.id.frag_lib_extras:
-//                fragmentClass = SecondFragment.class;
-//                break;
+            case R.id.frag_lib_extras:
+                fragment = new LibExtrasFragment();
+                // Using default constructor, since no need for custom args
+
+                break;
 //            case R.id.frag_about:
 //                fragmentClass = ThirdFragment.class;
 //                break;
-//            case R.id.option_sign_out:
-//                // TODO: Create sign out alert dialog
-//                break;
+            case R.id.option_sign_out:
+                // TODO: Create sign out alert dialog
+                AlertDialog signOut = new AlertDialog.Builder(this).create();
+                signOut.setTitle("Do you want to sign out?");
+                signOut.setButton(DialogInterface.BUTTON_POSITIVE,
+                        "YES",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                SharedPreferences sp = getSharedPreferences(titleSharedPrefs, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sp.edit();
+                                editor.apply();
+
+                                // TODO: Maybe only clear the two keys
+                                editor.clear();
+                                editor.apply();
+
+                                // Go back to LoginActivity
+                                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+
+                                // End this activity
+                                finish();
+                            }
+                        });
+                signOut.setButton(DialogInterface.BUTTON_NEGATIVE,
+                        "NO",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // TODO: Load IssuedBooks
+
+                                // Set check item to IssuedBooksFragment
+                                nvDrawer.getMenu().getItem(0).setChecked(true);
+
+                                // Dismiss the dialog
+                                dialogInterface.dismiss();
+                            }
+                        });
+
+                // Actually show the alert dialog
+                signOut.show();
+
+                // No Fragment for sign out option
+                return;
+
 
 //            default:
                // fragmentClass = FirstFragment.class;
@@ -191,10 +238,11 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
     @Override
     public void sendBooksToCaller(List<Book> books) {
+        // This method will be executed after onCreate finishes
+
         bookList = books;
         setLoadingDialog(false);
 
-        // TODO: Set issued books fragment here
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         // Set books details

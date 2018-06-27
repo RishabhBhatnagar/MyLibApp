@@ -51,9 +51,9 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-    final String titleSharedPrefs = "my_prefs";
-    final String KEY_PID = "pid";
-    final String KEY_PWD = "pwd";
+    public static final String titleSharedPrefs = "my_prefs";
+    public static final String KEY_PID = "pid";
+    public static final String KEY_PWD = "pwd";
 
     // In the full_screen_loading layout
     ProgressBar progressBar;
