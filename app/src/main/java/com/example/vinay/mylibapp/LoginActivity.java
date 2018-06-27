@@ -1,5 +1,6 @@
 package com.example.vinay.mylibapp;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -8,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -42,17 +44,19 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
 
     AlertDialog.Builder alertDialogBuilder;
-    AlertDialog progressDialog;
+    Dialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Create a progressDialog instance for the activity to show during network operations
+        // Create a loadingDialog instance for the activity to show during network operations
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(R.layout.progress);
-        progressDialog = alertDialogBuilder.create();
+        loadingDialog = alertDialogBuilder.create();
+        loadingDialog.setCancelable(false);
+        loadingDialog.setCanceledOnTouchOutside(false);
 
 
         et_pid = findViewById(R.id.et_pid);
@@ -71,12 +75,11 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
             @Override
             public void onClick(View view) {
 
-                setProgressDialog(true);
+                setLoadingDialog(true);
 
                 pid = et_pid.getText().toString();
                 pwd = et_pwd.getText().toString();
 
-                // TODO: Display loading screen with methods in GoGoGadget and deassign them
 
                 final GoGoGadget goGoGadget = new GoGoGadget((MyCallback) LoginActivity.this,
                         bundleURLs,
@@ -94,13 +97,13 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
     @Override
     public void sendStudentNameToCaller(String name) {
-        setProgressDialog(false);
+        setLoadingDialog(false);
         tv_result_login.setText("SUCCESS LOGIN");
     }
 
     @Override
     public void passErrorsToCaller(int errorCode) {
-        setProgressDialog(false);
+        setLoadingDialog(false);
         tv_result_login.setText("Some error happened"+ errorCode);
     }
 
@@ -130,9 +133,14 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
     }
 
-    private void setProgressDialog(boolean show){
-        // Sauce: https://stackoverflow.com/a/14853439/9485900
-        if (show) progressDialog.show();
-        else progressDialog.dismiss();
+    private void setLoadingDialog(boolean show){
+        // Sauce for dialog creation, and this setter method:
+        // https://stackoverflow.com/a/14853439/9485900
+
+        if (show) {
+            loadingDialog.show();
+        } else {
+            loadingDialog.dismiss();
+        }
     }
 }
