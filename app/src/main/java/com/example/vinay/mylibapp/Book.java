@@ -109,4 +109,33 @@ public class Book implements Parcelable {
                 ", canRenew=" + canRenew +
                 '}';
     }
+
+    public String getAcc_no() {
+        return acc_no;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDueDate() {
+        return dueDate;
+    }
+
+    public String getFineAmount() {
+        return fineAmount;
+    }
+
+    public String getRenewCount() {
+        return renewCount;
+    }
+
+    public String getReservations() {
+        return reservations;
+    }
+
+    public boolean isCanRenew() {
+        return canRenew;
+    }
+
 }

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.vinay.mylibapp.nav_drawer_fragments.IssuedBooksFragment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
     Map<String, String> cookies;
     List<Book> bookList;
+    GoGoGadget gForBooks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         // https://stackoverflow.com/a/7578313/9485900
         cookies = (HashMap<String, String>)intent.getSerializableExtra(KEY_COOKIES);
         // Now we have cookies, so get the data in the books
-        GoGoGadget gForBooks = new GoGoGadget((MyCallback) this,
+        gForBooks = new GoGoGadget((MyCallback) this,
                 dataHolder.getBundleURLs(),
                 GoGoGadget.GET_OUT_DOCS,
                 handler);
@@ -129,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
                 //fragmentClass = FirstFragment.class;
                 // TODO: Insert book list in bundle
-                fragment = IssuedBooksFragment.newInstance(bundle);
+                fragment = IssuedBooksFragment.newInstance(bookList);
                 break;
 //            case R.id.frag_lib_extras:
 //                fragmentClass = SecondFragment.class;
@@ -192,6 +195,13 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         setLoadingDialog(false);
 
         // TODO: Set issued books fragment here
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // Set books details
+        Fragment fragment = IssuedBooksFragment.newInstance(books);
+
+        fragmentManager.beginTransaction().replace(R.id.fragment_frame, fragment).commit();
+
     }
 
     @Override

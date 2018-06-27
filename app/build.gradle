@@ -29,6 +29,9 @@ dependencies {
     // Nav drawer
     implementation 'com.android.support:design:27.1.1'
 
+    // Card View
+    implementation 'com.android.support:cardview-v7:27.1.1'
+
     //Jsoup
     compile 'org.jsoup:jsoup:1.11.2'
 }
