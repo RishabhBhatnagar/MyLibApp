@@ -62,21 +62,23 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Create a loadingDialog instance for the activity to show during network operations
+        //region Create a loadingDialog instance for the activity to show during network operations
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(R.layout.progress);
         loadingDialog = alertDialogBuilder.create();
         loadingDialog.setCancelable(false);
         loadingDialog.setCanceledOnTouchOutside(false);
+        //endregion
 
-        // Set a Toolbar to replace the ActionBar
+        //region Setup a Toolbar to replace the ActionBar
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        //endregion
 
-        //region Get outstanding documents for user before he requests it
+        //region Get outstanding documents for user before he requests it, ie in the onCreate
         Intent intent = getIntent();
         // https://stackoverflow.com/a/7578313/9485900
         cookies = (HashMap<String, String>)intent.getSerializableExtra(KEY_COOKIES);
@@ -97,8 +99,6 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         // This will be stopped in one of the callback methods
 
         //endregion
-
-
 
         // Find our drawer view
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -126,9 +126,8 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
     private void selectDrawerItem(MenuItem menuItem) {
         // Create a new fragment and specify the fragment to show based on nav item clicked
-        Fragment fragment = null;
-        Bundle bundle = null;
-        Class fragmentClass;
+        Fragment fragment;
+
         switch(menuItem.getItemId()) {
             case R.id.frag_issued_books:
             default:
@@ -149,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 // TODO: Create sign out alert dialog
                 AlertDialog signOut = new AlertDialog.Builder(this).create();
                 signOut.setTitle("Do you want to sign out?");
+                //region Set Positive Button for signOut
                 signOut.setButton(DialogInterface.BUTTON_POSITIVE,
                         "YES",
                         new DialogInterface.OnClickListener() {
@@ -169,20 +169,32 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                                 finish();
                             }
                         });
+                //endregion
+                //region Set Negative Button for signOut
                 signOut.setButton(DialogInterface.BUTTON_NEGATIVE,
                         "NO",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                // TODO: Load IssuedBooks
 
-                                // Set check item to IssuedBooksFragment
-                                nvDrawer.getMenu().getItem(0).setChecked(true);
+                                //region Set the IssuedBooksFragment when sign out is denied
+
+                                // Find the menu item for Issued Books
+                                MenuItem menuItemIssuedBooks =
+                                        nvDrawer.getMenu().findItem(R.id.frag_issued_books);
+
+                                // Highlight it in the drawer
+                                menuItemIssuedBooks.setChecked(true);
+
+                                // Call the logic needed to set IssuedBooksFragment on FrameLayout
+                                selectDrawerItem(menuItemIssuedBooks);
+                                //endregion
 
                                 // Dismiss the dialog
                                 dialogInterface.dismiss();
                             }
                         });
+                //endregion
 
                 // Actually show the alert dialog
                 signOut.show();
@@ -190,28 +202,15 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 // No Fragment for sign out option
                 return;
 
+        }// switch
 
-//            default:
-               // fragmentClass = FirstFragment.class;
-        }
-
-//        try {
-//            fragment = (Fragment) fragmentClass.newInstance(bundle);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
 
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fragment_frame, fragment).commit();
 
-        // Highlight the selected item has been done by NavigationView
-        //menuItem.setChecked(true); //already done in the listener
         // Set action bar title
         setTitle(menuItem.getTitle());
-        // Close the navigation drawer
-        //mDrawerLayout.closeDrawers(); //already done in the listener
-
 
     }
 
@@ -219,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                // Open drawer with the button on action bar
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
         }
@@ -264,9 +264,11 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         switch (errorCode){
             case ERROR_NO_INTERNET:
             case ERROR_SERVER_UNREACHABLE:
-            case -8:
+            case -8:// This line is used only because the if else ladder below gives a warning for
+                // ERROR_SERVER_UNREACHABLE always true, since it's the last value for this case
+                // So, to avoid that warning, adding a impossible value here.
 
-                // Create AlertDialog for network failure
+                //region Create AlertDialog(loginFailedDialog) for network failure
                 AlertDialog loginFailedDialog = new AlertDialog.Builder(this).create();
                 if ( errorCode == ERROR_NO_INTERNET) {
                     loginFailedDialog.setTitle("You are not connected to the internet");
@@ -275,7 +277,9 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                     loginFailedDialog.setTitle("Connection to the server failed!");
                     loginFailedDialog.setMessage("Server is unreachable.");
                 }
+                //endregion
 
+                //region loginFailedDialog OK Button
                 loginFailedDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -289,6 +293,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
                     }
                 });
+                //endregion
                 break;
 
             case ERROR_INCORRECT_PID_OR_PASSWORD:

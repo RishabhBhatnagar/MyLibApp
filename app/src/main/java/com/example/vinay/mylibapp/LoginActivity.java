@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
     Handler handler = new Handler();
 
-
+    // For loading dialog
     AlertDialog.Builder alertDialogBuilder;
     Dialog loadingDialog;
 
@@ -137,7 +137,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
     @Override
     public void sendBooksToCaller(List<Book> books) {
-
+        // Do nothing, since this activity will never request the books
     }
 
     @Override
@@ -155,14 +155,17 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
         editor.apply();
 
         setLoadingDialog(false);
-//        tv_result_login.setText("SUCCESS LOGIN");
 
         // Go to MainActivity
         final AlertDialog loginSuccessDialog = new AlertDialog.Builder(
                 this).create();
         loginSuccessDialog.setTitle("Login Successful!");
         loginSuccessDialog.setMessage("Welcome " + name);
-        loginSuccessDialog.setButton(Dialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+        //region Set OK button for loginSuccessDialog
+        loginSuccessDialog.setButton(
+                Dialog.BUTTON_NEUTRAL,
+                "OK",
+                new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int whichButton) {
 
@@ -179,6 +182,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
                 finish();
             }
         });
+        //endregion
         loginSuccessDialog.show();
     }
 
