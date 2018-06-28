@@ -66,7 +66,7 @@ public class IssuedBooksFragment extends Fragment {
         }
 
         // Setup the recyclerview
-        recyclerView = view.findViewById(R.id.frag_issued_books_recycler_view);
+        recyclerView = view.findViewById(R.id.issued_books_recycler_view);
         mBooksAdapter = new BooksAdapter(bookList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);

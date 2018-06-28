@@ -24,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.vinay.mylibapp.nav_drawer_fragments.AboutFragment;
 import com.example.vinay.mylibapp.nav_drawer_fragments.IssuedBooksFragment;
 import com.example.vinay.mylibapp.nav_drawer_fragments.LibExtrasFragment;
 
@@ -141,11 +142,11 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 // Using default constructor, since no need for custom args
 
                 break;
-//            case R.id.frag_about:
-//                fragmentClass = ThirdFragment.class;
-//                break;
+            case R.id.frag_about:
+                fragment = new AboutFragment();
+                break;
             case R.id.option_sign_out:
-                // TODO: Create sign out alert dialog
+
                 AlertDialog signOut = new AlertDialog.Builder(this).create();
                 signOut.setTitle("Do you want to sign out?");
                 //region Set Positive Button for signOut
