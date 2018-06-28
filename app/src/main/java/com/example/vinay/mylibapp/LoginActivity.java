@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
     public static final String KEY_PID = "pid";
     public static final String KEY_PWD = "pwd";
 
-    // In the full_screen_loading layout
+    // In the loading_screen layout
     ProgressBar progressBar;
 
     GoGoGadget goGoGadget;
@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
         // Create a loadingDialog instance for the activity to show during network operations
         alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setView(R.layout.progress);
+        alertDialogBuilder.setView(R.layout.loading_dialog);
         loadingDialog = alertDialogBuilder.create();
         loadingDialog.setCancelable(false);
         loadingDialog.setCanceledOnTouchOutside(false);
@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
             //region Previous logged in user exists
 
             // Then set loading screen as background
-            setContentView(R.layout.full_screen_loading);
+            setContentView(R.layout.loading_screen);
 
             progressBar = findViewById(R.id.network_progress);
 
@@ -146,7 +146,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
     public void sendStudentNameToCaller(String name) {
         // This method will be called when login is correct
 
-        // Do this only in the full_screen_loading layout, ie when it's not null
+        // Do this only in the loading_screen layout, ie when it's not null
         // Make the progressbar disappear
         if(progressBar != null)
             progressBar.setVisibility(View.GONE);
