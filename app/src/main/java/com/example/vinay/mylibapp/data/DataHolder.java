@@ -1,6 +1,8 @@
-package com.example.vinay.mylibapp;
+package com.example.vinay.mylibapp.data;
 
 import android.os.Bundle;
+
+import com.example.vinay.mylibapp.GoGoGadget;
 
 /**
  * Created by vinay on 27-06-2018.

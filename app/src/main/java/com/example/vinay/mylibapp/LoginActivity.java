@@ -12,11 +12,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.example.vinay.mylibapp.data.Book;
+import com.example.vinay.mylibapp.data.DataHolder;
 
 import java.util.HashMap;
 import java.util.List;

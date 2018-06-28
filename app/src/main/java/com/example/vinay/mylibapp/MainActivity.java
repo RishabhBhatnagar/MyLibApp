@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -24,11 +23,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.vinay.mylibapp.data.Book;
+import com.example.vinay.mylibapp.data.DataHolder;
 import com.example.vinay.mylibapp.nav_drawer_fragments.AboutFragment;
 import com.example.vinay.mylibapp.nav_drawer_fragments.IssuedBooksFragment;
 import com.example.vinay.mylibapp.nav_drawer_fragments.LibExtrasFragment;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.example.vinay.mylibapp;
+package com.example.vinay.mylibapp.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

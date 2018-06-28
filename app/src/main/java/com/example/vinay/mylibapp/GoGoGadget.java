@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 
+import com.example.vinay.mylibapp.data.Book;
+
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,7 +19,7 @@ import java.util.Map;
 /**
  * Created by vinay on 14-06-2018.
  */
-class GoGoGadget implements Runnable {
+public class GoGoGadget implements Runnable {
     // Thread class to do Network requests
 
     // References to Calling activity
