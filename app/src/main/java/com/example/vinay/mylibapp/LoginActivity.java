@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_login);
-        // set ContentView is done later, depending on wheter previous logged in user exists
+        // set ContentView is done later, depending on whether previous logged in user exists
 
         // Create a loadingDialog instance for the activity to show during network operations
         alertDialogBuilder = new AlertDialog.Builder(this);
@@ -110,9 +110,9 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
             btn_login_submit = findViewById(R.id.btn_login_submit);
             tv_result_login = findViewById(R.id.tv_login_result);
 
-            // TODO: Debug
-            btn_login_submit.setText("BBBB");
-            // if button has this text, even after incorrect login, then its working correct
+            // TODO: Setup the views and make them pretty
+            btn_login_submit.setText("E");
+
 
             //region btn_login_submit OnClickListener
             btn_login_submit.setOnClickListener(new View.OnClickListener() {
@@ -191,7 +191,6 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
     @Override
     public void passErrorsToCaller(final int errorCode) {
         setLoadingDialog(false);
-//        tv_result_login.setText("Some error happened"+ errorCode);
 
         switch (errorCode){
             case ERROR_INCORRECT_PID_OR_PASSWORD:
@@ -257,7 +256,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
             case ERROR_NOT_LOGGED_IN:
                 throw new RuntimeException("This error will arise if requesting outstanding docs" +
-                        "logging in.\n" +
+                        " without logging in.\n" +
                         "You should not be trying to do that from this activity.;");
             default:
                 throw new RuntimeException("Unknown Error code");

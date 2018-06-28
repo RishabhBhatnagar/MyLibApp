@@ -127,23 +127,21 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
     private void selectDrawerItem(MenuItem menuItem) {
         // Create a new fragment and specify the fragment to show based on nav item clicked
-        Fragment fragment;
+        Fragment newFragmentToPutInFrame;
 
         switch(menuItem.getItemId()) {
             case R.id.frag_issued_books:
             default:
-
-                //fragmentClass = FirstFragment.class;
-                // TODO: Insert book list in bundle
-                fragment = IssuedBooksFragment.newInstance(bookList);
+                // default is used, so that IssuedBooksFragment is loaded for invalid menuItme
+                newFragmentToPutInFrame = IssuedBooksFragment.newInstance(bookList);
                 break;
             case R.id.frag_lib_extras:
-                fragment = new LibExtrasFragment();
+                newFragmentToPutInFrame = new LibExtrasFragment();
                 // Using default constructor, since no need for custom args
 
                 break;
             case R.id.frag_about:
-                fragment = new AboutFragment();
+                newFragmentToPutInFrame = new AboutFragment();
                 break;
             case R.id.option_sign_out:
 
@@ -159,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                                 SharedPreferences.Editor editor = sp.edit();
                                 editor.apply();
 
-                                // TODO: Maybe only clear the two keys
+                                // TODO: Maybe only clear the two keys, instead of clearing the shared prefs
                                 editor.clear();
                                 editor.apply();
 
@@ -208,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragment_frame, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_frame, newFragmentToPutInFrame).commit();
 
         // Set action bar title
         setTitle(menuItem.getTitle());

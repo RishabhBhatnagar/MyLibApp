@@ -11,14 +11,14 @@ import com.example.vinay.mylibapp.GoGoGadget;
 public class DataHolder {
 
     // Main Page where login Form is present
-    static String urlMainPage = "http://115.248.171.105:82/webopac/";
+    private static String urlMainPage = "http://115.248.171.105:82/webopac/";
 
     // Complete url to the form action attribute
     // where we send a POST
-    static String urlLoginFormAction = urlMainPage + "opac.asp?m_firsttime=Y&m_memchk_flg=T";
+    private static String urlLoginFormAction = urlMainPage + "opac.asp?m_firsttime=Y&m_memchk_flg=T";
 
     // Url of docs page
-    static String urlOutDocsPage = "http://115.248.171.105:82/webopac/l_renew.asp";
+    private static String urlOutDocsPage = "http://115.248.171.105:82/webopac/l_renew.asp";
 
     // Url where reissue form is sent
     // static String urlOutDocsFormAction = l_renew1.asp;
