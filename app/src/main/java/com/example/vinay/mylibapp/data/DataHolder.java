@@ -9,6 +9,13 @@ import com.example.vinay.mylibapp.GoGoGadget;
  */
 
 public class DataHolder {
+    // Using a singleton design pattern, since we only need one instance for this class
+
+    // To set data for flask server, set this boolean to true
+    private boolean testing = false;
+
+    // Single instance for DataHolder that will be shared throughout the application
+    private static DataHolder dataHolder;
 
     // Main Page where login Form is present
     private static String urlMainPage = "http://115.248.171.105:82/webopac/";
@@ -29,7 +36,7 @@ public class DataHolder {
         return bundleURLs;
     }
 
-    public DataHolder(boolean testing) {
+    private DataHolder() {
 
         if (testing) {
             urlMainPage = "http://192.168.1.66:5000/";
@@ -42,5 +49,12 @@ public class DataHolder {
         bundleURLs.putString(GoGoGadget.keyMainPage, urlMainPage);
         bundleURLs.putString(GoGoGadget.keyLoginForm, urlLoginFormAction);
         bundleURLs.putString(GoGoGadget.keyOutDocs, urlOutDocsPage);
+    }
+
+    public static DataHolder getDataHolder(){
+        if(dataHolder == null){
+            dataHolder = new DataHolder();
+        }
+        return dataHolder;
     }
 }

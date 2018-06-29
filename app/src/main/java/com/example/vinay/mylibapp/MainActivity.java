@@ -47,7 +47,8 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
 
-    DataHolder dataHolder = new DataHolder(false);
+    // Obtain the data holder object
+    DataHolder dataHolder = DataHolder.getDataHolder();
     Handler handler = new Handler();
 
     // Loading Dialog

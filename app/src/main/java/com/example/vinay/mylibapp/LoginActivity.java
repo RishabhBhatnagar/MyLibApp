@@ -40,9 +40,9 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
     String pwd;
 
 
-    // Make this true, to run on flask server
-    // If testing=true, then accordingly change urls in the DataHolder constructor
-    DataHolder dataHolder = new DataHolder(false);
+    // To test on flask server, change the boolean testing variable in DataHolder class in the
+    // private constructor
+    DataHolder dataHolder = DataHolder.getDataHolder();
 
 
     Handler handler = new Handler();
