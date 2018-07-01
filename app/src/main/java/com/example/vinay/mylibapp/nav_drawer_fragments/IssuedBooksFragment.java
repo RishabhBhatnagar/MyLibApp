@@ -87,11 +87,15 @@ public class IssuedBooksFragment extends Fragment {
         private List<Book> bookList;
 
         public class MyViewHolder extends RecyclerView.ViewHolder{
-            public TextView tv_title;
+            public TextView tv_title,tv_duedate,tv_fine,tv_reissue_count;
 
             public MyViewHolder(View view) {
                 super(view);
-                tv_title = (TextView) view.findViewById(R.id.title);
+                tv_title = (TextView) view.findViewById(R.id.name);
+                tv_duedate = view.findViewById(R.id.due_date);
+                tv_fine = view.findViewById(R.id.fine_amt);
+                tv_reissue_count=view.findViewById(R.id.re_issue_counter);
+
             }
         }
 
@@ -112,6 +116,9 @@ public class IssuedBooksFragment extends Fragment {
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             Book currentBook = bookList.get(position);
             holder.tv_title.setText(currentBook.getTitle());
+            holder.tv_duedate.setText(currentBook.getDueDate());
+            holder.tv_fine.setText(currentBook.getFineAmount());
+            holder.tv_reissue_count.setText(currentBook.getRenewCount());
         }
 
         @Override
