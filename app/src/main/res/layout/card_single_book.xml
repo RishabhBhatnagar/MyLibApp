@@ -7,16 +7,17 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="5dp"
+    android:clickable="true"
 
     card_view:cardElevation="@dimen/cardview_default_elevation"
     card_view:cardCornerRadius="5dp"
-    android:background="#d1cccc">
+    >
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/relative_layout"
-        android:background="#d1cccc">
+        android:background="@drawable/selector_row">
 
 
         <TextView
@@ -153,11 +154,8 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
 
+
                 />
-
-
-
-
 
         </RelativeLayout>
 

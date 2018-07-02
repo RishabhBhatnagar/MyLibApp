@@ -1,18 +1,29 @@
 package com.example.vinay.mylibapp.nav_drawer_fragments;
 
+import android.content.ClipData;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.vinay.mylibapp.MainActivity;
 import com.example.vinay.mylibapp.data.Book;
 import com.example.vinay.mylibapp.R;
 
@@ -29,6 +40,7 @@ public class IssuedBooksFragment extends Fragment {
     List<Book> bookList = new ArrayList<>();
     private RecyclerView recyclerView;
     private BooksAdapter mBooksAdapter;
+    private Button re_issue;
 
     public static IssuedBooksFragment newInstance(List<Book> bookList){
         IssuedBooksFragment issuedBooksFragment = new IssuedBooksFragment();
@@ -73,7 +85,6 @@ public class IssuedBooksFragment extends Fragment {
         recyclerView.setAdapter(mBooksAdapter);
 
 
-
         return view;
     }
 
@@ -85,16 +96,47 @@ public class IssuedBooksFragment extends Fragment {
     private static class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.MyViewHolder> {
 
         private List<Book> bookList;
+        public Button reIssueButtton;
+
+
 
         public class MyViewHolder extends RecyclerView.ViewHolder{
-            public TextView tv_title,tv_duedate,tv_fine,tv_reissue_count;
 
-            public MyViewHolder(View view) {
+            public TextView tv_title,tv_duedate,tv_fine,tv_reissue_count;
+            public RelativeLayout relativeLayout;
+
+
+
+            public MyViewHolder(final View view) {
                 super(view);
+
                 tv_title = (TextView) view.findViewById(R.id.name);
                 tv_duedate = view.findViewById(R.id.due_date);
                 tv_fine = view.findViewById(R.id.fine_amt);
                 tv_reissue_count=view.findViewById(R.id.re_issue_counter);
+
+                reIssueButtton=view.findViewById(R.id.re_issue_button);
+
+                relativeLayout=view.findViewById(R.id.relative_layout);
+
+                view.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        int p=getLayoutPosition();
+
+                        Toast.makeText(view.getContext(), "Clicked on :"+p, Toast.LENGTH_SHORT).show();
+
+                        // https://stackoverflow.com/questions/29983848/how-to-highlight-the-selected-item-of-recycler-view
+                        relativeLayout.setSelected(true);
+
+                        return true;
+                    }
+                });
+
+
+
+
+
 
             }
         }
@@ -112,14 +154,18 @@ public class IssuedBooksFragment extends Fragment {
             return new MyViewHolder(itemView);
         }
 
+
         @Override
-        public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
             Book currentBook = bookList.get(position);
             holder.tv_title.setText(currentBook.getTitle());
             holder.tv_duedate.setText(currentBook.getDueDate());
             holder.tv_fine.setText(currentBook.getFineAmount());
             holder.tv_reissue_count.setText(currentBook.getRenewCount());
+
+
         }
+
 
         @Override
         public int getItemCount() {
