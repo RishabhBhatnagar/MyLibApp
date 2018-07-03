@@ -21,6 +21,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vinay.mylibapp.data.Book;
@@ -107,6 +109,14 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
         //region Nav Drawer Init and Listener
         nvDrawer = findViewById(R.id.nvDrawer);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String value = extras.getString("key");
+            View headerView = nvDrawer.getHeaderView(0);
+            TextView nameHeader = (TextView) headerView.findViewById(R.id.header_name);
+            nameHeader.setText(value);
+
+        }
         nvDrawer.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override

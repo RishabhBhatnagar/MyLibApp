@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -35,9 +36,11 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
     EditText et_pid;
     EditText et_pwd;
     Button btn_login_submit;
-    TextView tv_result_login;
+    // TextView tv_result_login;
     String pid;
     String pwd;
+    public  String NavName;
+
 
 
     // To test on flask server, change the boolean testing variable in DataHolder class in the
@@ -69,6 +72,11 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
         // set ContentView is done later, depending on whether previous logged in user exists
 
         // Create a loadingDialog instance for the activity to show during network operations
+
+
+
+
+
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(R.layout.loading_dialog);
         loadingDialog = alertDialogBuilder.create();
@@ -104,14 +112,17 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
             // If there is no logged in user,
             // show the login form
             setContentView(R.layout.activity_login);
+            // LinearLayout layout = findViewById(R.id.back);
+            //layout.setBackgroundResource(R.drawable.back1);
+            //layout.getBackground().setAlpha(4);
 
             et_pid = findViewById(R.id.et_pid);
             et_pwd = findViewById(R.id.et_pwd);
             btn_login_submit = findViewById(R.id.btn_login_submit);
-            tv_result_login = findViewById(R.id.tv_login_result);
+            // tv_result_login = findViewById(R.id.tv_login_result);
 
             // TODO: Setup the views and make them pretty
-            btn_login_submit.setText("E");
+            btn_login_submit.setText("Submit");
 
 
             //region btn_login_submit OnClickListener
@@ -135,7 +146,10 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
             //endregion
             //endregion
         }//else
+
+
     }
+
 
     @Override
     public void sendBooksToCaller(List<Book> books) {
@@ -143,18 +157,21 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
     }
 
     @Override
-    public void sendStudentNameToCaller(String name) {
+    public void sendStudentNameToCaller(final String name) {
         // This method will be called when login is correct
 
         // Do this only in the loading_screen layout, ie when it's not null
-        // Make the progressbar disappear
+        // Make the progressbar disappear\\\
+
+
+
         if(progressBar != null)
             progressBar.setVisibility(View.GONE);
-
         // Add the correct pid/pwd to shared prefs
         editor.putString(KEY_PID, pid);
         editor.putString(KEY_PWD, pwd);
         editor.apply();
+
 
         setLoadingDialog(false);
 
@@ -162,31 +179,46 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
         final AlertDialog loginSuccessDialog = new AlertDialog.Builder(
                 this).create();
         loginSuccessDialog.setTitle("Login Successful!");
-        loginSuccessDialog.setMessage("Welcome " + name);
+        loginSuccessDialog.setMessage("Welcome "+ name);
+
+
+
         //region Set OK button for loginSuccessDialog
         loginSuccessDialog.setButton(
                 Dialog.BUTTON_NEUTRAL,
                 "OK",
                 new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int whichButton) {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int whichButton) {
 
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 
-                // https://stackoverflow.com/a/7578313/9485900
-                // Convert logged in cookies to HashMap since
-                // HashMap is Serializable, but Map isn't
-                intent.putExtra(KEY_COOKIES,(HashMap<String, String>) goGoGadget.getCookies());
+                        // https://stackoverflow.com/a/7578313/9485900
+                        // Convert logged in cookies to HashMap since
+                        // HashMap is Serializable, but Map isn't
+                        intent.putExtra(KEY_COOKIES,(HashMap<String, String>) goGoGadget.getCookies());
+                        intent.putExtra("key",name);
 
-                startActivity(intent);
+                        startActivity(intent);
 
-                // Since we don't want users to come back to this activity, after being logged in
-                finish();
-            }
-        });
+
+
+
+
+
+                        // Since we don't want users to come back to this activity, after being logged in
+                        finish();
+                    }
+                });
         //endregion
         loginSuccessDialog.show();
+
+
+
     }
+
+
+
 
     @Override
     public void passErrorsToCaller(final int errorCode) {
@@ -251,8 +283,8 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
                 // Show the dialog
                 loginFailedDialog.show();
-            //endregion
-            break;
+                //endregion
+                break;
 
             case ERROR_NOT_LOGGED_IN:
                 throw new RuntimeException("This error will arise if requesting outstanding docs" +
@@ -262,6 +294,9 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
                 throw new RuntimeException("Unknown Error code");
         }// switch
     }
+
+
+
 
     @Override
     public String getPid() {
