@@ -1,5 +1,6 @@
 package com.example.vinay.mylibapp;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     List<Book> bookList;
     GoGoGadget gForBooks;
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

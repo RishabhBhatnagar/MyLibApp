@@ -1,5 +1,6 @@
 package com.example.vinay.mylibapp.nav_drawer_fragments;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Color;
@@ -14,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +29,15 @@ import com.example.vinay.mylibapp.MainActivity;
 import com.example.vinay.mylibapp.data.Book;
 import com.example.vinay.mylibapp.R;
 
+import org.w3c.dom.Text;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by vinay on 27-06-2018.
@@ -75,6 +84,7 @@ public class IssuedBooksFragment extends Fragment {
             Book b = (Book) p;
             bookList.add(b);
         }
+        //f(posi);
 
         // Setup the recyclerview
         recyclerView = view.findViewById(R.id.issued_books_recycler_view);
@@ -102,18 +112,19 @@ public class IssuedBooksFragment extends Fragment {
 
         public class MyViewHolder extends RecyclerView.ViewHolder{
 
-            public TextView tv_title,tv_duedate,tv_fine,tv_reissue_count;
+            public TextView tv_title,tv_duedate,tv_fine,tv_reissue_count,tv_daysLeft;
             public RelativeLayout relativeLayout;
 
 
 
             public MyViewHolder(final View view) {
                 super(view);
-
+                tv_daysLeft=view.findViewById(R.id.days_left);
                 tv_title = (TextView) view.findViewById(R.id.name);
                 tv_duedate = view.findViewById(R.id.due_date);
                 tv_fine = view.findViewById(R.id.fine_amt);
                 tv_reissue_count=view.findViewById(R.id.re_issue_counter);
+
 
                 reIssueButtton=view.findViewById(R.id.re_issue_button);
 
@@ -132,12 +143,6 @@ public class IssuedBooksFragment extends Fragment {
                         return true;
                     }
                 });
-
-
-
-
-
-
             }
         }
 
@@ -154,6 +159,26 @@ public class IssuedBooksFragment extends Fragment {
             return new MyViewHolder(itemView);
         }
 
+        @SuppressLint("SimpleDateFormat")
+        public String f(int position)
+        {
+            String DaysLeft="";
+            Book currentBook = bookList.get(position);
+            String inputDateString = currentBook.getDueDate();
+            Calendar calCurr = Calendar.getInstance();
+            Calendar day = Calendar.getInstance();
+            try {
+                day.setTime(new SimpleDateFormat("dd/MM/yyyy").parse(inputDateString));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if(day.after(calCurr)){
+                  DaysLeft= String.valueOf((day.get(Calendar.DAY_OF_MONTH) -(calCurr.get(Calendar.DAY_OF_MONTH))));
+            }
+            return DaysLeft;
+        }
+
+
 
         @Override
         public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
@@ -162,8 +187,8 @@ public class IssuedBooksFragment extends Fragment {
             holder.tv_duedate.setText(currentBook.getDueDate());
             holder.tv_fine.setText(currentBook.getFineAmount());
             holder.tv_reissue_count.setText(currentBook.getRenewCount());
-
-
+            holder.tv_daysLeft.setText(f(position));
+            //f(position);
         }
 
 

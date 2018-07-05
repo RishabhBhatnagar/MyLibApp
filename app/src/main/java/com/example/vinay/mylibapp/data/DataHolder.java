@@ -39,7 +39,7 @@ public class DataHolder {
     private DataHolder() {
 
         if (testing) {
-            urlMainPage = "http://192.168.1.66:5000/";
+            urlMainPage = "http://192.168.1.104:5000/";
             urlLoginFormAction = urlMainPage + "userpage";
             urlOutDocsPage = urlMainPage + "out_docs";
         }

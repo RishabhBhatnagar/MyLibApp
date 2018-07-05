@@ -11,6 +11,7 @@
 
     card_view:cardElevation="@dimen/cardview_default_elevation"
     card_view:cardCornerRadius="5dp"
+    android:orientation="horizontal"
     >
 
     <RelativeLayout
@@ -153,11 +154,31 @@
                 android:text="RE-ISSUE"
                 android:textSize="18sp"
                 android:textStyle="bold"
-
-
                 />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DAYS LEFT :"
+                android:layout_centerInParent="true"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="#000"
+                android:layout_marginTop="2.3dp"
+            />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="02"
+                android:layout_marginLeft="300dp"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="#000"
+                android:layout_marginTop="2.3dp"
+                android:id="@+id/days_left"
+                />
         </RelativeLayout>
+
 
 
 
