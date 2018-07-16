@@ -1,22 +1,15 @@
 package com.example.vinay.mylibapp.nav_drawer_fragments;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,19 +18,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.example.vinay.mylibapp.MainActivity;
 import com.example.vinay.mylibapp.data.Book;
 import com.example.vinay.mylibapp.R;
-
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by vinay on 27-06-2018.
@@ -59,6 +49,7 @@ public class IssuedBooksFragment extends Fragment {
 
         issuedBooksFragment.setArguments(args);
         return issuedBooksFragment;
+
     }
 
     @Nullable
@@ -66,13 +57,14 @@ public class IssuedBooksFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_issued_books, container, false);
 
+
+
         Bundle args = getArguments();
 
         List<Parcelable> parcelBooks = args.getParcelableArrayList(KEY_BOOKS);
 
         if(parcelBooks == null){
             // if user has no books borrowed
-
             TextView textView = new TextView(getActivity());
             textView.setText("NO BOOKS ISSUED");
 
@@ -93,8 +85,6 @@ public class IssuedBooksFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mBooksAdapter);
-
-
         return view;
     }
 
@@ -103,10 +93,12 @@ public class IssuedBooksFragment extends Fragment {
      */
 
     // private since we only need it inside this class
-    private static class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.MyViewHolder> {
+    private class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.MyViewHolder> {
 
         private List<Book> bookList;
         public Button reIssueButtton;
+        MainActivity mainActivity;
+
 
 
 
@@ -114,6 +106,7 @@ public class IssuedBooksFragment extends Fragment {
 
             public TextView tv_title,tv_duedate,tv_fine,tv_reissue_count,tv_daysLeft;
             public RelativeLayout relativeLayout;
+
 
 
 
@@ -130,6 +123,7 @@ public class IssuedBooksFragment extends Fragment {
 
                 relativeLayout=view.findViewById(R.id.relative_layout);
 
+
                 view.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
@@ -145,7 +139,7 @@ public class IssuedBooksFragment extends Fragment {
                 });
             }
         }
-
+       // FragToActivity fragToActivity;
         public BooksAdapter(List<Book> books){
             bookList = books;
         }
@@ -155,16 +149,26 @@ public class IssuedBooksFragment extends Fragment {
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.card_single_book, parent, false);
-
             return new MyViewHolder(itemView);
         }
+        //FragToActivity fragToActivity;
 
+        String daysLeft="";
         @SuppressLint("SimpleDateFormat")
-        public String f(int position)
+        public String DaysLeft(int position)
         {
             String DaysLeft="";
             Book currentBook = bookList.get(position);
             String inputDateString = currentBook.getDueDate();
+            //Toast.makeText(, position, Toast.LENGTH_SHORT).show();
+//            Bundle bundle = new Bundle();
+//            bundle.putString("myData", inputDateString);
+//            Intent i = new Intent(getContext(),MainActivity.class);
+//            i.putExtras(bundle);
+//            startActivity(i);
+
+
+
             Calendar calCurr = Calendar.getInstance();
             Calendar day = Calendar.getInstance();
             try {
@@ -174,12 +178,17 @@ public class IssuedBooksFragment extends Fragment {
             }
             if(day.after(calCurr)){
                   DaysLeft= String.valueOf((day.get(Calendar.DAY_OF_MONTH) -(calCurr.get(Calendar.DAY_OF_MONTH))));
+
             }
-            return DaysLeft;
+
+              daysLeft=DaysLeft;
+
+              return DaysLeft;
+
         }
 
 
-
+       // int Position=0;
         @Override
         public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
             Book currentBook = bookList.get(position);
@@ -187,9 +196,10 @@ public class IssuedBooksFragment extends Fragment {
             holder.tv_duedate.setText(currentBook.getDueDate());
             holder.tv_fine.setText(currentBook.getFineAmount());
             holder.tv_reissue_count.setText(currentBook.getRenewCount());
-            holder.tv_daysLeft.setText(f(position));
-            //f(position);
+            holder.tv_daysLeft.setText(DaysLeft(position));
+
         }
+
 
 
         @Override

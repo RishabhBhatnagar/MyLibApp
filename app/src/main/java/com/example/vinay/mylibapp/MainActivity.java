@@ -21,10 +21,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.example.vinay.mylibapp.data.Book;
 import com.example.vinay.mylibapp.data.DataHolder;
@@ -49,10 +51,14 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     private Toolbar toolbar;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
+   // List<Book> books1;
+
 
     // Obtain the data holder object
     DataHolder dataHolder = DataHolder.getDataHolder();
     Handler handler = new Handler();
+    //IssuedBooksFragment h = new IssuedBooksFragment();
+
 
     // Loading Dialog
     AlertDialog.Builder alertDialogBuilder;
@@ -67,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Intent i=getIntent();
 
         //region Create a loadingDialog instance for the activity to show during network operations
         alertDialogBuilder = new AlertDialog.Builder(this);
@@ -102,9 +110,14 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         // Start a indefinite loading dialog
         setLoadingDialog(true);
 
+
         // This will be stopped in one of the callback methods
 
         //endregion
+
+
+
+
 
         // Find our drawer view
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -119,6 +132,17 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
             nameHeader.setText(value);
 
         }
+       // Bundle bundle = getIntent().getExtras();
+        //assert bundle != null;
+//        if(bundle!=null) {
+//            String value1 = bundle.getString("myData", "");
+//            Log.v("in mainactivity", "" + value1);
+//        }
+
+
+
+
+
         nvDrawer.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -137,6 +161,16 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 });
         //endregion
     }
+//    String Days="";
+//    public void  setName(String days) {
+//         Days = days;
+//    }
+//
+//    public String getName(){
+//
+//        return Days;
+//
+//    }
 
     private void selectDrawerItem(MenuItem menuItem) {
         // Create a new fragment and specify the fragment to show based on nav item clicked
@@ -201,7 +235,6 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                                 // Call the logic needed to set IssuedBooksFragment on FrameLayout
                                 selectDrawerItem(menuItemIssuedBooks);
                                 //endregion
-
                                 // Dismiss the dialog
                                 dialogInterface.dismiss();
                             }
@@ -253,6 +286,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         // This method will be executed after onCreate finishes
 
         bookList = books;
+        //books1=books;
         setLoadingDialog(false);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -262,7 +296,16 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
         fragmentManager.beginTransaction().replace(R.id.fragment_frame, fragment).commit();
 
+
+//
+//
+//
+//
     }
+
+//        // Used only during login
+//        // Will not be called in this activity
+//    }
 
     @Override
     public void sendStudentNameToCaller(String name) {
@@ -345,6 +388,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 activeNetwork.isConnectedOrConnecting();
         return isConnected;
     }
+
 
 
 }
