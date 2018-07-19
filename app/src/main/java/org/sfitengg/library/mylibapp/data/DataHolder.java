@@ -4,9 +4,6 @@ import android.os.Bundle;
 
 import org.sfitengg.library.mylibapp.GoGoGadget;
 
-/**
- * Created by vinay on 27-06-2018.
- */
 
 public class DataHolder {
     // Using a singleton design pattern, since we only need one instance for this class

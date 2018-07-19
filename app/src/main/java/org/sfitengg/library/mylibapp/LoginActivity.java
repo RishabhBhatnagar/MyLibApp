@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import org.sfitengg.library.mylibapp.data.Book;
 import org.sfitengg.library.mylibapp.data.DataHolder;
@@ -32,7 +33,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
     // TextView tv_result_login;
     String pid;
     String pwd;
-    public  String NavName;
+    public String fileName = "file";
 
 
 
@@ -70,6 +71,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
 
 
+
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(R.layout.loading_dialog);
         loadingDialog = alertDialogBuilder.create();
@@ -91,6 +93,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
             setContentView(R.layout.loading_screen);
 
             progressBar = findViewById(R.id.network_progress);
+
 
             goGoGadget = new GoGoGadget((MyCallback) LoginActivity.this,
                     dataHolder.getBundleURLs(),
