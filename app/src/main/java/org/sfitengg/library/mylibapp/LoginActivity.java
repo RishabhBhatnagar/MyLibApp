@@ -68,10 +68,6 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
         // Create a loadingDialog instance for the activity to show during network operations
 
 
-
-
-
-
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(R.layout.loading_dialog);
         loadingDialog = alertDialogBuilder.create();
@@ -118,7 +114,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
             // tv_result_login = findViewById(R.id.tv_login_result);
 
             // TODO: Setup the views and make them pretty
-            btn_login_submit.setText("Submit");
+            btn_login_submit.setText("SUBMIT");
 
 
             //region btn_login_submit OnClickListener
@@ -158,8 +154,6 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
         // Do this only in the loading_screen layout, ie when it's not null
         // Make the progressbar disappear\\\
-
-
 
         if(progressBar != null)
             progressBar.setVisibility(View.GONE);

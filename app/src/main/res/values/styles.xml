@@ -8,6 +8,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="fontForNotificationLandingPage">
+        <item name="android:textStyle">italic</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+
+        <item name="android:textSize">35dp</item>
+        <item name="android:padding">2dip</item>
+    </style>
+
     <!--Use this style for MainActivity which has the navigation drawer, and
     provides it's own toolbar/ActionBar-->
     <style name="MainActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">

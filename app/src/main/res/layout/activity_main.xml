@@ -6,7 +6,7 @@
     android:background="@color/main_activity_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.vinay.mylibapp.org.example.vinay.mylibapp.MainActivity">
+    tools:context="org.example.vinay.mylibapp.MainActivity">
 
     <!--Contents of the screen-->
     <LinearLayout
@@ -20,10 +20,6 @@
             android:id="@+id/fragment_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
-
-
-
     </LinearLayout>
 
     <!--Navigation drawer that comes from left-->

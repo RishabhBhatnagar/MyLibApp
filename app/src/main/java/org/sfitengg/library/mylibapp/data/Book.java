@@ -2,6 +2,7 @@ package org.sfitengg.library.mylibapp.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 /**
  * Created by vinay on 14-06-2018.
@@ -135,7 +136,9 @@ public class Book implements Parcelable {
     }
 
     public boolean isCanRenew() {
+
         return canRenew;
+
     }
 
 }
