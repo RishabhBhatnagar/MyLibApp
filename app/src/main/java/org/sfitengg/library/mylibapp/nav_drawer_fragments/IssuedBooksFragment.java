@@ -2,6 +2,7 @@ package org.sfitengg.library.mylibapp.nav_drawer_fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -114,10 +115,25 @@ private static String KEY_BOOKS = "books";
             public CheckBox reissueCheckBox;
             private boolean selected = false;
 
-            public void canRenew(){
 
+
+
+            public void canRenew(){
                 int position = getAdapterPosition();
                 Book currentbook = bookList.get(position);
+//                String inputDateString = currentbook.getDueDate();
+//                Calendar calCurr = Calendar.getInstance();
+//                Calendar day = Calendar.getInstance();
+//                try {
+//                    day.setTime(new SimpleDateFormat("dd/MM/yyyy").parse(inputDateString));
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+
+//                    int value= (day.get(Calendar.DAY_OF_MONTH) -(calCurr.get(Calendar.DAY_OF_MONTH))+days);
+//
+//                    Toast.makeText(getContext(), "VALUEEE"+day.get(Calendar.DAY_OF_MONTH)+""+calCurr.get(Calendar.DAY_OF_MONTH), Toast.LENGTH_SHORT).show();
+
                 if (!currentbook.isCanRenew()) {
                     reissueCheckBox.setEnabled(false);
                     Toast.makeText(getContext(), "RE-ISSUE BLOCKED PLEASE RETURN THE BOOK !", Toast.LENGTH_SHORT).show();
@@ -226,7 +242,9 @@ private static String KEY_BOOKS = "books";
                         }
                     }
                 });
+
             }
+
         }
 
         public BooksAdapter(List<Book> books, final IssuedBooksFragment context){
@@ -236,6 +254,10 @@ private static String KEY_BOOKS = "books";
             for(int i = 0; i<selectedList.length; i++){
                 selectedList[i] = false;
             }
+
+
+
+
         }
 
         @NonNull
@@ -264,6 +286,7 @@ private static String KEY_BOOKS = "books";
                    DaysLeft= (day.get(Calendar.DAY_OF_MONTH) -(calCurr.get(Calendar.DAY_OF_MONTH)));
                   daysLeft= String.valueOf(DaysLeft);
             }
+
             if(DaysLeft<=0){
                 daysLeft="0";
                 return daysLeft;
