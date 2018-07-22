@@ -219,8 +219,8 @@ public class GoGoGadget implements Runnable {
                                 book.setReservations( elList.get(i * 7 + 5).text().trim());
 
                                 // Check if book can be renew or not
-                                String canRenew = elList.get(i * 7 + 6).text().trim();
-                                if (canRenew.equals("&nbsp;") || canRenew.contains("&nb")) {
+                                String canRenew = elList.get(i * 7 + 6).html();
+                                if (canRenew.contains("&nbsp;") || canRenew.contains("&nb")) {
                                     // book can't be renewed right now
                                     book.setCanRenew(false);
                                 } else {
