@@ -2,15 +2,13 @@
 <!-- in drawable folder-->
 <ripple
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:color="?android:colorControlHighlight"
-    tools:ignore="NewApi">
+    android:color="?android:colorControlHighlight">
 
-    <item android:id="@android:id/mask"
-        tools:ignore="NewApi">
+    <item android:id="@android:id/mask">
         <shape android:shape="rectangle">
             <solid android:color="?android:colorAccent"
-                tools:ignore="NewApi" />
+
+                />
         </shape>
     </item>
 
@@ -29,7 +27,7 @@
                 android:endColor="#ed044e"
                 android:alpha="140"
                 android:type="linear"
-                />
+                /> />
         </shape>
     </item>
 
