@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity implements MyCallback{
 
     public static final String KEY_COOKIES = "cookies";
+    protected static final String SKIPPED = "skipped";
 
     EditText et_pid;
     EditText et_pwd;
@@ -95,6 +97,22 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
                     dataHolder.getBundleURLs(),
                     GoGoGadget.LOGIN_AND_GET_COOKIES,
                     handler);
+
+
+            SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            String booksName = sharedPreferences.getString(MainActivity.BOOKS_STRING_TAG, null);
+
+            if(booksName != null){
+                editor.putBoolean(SKIPPED, true);
+                editor.apply();
+                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish();
+            }
+
+            editor.putBoolean(SKIPPED, false);
+
+
             new Thread(goGoGadget).start();
             //endregion
         }
