@@ -2,7 +2,6 @@ package org.sfitengg.library.mylibapp.nav_drawer_fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -11,14 +10,12 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,7 +79,7 @@ private static String KEY_BOOKS = "books";
 
         // Setup the recyclerview
         recyclerView = view.findViewById(R.id.issued_books_recycler_view);
-        mBooksAdapter = new BooksAdapter(bookList, IssuedBooksFragment.this);
+        mBooksAdapter = new BooksAdapter(bookList, view.getContext());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -93,10 +90,10 @@ private static String KEY_BOOKS = "books";
     // private since we only need it inside this class
     private class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.MyViewHolder> {
 
+        private final Context context;
         private List<Book> bookList;
         private boolean anyBookSelected = false;
         private boolean selectedList[];
-        private IssuedBooksFragment context;
 
         private List<Book> getBooks(){
             List<Book> selectedBooks = new ArrayList<>();
@@ -114,8 +111,6 @@ private static String KEY_BOOKS = "books";
             public RelativeLayout relativeLayout;
             public CheckBox reissueCheckBox;
             private boolean selected = false;
-
-
 
 
             public void canRenew(){
@@ -156,11 +151,11 @@ private static String KEY_BOOKS = "books";
 
                     @Override
                     public void onClick(View v) {
-                        canRenew();  // to disable the checckbox if canRenew boolean is false
+                        canRenew();  // to disable the checkbox if canRenew boolean is false
                          if(selected){
                             numberOfBooksSelected -= 1;
                             reissueCheckBox.setChecked(false);
-                            reIssueButtton.setVisibility(view.GONE);
+                            reIssueButtton.setVisibility(View.GONE);
                         }
                         else{
                                 numberOfBooksSelected += 1;
@@ -247,7 +242,7 @@ private static String KEY_BOOKS = "books";
 
         }
 
-        public BooksAdapter(List<Book> books, final IssuedBooksFragment context){
+        public BooksAdapter(List<Book> books, Context context){
             bookList = books;
             this.context = context;
             selectedList = new boolean[books.size()];
@@ -305,6 +300,15 @@ private static String KEY_BOOKS = "books";
             holder.tv_reissue_count.setText(currentBook.getRenewCount());
             holder.tv_daysLeft.setText(daysleft(position));
 
+            if(bookList.get(position).isCanRenew()){
+                Toast.makeText(context, "can renew" + bookList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+            }
+            else{
+                holder.reissueCheckBox.setChecked(false);
+                holder.reissueCheckBox.setEnabled(false);
+                holder.relativeLayout.setEnabled(false);
+                holder.relativeLayout.setSelected(false);
+            }
         }
 
         @Override
