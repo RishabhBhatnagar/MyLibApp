@@ -93,8 +93,6 @@ private static String KEY_BOOKS = "books";
     private class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.MyViewHolder> {
 
         private List<Book> bookList;
-        ///public Button reIssueButtton;
-        public CheckBox checkBox;
         private boolean anyBookSelected = false;
         private boolean selectedList[];
         private IssuedBooksFragment context;
@@ -116,13 +114,11 @@ private static String KEY_BOOKS = "books";
             public CheckBox reissueCheckBox;
             private boolean selected = false;
 
-
             public void canRenew(){
 
                 int position = getAdapterPosition();
                 Book currentbook = bookList.get(position);
                 if (!currentbook.isCanRenew()) {
-
                     reissueCheckBox.setEnabled(false);
                     Toast.makeText(getContext(), "RE-ISSUE BLOCKED PLEASE RETURN THE BOOK !", Toast.LENGTH_SHORT).show();
                 }
@@ -206,6 +202,7 @@ private static String KEY_BOOKS = "books";
                     @Override
                     public void onClick(View v) {
                         canRenew();
+
                          if(anyBookSelected){
 
                             if(selected){
@@ -274,10 +271,6 @@ private static String KEY_BOOKS = "books";
                 return daysLeft;
             }
         }
-
-
-
-
 
         @Override
         public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {

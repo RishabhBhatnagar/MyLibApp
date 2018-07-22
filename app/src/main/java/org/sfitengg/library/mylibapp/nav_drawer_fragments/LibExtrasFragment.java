@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -35,10 +36,12 @@ public class LibExtrasFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
         parent = view.findViewById(R.id.parent);
 
+
+
         //getting recycler view ready.
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
         dataSet = new ArrayList<>();
 
         initialiseUrlNames(dataSet);
