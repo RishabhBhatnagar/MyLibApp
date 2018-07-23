@@ -29,7 +29,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class IssuedBooksFragment extends Fragment {
 
@@ -134,18 +136,7 @@ private static String KEY_BOOKS = "books";
             public void canRenew(){
                 int position = getAdapterPosition();
                 Book currentbook = bookList.get(position);
-//                String inputDateString = currentbook.getDueDate();
-//                Calendar calCurr = Calendar.getInstance();
-//                Calendar day = Calendar.getInstance();
-//                try {
-//                    day.setTime(new SimpleDateFormat("dd/MM/yyyy").parse(inputDateString));
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-
-//                    int value= (day.get(Calendar.DAY_OF_MONTH) -(calCurr.get(Calendar.DAY_OF_MONTH))+days);
 //
-//                    Toast.makeText(getContext(), "VALUEEE"+day.get(Calendar.DAY_OF_MONTH)+""+calCurr.get(Calendar.DAY_OF_MONTH), Toast.LENGTH_SHORT).show();
 
                 if (!currentbook.isCanRenew()) {
                     reissueCheckBox.setEnabled(false);
@@ -173,12 +164,15 @@ private static String KEY_BOOKS = "books";
                          if(selected){
                             numberOfBooksSelected -= 1;
                             reissueCheckBox.setChecked(false);
-                            reIssueButtton.setVisibility(View.GONE);
+                            if(numberOfBooksSelected==0){
+                                reIssueButtton.setVisibility(view.GONE);
+                            }
+
                         }
                         else{
                                 numberOfBooksSelected += 1;
                                 reissueCheckBox.setChecked(true);
-                                reIssueButtton.setVisibility(View.VISIBLE);
+                                reIssueButtton.setVisibility(view.VISIBLE);
                         }
                         if(numberOfBooksSelected<1){
                             anyBookSelected = false;
@@ -206,7 +200,9 @@ private static String KEY_BOOKS = "books";
                          if(selected){
                             numberOfBooksSelected -= 1;
                             reissueCheckBox.setChecked(false);
-                            reIssueButtton.setVisibility(view.GONE);
+                             if(numberOfBooksSelected==0){
+                                 reIssueButtton.setVisibility(view.GONE);
+                             }
 
                         }
                         else {
@@ -237,12 +233,14 @@ private static String KEY_BOOKS = "books";
                             if(selected){
                                 numberOfBooksSelected -= 1;
                                 reissueCheckBox.setChecked(false);
-                                reIssueButtton.setVisibility(view.GONE);
+                                if(numberOfBooksSelected==0){
+                                    reIssueButtton.setVisibility(view.GONE);
+                                }
                             }
                             else{
                                 numberOfBooksSelected += 1;
                                 reissueCheckBox.setChecked(true);
-                                reIssueButtton.setVisibility(View.VISIBLE);
+                                reIssueButtton.setVisibility(view.VISIBLE);
 
                             }
                             if(numberOfBooksSelected<1){
@@ -287,25 +285,28 @@ private static String KEY_BOOKS = "books";
         public String daysleft(int position) {
             String daysLeft="";
             Book currentBook = bookList.get(position);
-            String inputDateString = currentBook.getDueDate();
-            Calendar calCurr = Calendar.getInstance();
-            Calendar day = Calendar.getInstance();
+            SimpleDateFormat myFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date todayDate = new Date();
+            String inputString1 = myFormat.format(todayDate);
+            String inputString2 = currentBook.getDueDate();
+
             try {
-                day.setTime(new SimpleDateFormat("dd/MM/yyyy").parse(inputDateString));
+                Date date1 = myFormat.parse(inputString1);
+                Date date2 = myFormat.parse(inputString2);
+                long diff = date2.getTime() - date1.getTime();
+                          DaysLeft = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                          daysLeft= String.valueOf(DaysLeft);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            if(day.after(calCurr)){
-                   DaysLeft= (day.get(Calendar.DAY_OF_MONTH) -(calCurr.get(Calendar.DAY_OF_MONTH)));
-                  daysLeft= String.valueOf(DaysLeft);
-            }
 
-            if(DaysLeft<=0){
-                daysLeft="0";
+                if(DaysLeft<=0) {
+                    daysLeft="0";
+                    return daysLeft;
+                }else{
                 return daysLeft;
-            }else {
-                return daysLeft;
-            }
+                }
+
         }
 
         @Override
