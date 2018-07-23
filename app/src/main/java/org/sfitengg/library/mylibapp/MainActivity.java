@@ -293,6 +293,22 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         return super.onOptionsItemSelected(item);
     }
 
+    public void startReissueProcess(List<Book> booksToReisse){
+        // This method will be called from the IssuedBooksFragment
+        // This method handles all the logic, so that function calls are kept within this activity
+
+        // Start loading dialog
+        setLoadingDialog(true);
+
+        GoGoGadget gSendReissue = new GoGoGadget((MyCallback)this,
+                dataHolder.getBundleURLs(),
+                GoGoGadget.SEND_REISSUE,
+                handler);
+        gSendReissue.setCookies(cookies);
+
+        new Thread(gSendReissue).start();
+    }
+
     private void setLoadingDialog(boolean show){
         // Sauce for dialog creation, and this setter method:
         // https://stackoverflow.com/a/14853439/9485900

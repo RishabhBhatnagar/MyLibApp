@@ -20,6 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.sfitengg.library.mylibapp.GoGoGadget;
+import org.sfitengg.library.mylibapp.MainActivity;
 import org.sfitengg.library.mylibapp.data.Book;
 import org.sfitengg.library.mylibapp.R;
 
@@ -84,6 +86,22 @@ private static String KEY_BOOKS = "books";
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mBooksAdapter);
+
+        // On click listener for reissue
+
+        reIssueButtton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<Book> booksToReissue = mBooksAdapter.getBooks();
+
+                // This method will handle all the function calls for MainActivity
+                // It's created so that code is written within MainActivity for clarity
+                ((MainActivity)getActivity()).startReissueProcess(booksToReissue);
+
+            }
+        });
+
+
         return view;
     }
 
