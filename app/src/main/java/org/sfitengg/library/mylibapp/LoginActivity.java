@@ -167,6 +167,11 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
     }
 
     @Override
+    public void postToOutDocsSuccess() {
+        // Do nothing, since this activity will never try to post to out docs and reissue books
+    }
+
+    @Override
     public void sendStudentNameToCaller(final String name) {
         // This method will be called when login is correct
 
@@ -188,6 +193,8 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
                 this).create();
         loginSuccessDialog.setTitle("Login Successful!");
         loginSuccessDialog.setMessage("Welcome "+ name);
+        loginSuccessDialog.setCancelable(false);
+        loginSuccessDialog.setCanceledOnTouchOutside(false);
 
 
 

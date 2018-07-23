@@ -43,6 +43,7 @@ import java.util.Map;
 import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_INCORRECT_PID_OR_PASSWORD;
 import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_NOT_LOGGED_IN;
 import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_NO_INTERNET;
+import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_POST_TO_REISSUE_FAILED;
 import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_SERVER_UNREACHABLE;
 import static org.sfitengg.library.mylibapp.LoginActivity.KEY_COOKIES;
 import static org.sfitengg.library.mylibapp.LoginActivity.titleSharedPrefs;
@@ -362,6 +363,28 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     }
 
     @Override
+    public void postToOutDocsSuccess() {
+        // Reissue post request has been success
+        setLoadingDialog(false);
+
+        AlertDialog reissueSuccessDialog = new AlertDialog.Builder(this).create();
+        reissueSuccessDialog.setTitle("Books reissued successfully!");
+        reissueSuccessDialog.setMessage("Do you want to reload?");
+        reissueSuccessDialog.setButton(DialogInterface.BUTTON_NEUTRAL,
+                "OK",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Recreate the activity to reload everything
+                        recreate();
+                    }
+                });
+
+        reissueSuccessDialog.show();
+
+    }
+
+    @Override
     public void passErrorsToCaller(final int errorCode) {
         setLoadingDialog(false);
         switch (errorCode){
@@ -405,6 +428,11 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                         "then these errors will not come.\n" +
                         "Check if you passed the cookies from the correct" +
                         " login, to the MainActivity intent");
+            case ERROR_POST_TO_REISSUE_FAILED:
+                Toast.makeText(this,
+                        "Something went wrong when posting to out docs page",
+                        Toast.LENGTH_SHORT).show();
+                break;
             default:
                     Toast.makeText(this,"Error" + errorCode, Toast.LENGTH_SHORT).show();
 

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 
+import org.jsoup.nodes.Element;
 import org.sfitengg.library.mylibapp.data.Book;
 
 import org.jsoup.Connection;
@@ -80,11 +81,13 @@ public class GoGoGadget implements Runnable {
     public static final int RETURN_NAME = 23;
     public static final int RETURN_LIST_BOOKS = 24;
     public static final int RETURN_NO_BORROWED_BOOKS = 25;
+    public static final int RETURN_POST_TO_REISSUE_SUCCESS = 26;
     // 2) Error was obtained
     public static final int ERROR_NOT_LOGGED_IN = 52;
     public static final int ERROR_INCORRECT_PID_OR_PASSWORD = 53;
     public static final int ERROR_NO_INTERNET = 54;
     public static final int ERROR_SERVER_UNREACHABLE = 55;
+    public static final int ERROR_POST_TO_REISSUE_FAILED = 56;
 
 
     private void setErrorServerUnreachable() {
@@ -275,6 +278,91 @@ public class GoGoGadget implements Runnable {
                 //endregion
                 break;
             case SEND_REISSUE:
+                try {
+                    Connection.Response outDocsPage = Jsoup.connect(gUrlOutDocs)
+                            .cookies(cookies)
+                            .method(Connection.Method.GET)
+                            .execute();
+                    Document docOutDocs = outDocsPage.parse();
+
+                    // Checkbox inputs
+                    Elements checkBoxInputTags = docOutDocs.select("input[checked]");
+
+                    // Select the element which are not checkboxes, and have to be submitted in anycase
+                    Elements userIndependentInputTags = docOutDocs.select("input:not([checked])");
+
+                    Connection connToReissue = Jsoup.connect(this.gUrlOutForm)
+                            .cookies(this.cookies)
+                            .method(Connection.Method.POST);
+
+                    for(Element e : userIndependentInputTags){
+                        // Add the inputs to connection
+                        connToReissue.data(e.attr("name"), e.attr("value"));
+                    }
+
+
+                    for(Book book : this.booksToReissue){
+                        // for each book find its correct tag
+
+                        // if userIndependent tag name begins with m_accno, then get that value
+                        // Compare with book acc_no, if they are same, then that's the checkbox for the book
+                        for(Element element : userIndependentInputTags){
+                            if(element.attr("name").contains("m_accno")){
+                                // this is a named attribute that may be associated with a book
+
+                                String book_accno = book.getAcc_no().substring(1);
+                                String input_accno = element.attr("value");
+
+                                // element will have the 1234 for a book 'B1234', we will now compare
+                                // those values, if they are same, then we have the input checkbox number for the book
+                                if(book_accno.equals(input_accno)){
+                                    String name = element.attr("name");
+                                    // this will be m_accnoN, N = number
+                                    // this N will tell us which checkbox to add to the connection
+
+                                    // Get the last char of the name attribute
+                                    String N = name.substring(name.length() - 1);
+
+                                    // Find the checkbox of current book
+                                    for(Element e : checkBoxInputTags){
+                                        if(e.attr("name").equals("m_chk" + N)){
+                                            // Add this checkbox to the connection
+                                            connToReissue.data(e.attr("name"),
+                                                    e.attr("value"));
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                    }// Book loop
+
+
+                    // Finally execute the connection
+                    Connection.Response successPage = connToReissue.execute();
+                    Document docSucc = successPage.parse();
+
+                    // There is single bold tag
+                    Elements boldTag = docSucc.select("b");
+
+                    for(Element b : boldTag){
+                        if(b.text().contains("Document")){
+                            // Then we have successfully posted
+                            this.resultCode = RETURN_POST_TO_REISSUE_SUCCESS;
+                            break;
+                        }
+                        else{
+                            this.resultCode = ERROR_POST_TO_REISSUE_FAILED;
+                        }
+                    }
+
+
+                }
+                catch (IOException e){
+                    e.printStackTrace();
+                    // Set server unreachable error code
+                    setErrorServerUnreachable();
+                }
                 break;
             default:
                 // action variable has to be initialized
@@ -312,12 +400,16 @@ public class GoGoGadget implements Runnable {
                     case RETURN_NO_BORROWED_BOOKS:
                         myCallback.sendBooksToCaller(null);
                         break;
+                    case RETURN_POST_TO_REISSUE_SUCCESS:
+                        myCallback.postToOutDocsSuccess();
+                        break;
 
                     // ERRORS SECTION
                     case ERROR_NOT_LOGGED_IN:
                     case ERROR_NO_INTERNET:
                     case ERROR_SERVER_UNREACHABLE:
                     case ERROR_INCORRECT_PID_OR_PASSWORD:
+                    case ERROR_POST_TO_REISSUE_FAILED:
                         myCallback.passErrorsToCaller(resultCode);
                         break;
 
