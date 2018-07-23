@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         return super.onOptionsItemSelected(item);
     }
 
-    public void startReissueProcess(List<Book> booksToReisse){
+    public void startReissueProcess(List<Book> booksToReissue){
         // This method will be called from the IssuedBooksFragment
         // This method handles all the logic, so that function calls are kept within this activity
 
@@ -303,7 +303,8 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         GoGoGadget gSendReissue = new GoGoGadget((MyCallback)this,
                 dataHolder.getBundleURLs(),
                 GoGoGadget.SEND_REISSUE,
-                handler);
+                handler,
+                booksToReissue);
         gSendReissue.setCookies(cookies);
 
         new Thread(gSendReissue).start();

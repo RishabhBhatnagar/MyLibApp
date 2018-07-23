@@ -26,15 +26,21 @@ public class GoGoGadget implements Runnable {
     private MyCallback myCallback;
     private Handler handler; // Handler object needed to post messages to calling activity
 
+    // Books to be reissued
+    // Only for SEND_REISSUE case
+    private List<Book> booksToReissue = null;
+
     // Urls to be accessed
     // They are passed in a Bundle to Constructor
     private String gUrlMainPage;
     private String gUrlLoginFormAction;
     private String gUrlOutDocs;
+    private String gUrlOutForm;
     // Keys to access the Bundle
     public static final String keyMainPage = "main";
     public static final String keyLoginForm = "login";
     public static final String keyOutDocs = "outdocs";
+    public static final String keyOutForm = "outdocs_form";
 
 
     // Cookies that will be used to log in
@@ -107,12 +113,24 @@ public class GoGoGadget implements Runnable {
         this.gUrlMainPage = bundleURLs.getString(keyMainPage);
         this.gUrlLoginFormAction = bundleURLs.getString(keyLoginForm);
         this.gUrlOutDocs = bundleURLs.getString(keyOutDocs);
+        this.gUrlOutForm = bundleURLs.getString(keyOutForm);
 
         this.action = action;
         this.result = new Bundle();
         this.cookies = null;
 
         this.handler = handler;
+    }
+
+    GoGoGadget(MyCallback myCallback, Bundle bundleURLs, int action,
+               Handler handler, List<Book> booksToReissue){
+
+        // Calling the default constructor
+        this(myCallback, bundleURLs, action, handler);
+
+        // Set the reissue books
+        this.booksToReissue = booksToReissue;
+
     }
 
     @Override
@@ -255,6 +273,8 @@ public class GoGoGadget implements Runnable {
                     }
                 }//else
                 //endregion
+                break;
+            case SEND_REISSUE:
                 break;
             default:
                 // action variable has to be initialized

@@ -25,7 +25,7 @@ public class DataHolder {
     private static String urlOutDocsPage = "http://115.248.171.105:82/webopac/l_renew.asp";
 
     // Url where reissue form is sent
-    private static String urlOutDocsFormAction = "http://115.248.171.105:82/webopac/l_renew1.asp";
+    private static String urlOutFormAction = "http://115.248.171.105:82/webopac/l_renew1.asp";
 
     private Bundle bundleURLs;
 
@@ -39,7 +39,7 @@ public class DataHolder {
             urlMainPage = "http://192.168.1.68:5000/";
             urlLoginFormAction = urlMainPage + "userpage";
             urlOutDocsPage = urlMainPage + "out_docs";
-            urlOutDocsFormAction = urlMainPage + "renew_success";
+            urlOutFormAction = urlMainPage + "renew_success";
         }
 
         // Create a bundle to pass in the URLs to the GoGoGadget object
@@ -47,6 +47,7 @@ public class DataHolder {
         bundleURLs.putString(GoGoGadget.keyMainPage, urlMainPage);
         bundleURLs.putString(GoGoGadget.keyLoginForm, urlLoginFormAction);
         bundleURLs.putString(GoGoGadget.keyOutDocs, urlOutDocsPage);
+        bundleURLs.putString(GoGoGadget.keyOutForm, urlOutFormAction);
     }
 
     public static DataHolder getDataHolder(){
