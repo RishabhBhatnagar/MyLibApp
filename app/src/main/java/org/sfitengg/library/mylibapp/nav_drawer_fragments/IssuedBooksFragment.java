@@ -136,12 +136,32 @@ private static String KEY_BOOKS = "books";
             public void canRenew(){
                 int position = getAdapterPosition();
                 Book currentbook = bookList.get(position);
-//
-
                 if (!currentbook.isCanRenew()) {
                     reissueCheckBox.setEnabled(false);
                     Toast.makeText(getContext(), "RE-ISSUE BLOCKED PLEASE RETURN THE BOOK !", Toast.LENGTH_SHORT).show();
                 }
+            }
+
+            public void Onclick(){
+
+                if(selected){
+                    numberOfBooksSelected -= 1;
+                    reissueCheckBox.setChecked(false);
+                    if(numberOfBooksSelected==0){
+                        reIssueButtton.setVisibility(View.GONE);
+                    }
+                }
+                else{
+                    numberOfBooksSelected += 1;
+                    reissueCheckBox.setChecked(true);
+                    reIssueButtton.setVisibility(View.VISIBLE);
+
+                }
+                if(numberOfBooksSelected<1){
+                    anyBookSelected = false;
+                }
+                selected =! selected;
+
             }
 
 
@@ -157,32 +177,12 @@ private static String KEY_BOOKS = "books";
 
                 //region onclicklistener reissue
                 reissueCheckBox.setOnClickListener(new View.OnClickListener() {
-
                     @Override
                     public void onClick(View v) {
                         canRenew();  // to disable the checkbox if canRenew boolean is false
-                         if(selected){
-                            numberOfBooksSelected -= 1;
-                            reissueCheckBox.setChecked(false);
-                            if(numberOfBooksSelected==0){
-                                reIssueButtton.setVisibility(view.GONE);
-                            }
-
-                        }
-                        else{
-                                numberOfBooksSelected += 1;
-                                reissueCheckBox.setChecked(true);
-                                reIssueButtton.setVisibility(view.VISIBLE);
-                        }
-                        if(numberOfBooksSelected<1){
-                            anyBookSelected = false;
-                        }
-
+                         Onclick();
                         // https://stackoverflow.com/questions/29983848/how-to-highlight-the-selected-item-of-recycler-view
-                        selected =! selected;
-
                         selectedList[getAdapterPosition()] = selected;
-
                         relativeLayout.setSelected(selected);
                         if(selected){
                             anyBookSelected = true;
@@ -197,26 +197,8 @@ private static String KEY_BOOKS = "books";
                     public boolean onLongClick(View v) {
                         anyBookSelected = true;
                         canRenew();
-                         if(selected){
-                            numberOfBooksSelected -= 1;
-                            reissueCheckBox.setChecked(false);
-                             if(numberOfBooksSelected==0){
-                                 reIssueButtton.setVisibility(view.GONE);
-                             }
-
-                        }
-                        else {
-                            numberOfBooksSelected += 1;
-                            reissueCheckBox.setChecked(true);
-                            reIssueButtton.setVisibility(view.VISIBLE);
-                        }
-
-                        if(numberOfBooksSelected<1){
-                            anyBookSelected = false;
-                        }
-
+                         Onclick();
                         // https://stackoverflow.com/questions/29983848/how-to-highlight-the-selected-item-of-recycler-view
-                        selected =! selected;
                         selectedList[getAdapterPosition()] = false;
                         relativeLayout.setSelected(selected);
                         return true;
@@ -227,28 +209,9 @@ private static String KEY_BOOKS = "books";
                     @Override
                     public void onClick(View v) {
                         canRenew();
-
                          if(anyBookSelected){
-
-                            if(selected){
-                                numberOfBooksSelected -= 1;
-                                reissueCheckBox.setChecked(false);
-                                if(numberOfBooksSelected==0){
-                                    reIssueButtton.setVisibility(view.GONE);
-                                }
-                            }
-                            else{
-                                numberOfBooksSelected += 1;
-                                reissueCheckBox.setChecked(true);
-                                reIssueButtton.setVisibility(view.VISIBLE);
-
-                            }
-                            if(numberOfBooksSelected<1){
-                                anyBookSelected = false;
-                            }
-                            selected =! selected;
+                            Onclick();
                             selectedList[getAdapterPosition()] = selected;
-
                             relativeLayout.setSelected(selected);
                         }
                     }
@@ -265,10 +228,6 @@ private static String KEY_BOOKS = "books";
             for(int i = 0; i<selectedList.length; i++){
                 selectedList[i] = false;
             }
-
-
-
-
         }
 
         @NonNull
