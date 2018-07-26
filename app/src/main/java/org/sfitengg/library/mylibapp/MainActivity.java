@@ -423,15 +423,12 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
-
-                        if(errorCode == ERROR_NO_INTERNET || errorCode == ERROR_SERVER_UNREACHABLE){
-                            // Quit the app
-                            finish();
-                            System.exit(0);
-                        }
-
                     }
                 });
+
+                if(!this.isFinishing()) {
+                    loginFailedDialog.show();
+                }
                 //endregion
                 break;
 
