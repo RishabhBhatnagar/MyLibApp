@@ -56,6 +56,10 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
 
+    // SharedPreferences
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
     // Obtain the data holder object
     DataHolder dataHolder = DataHolder.getDataHolder();
     Handler handler = new Handler();
@@ -95,37 +99,11 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         //endregion
 
-
-
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if(!sharedPreferences.getBoolean(LoginActivity.SKIPPED, false)) {
-
-            //region Get outstanding documents for user before he requests it, ie in the onCreate
-            Intent intent = getIntent();
-            // https://stackoverflow.com/a/7578313/9485900
-            cookies = (HashMap<String, String>) intent.getSerializableExtra(KEY_COOKIES);
-            // Now we have cookies, so get the data in the books
-            gForBooks = new GoGoGadget((MyCallback) this,
-                    dataHolder.getBundleURLs(),
-                    GoGoGadget.GET_OUT_DOCS,
-                    handler);
-
-            // Set the cookies needed for access
-            gForBooks.setCookies(cookies);
-
-            new Thread(gForBooks).start();
-
-            // Start a indefinite loading dialog
-            setLoadingDialog(true);
-
-            // This will be stopped in one of the callback methods
-
-            //endregion
-        }
-        else{
-            bookList = stringToBooks(sharedPreferences.getString(MainActivity.BOOKS_STRING_TAG, "none"));
-            }
+        //region Create sharedPreferences
+        sharedPreferences = getApplicationContext().getSharedPreferences(titleSharedPrefs, MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.apply();
+        //endregion
 
 
         // Find our drawer view
@@ -158,24 +136,65 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                     }
                 });
         //endregion
+
+
+//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if(!sharedPreferences.getBoolean(LoginActivity.SKIPPED, false)) {
+
+            //region Get outstanding documents for user before he requests it, ie in the onCreate
+            Intent intent = getIntent();
+            // https://stackoverflow.com/a/7578313/9485900
+            cookies = (HashMap<String, String>) intent.getSerializableExtra(KEY_COOKIES);
+            // Now we have cookies, so get the data in the books
+            gForBooks = new GoGoGadget((MyCallback) this,
+                    dataHolder.getBundleURLs(),
+                    GoGoGadget.GET_OUT_DOCS,
+                    handler);
+
+            // Set the cookies needed for access
+            gForBooks.setCookies(cookies);
+
+            new Thread(gForBooks).start();
+
+            // Start a indefinite loading dialog
+            setLoadingDialog(true);
+
+            // This will be stopped in one of the callback methods
+
+            //endregion
+        }
+        else{
+            bookList = stringToBooks(sharedPreferences.getString(MainActivity.BOOKS_STRING_TAG, "none"));
+
+            // Find the menu item for Issued Books
+            MenuItem menuItemIssuedBooks =
+                    nvDrawer.getMenu().findItem(R.id.frag_issued_books);
+
+            // Highlight it in the drawer
+            menuItemIssuedBooks.setChecked(true);
+
+            // Call the logic needed to set IssuedBooksFragment on FrameLayout
+            selectDrawerItem(menuItemIssuedBooks);
+        }
+
+
     }
 
 
     private String bookToString(Book book){
-        String op = "";
-        op += book.getAcc_no() + attributeSeperator;
-        op += book.getDueDate() + attributeSeperator;
-        op += book.getFineAmount() + attributeSeperator;
-        op += book.getRenewCount() + attributeSeperator;
-        op += book.getReservations() + attributeSeperator;
-        op += book.getTitle() + bookSeperator;
-        return op;
+        return  book.getAcc_no() + attributeSeperator +
+                book.getDueDate() + attributeSeperator +
+                book.getFineAmount() + attributeSeperator +
+                book.getRenewCount() + attributeSeperator +
+                book.getReservations() + attributeSeperator +
+                book.getTitle() + bookSeperator;
     }
 
     private List<Book> stringToBooks(String booksListsString) {
         List<Book> bL = new ArrayList<>();
         if(booksListsString.equals("none")){
             //TODO : no bookList String found.
+            bL = null;
         }
         else{
             for(String bookString : booksListsString.split(bookSeperator)){
@@ -335,8 +354,8 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         for(Book book:books){
             booksString += bookToString(book);
         }
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(BOOKS_STRING_TAG, booksString);
         editor.apply();
 
@@ -347,12 +366,6 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         Fragment fragment = IssuedBooksFragment.newInstance(books);
 
         fragmentManager.beginTransaction().replace( R.id.fragment_frame, fragment).commit();
-
-//
-//        List<Date> dateList = new ArrayList<>();
-//        for(Book b : bookList){
-//            b.getTitle();
-//        }
 
     }
 

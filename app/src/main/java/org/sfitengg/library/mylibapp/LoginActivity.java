@@ -102,14 +102,12 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
                     handler);
 
 
-            SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
             String booksName = sharedPreferences.getString(MainActivity.BOOKS_STRING_TAG, null);
 
             if(booksName != null){
                 editor.putBoolean(SKIPPED, true);
                 editor.apply();
-                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
             }
 
@@ -125,9 +123,6 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
             // If there is no logged in user,
             // show the login form
             setContentView(R.layout.activity_login);
-            // LinearLayout layout = findViewById(R.id.back);
-            //layout.setBackgroundResource(R.drawable.back1);
-            //layout.getBackground().setAlpha(4);
 
             et_pid = findViewById(R.id.et_pid);
             et_pwd = findViewById(R.id.et_pwd);
