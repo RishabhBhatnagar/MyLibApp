@@ -227,6 +227,15 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
                     @Override
                     public void onClick(DialogInterface dialogInterface, int whichButton) {
 
+                        // https://stackoverflow.com/questions/32065854/activity-has-leaked-window-at-alertdialog-show-method/32065936
+                        // Need this section to avoid WindowLeak error
+                        // This error occurs because, the alert dialog is still existing, even after
+                        // current activity has been destroyed when starting a new one
+                        // So call this before starting a new activity
+                        if (loginSuccessDialog != null && loginSuccessDialog.isShowing()) {
+                            loginSuccessDialog.dismiss();
+                        }
+
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 
                         // https://stackoverflow.com/a/7578313/9485900
