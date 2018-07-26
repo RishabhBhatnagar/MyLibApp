@@ -7,15 +7,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.sfitengg.library.mylibapp.data.Book;
@@ -154,6 +157,29 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
                 }
             });
             //endregion
+
+            TextView txt=  findViewById(R.id.home); //txt is object of TextView
+            txt.setText("Click here to ");
+            txt.setMovementMethod(LinkMovementMethod.getInstance());
+            txt.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                    browserIntent.setData(Uri.parse("http://115.248.171.105:82/webopac/chgpas.asp"));
+                    startActivity(browserIntent);
+                }
+            });
+
+            TextView txt1=  findViewById(R.id.home1); //txt is object of TextView
+            txt1.setText("change your password ");
+            txt1.setMovementMethod(LinkMovementMethod.getInstance());
+            txt1.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                    browserIntent.setData(Uri.parse("http://115.248.171.105:82/webopac/chgpas.asp"));
+                    startActivity(browserIntent);
+                }
+            });
+
             //endregion
         }//else
 
@@ -215,10 +241,6 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
                         intent.putExtra("key",name);
 
                         startActivity(intent);
-
-
-
-
 
 
                         // Since we don't want users to come back to this activity, after being logged in
