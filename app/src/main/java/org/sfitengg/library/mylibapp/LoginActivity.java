@@ -302,23 +302,10 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
                 loginFailedDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+
+                        // Dismiss the loginFailedDialog
                         dialogInterface.dismiss();
 
-                        if(errorCode == GoGoGadget.ERROR_NO_INTERNET || errorCode == GoGoGadget.ERROR_SERVER_UNREACHABLE){
-                            // Quit the app
-                            // If we don't quit here, and let the activity be recreated,
-                            // Then it will be stuck in a loop while there is no internet
-                            finish();
-                            System.exit(0);
-                        }
-
-
-                        // This should be the last statement in this block
-                        // Restart activity
-                        recreate();
-                        // Now, since we have cleared the shared prefs,
-                        // The activity will have no previous user
-                        // It will now go into the block for no previous user
                     }
                 });
 
