@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.vinay.mylibapp.org.example.vinay.mylibapp.LoginActivity"
+    tools:context="org.sfitengg.library.mylibapp.LoginActivity"
     android:orientation="vertical"
     android:id="@+id/back"
 
