@@ -46,6 +46,8 @@ import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_NO_INTERNET;
 import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_POST_TO_REISSUE_FAILED;
 import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_SERVER_UNREACHABLE;
 import static org.sfitengg.library.mylibapp.LoginActivity.KEY_COOKIES;
+import static org.sfitengg.library.mylibapp.LoginActivity.KEY_PID;
+import static org.sfitengg.library.mylibapp.LoginActivity.KEY_PWD;
 import static org.sfitengg.library.mylibapp.LoginActivity.titleSharedPrefs;
 
 public class MainActivity extends AppCompatActivity implements MyCallback{
@@ -171,9 +173,6 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                     dataHolder.getBundleURLs(),
                     GoGoGadget.GET_OUT_DOCS,
                     handler);
-
-            // Set the cookies needed for access
-            gForBooks.setCookies(cookies);
 
             new Thread(gForBooks).start();
 
@@ -355,7 +354,8 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 GoGoGadget.SEND_REISSUE,
                 handler,
                 booksToReissue);
-        gSendReissue.setCookies(cookies);
+
+
 
         new Thread(gSendReissue).start();
     }
@@ -482,15 +482,15 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     @Override
     public String getPid() {
         // Used only during login
-        // Will not be called in this activity
-        return null;
+        // Will be called in this activity since we need to login again to get fresh cookies
+        return sharedPreferences.getString(KEY_PID, "1"); // 1 is any non null value
     }
 
     @Override
     public String getPwd() {
         // Used only during login
-        // Will not be called in this activity
-        return null;
+        // Will be called in this activity since we need to login again to get fresh cookies
+        return sharedPreferences.getString(KEY_PWD, "1"); // 1 is any non null value
     }
 
     @Override
