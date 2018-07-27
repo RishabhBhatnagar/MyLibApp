@@ -111,14 +111,18 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
         //region Nav Drawer Init and Listener
         nvDrawer = findViewById(R.id.nvDrawer);
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            String value = extras.getString("key");
-            View headerView = nvDrawer.getHeaderView(0);
-            TextView nameHeader = (TextView) headerView.findViewById(R.id.header_name);
-            nameHeader.setText(value);
 
-        }
+        //region Set the username in nav drawer header
+        String user_name = sharedPreferences.getString(LoginActivity.KEY_USER_NAME, null);
+        View headerView = nvDrawer.getHeaderView(0);
+        TextView nameHeader = headerView.findViewById(R.id.header_name);
+        if(user_name != null)
+            nameHeader.setText(user_name);
+        else
+            nameHeader.setText("User");
+        //endregion
+
+
         nvDrawer.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -138,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         //endregion
 
 
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if(!sharedPreferences.getBoolean(LoginActivity.SKIPPED, false)) {
 
             //region Get outstanding documents for user before he requests it, ie in the onCreate

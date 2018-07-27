@@ -31,6 +31,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
     public static final String KEY_COOKIES = "cookies";
     protected static final String SKIPPED = "skipped";
+    public static final String KEY_USER_NAME = "username";
 
     EditText et_pid;
     EditText et_pwd;
@@ -204,6 +205,8 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
         // Add the correct pid/pwd to shared prefs
         editor.putString(KEY_PID, pid);
         editor.putString(KEY_PWD, pwd);
+        // Add the username to shared prefs
+        editor.putString(KEY_USER_NAME, name);
         editor.apply();
 
 
