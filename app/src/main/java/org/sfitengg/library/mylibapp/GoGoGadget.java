@@ -95,13 +95,13 @@ public class GoGoGadget implements Runnable {
         resultCode = ERROR_SERVER_UNREACHABLE;
     }
 
-    public void setCookies(Map<String, String> cookies) {
-        // Use this method to setCookies for all GoGoGadget objects
-        // except the first
-        // Since the cookies member for the very first successful
-        // GoGoGadget object, has to be used for successive logins
-        this.cookies = cookies;
-    }
+//    private void setCookies(Map<String, String> cookies) {
+//        // Use this method to setCookies for all GoGoGadget objects
+//        // except the first
+//        // Since the cookies member for the very first successful
+//        // GoGoGadget object, has to be used for successive logins
+//        this.cookies = cookies;
+//    }
 
     public Map<String, String> getCookies() {
         return this.cookies;
@@ -155,41 +155,8 @@ public class GoGoGadget implements Runnable {
             case LOGIN_AND_GET_COOKIES:
                 //region LOGIN
                 try {
-                    Connection.Response loginForm = Jsoup.connect(this.gUrlMainPage)
-                            .method(Connection.Method.GET)
-                            .timeout(100000)
-                            .execute();
-                    cookies = loginForm.cookies();
 
-                    Document docMainPage = loginForm.parse();
-
-                    // default input tags whose values we need to mention as they as in the source
-                    String submitValue = docMainPage.select("input[type=submit]").attr("value");
-                    String resetValue = docMainPage.select("input[type=reset]").attr("value");
-
-                    Connection.Response responseLoginForm = Jsoup.connect(this.gUrlLoginFormAction)
-                            .cookies(this.cookies)
-                            .data("m_mem_id", myCallback.getPid())
-                            .data("m_mem_pwd", myCallback.getPwd())
-                            .data("Submit", submitValue)
-                            .data("Submit2", resetValue)
-                            .method(Connection.Method.POST)
-                            .execute();
-
-                    Document docProfilePage = responseLoginForm.parse();
-
-                    // If following tag is present, then we have successfully logged in
-                    String name = docProfilePage.select("font[color=purple][face=Arial][size=3]").html();
-                    // This tag contains name of student
-
-                    if (name.length() > 0) {
-                        // Correct Login
-                        this.result.putString(rKeyName, name);
-                        this.resultCode = RETURN_NAME;
-                    } else {
-                        // incorrect login
-                        this.resultCode = ERROR_INCORRECT_PID_OR_PASSWORD;
-                    }
+                    methodLoginAndGetCookies();
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -200,162 +167,27 @@ public class GoGoGadget implements Runnable {
                 break;
             case GET_OUT_DOCS:
                 //region Get Outstanding Documents Page
-                if (cookies == null) {
-                    // Can't login without the original cookies
-                    resultCode = ERROR_NOT_LOGGED_IN;
-                } else {
-                    //Check outstanding documents
-                    try {
-                        Connection.Response outR = Jsoup.connect(gUrlOutDocs)
-                                .cookies(cookies)
-                                .method(Connection.Method.GET)
-                                .execute();
-                        Document docOutDocs = outR.parse();
+                try {
 
-                        // Inside these tags, the attributes are present
-                        // <td valign="top">
-                        // <font face="Arial" color="black" size="2">
+                    // Get fresh cookies by loggin in again
+                    methodLoginAndGetCookies();
+                    // Actually get the documents and return the books
+                    methodGetOutDocs();
 
-                        // We get a list of all elements that satisfy the following params
-                        Elements elList = docOutDocs.select("tr td[valign=top]");
-
-                        if(elList.size() >0){
-                            //region User has borrowed books
-                            // if elList has more than one element
-                            // this means that the table which shows the books exists
-
-                            List<Book> bookList = new ArrayList<>();
-
-                            int noOfBooks = elList.size() / 7;
-                            // Since there are seven attributes for each book
-                            // -1 is not needed since when last row is empty
-                            // it doesn't have [valign=top] tag
-                            for (int i = 0; i < noOfBooks; i++) {
-                                Book book = new Book();
-                                book.setAcc_no(       elList.get(i * 7 + 0).text().trim());
-                                book.setTitle(        elList.get(i * 7 + 1).text().trim());
-                                book.setDueDate(      elList.get(i * 7 + 2).text().trim());
-                                book.setFineAmount(   elList.get(i * 7 + 3).text().trim());
-                                book.setRenewCount(   elList.get(i * 7 + 4).text().trim());
-                                book.setReservations( elList.get(i * 7 + 5).text().trim());
-
-                                // Check if book can be renew or not
-                                String canRenew = elList.get(i * 7 + 6).html();
-                                if (canRenew.contains("&nbsp;") || canRenew.contains("&nb")) {
-                                    // book can't be renewed right now
-                                    book.setCanRenew(false);
-                                } else {
-                                    //if we have input tag
-                                    // book can be renewed
-                                    book.setCanRenew(true);
-                                }
-
-                                bookList.add(book);
-
-                            }// for
-
-                            // Put the list of books in result bundle
-                            resultCode = RETURN_LIST_BOOKS;
-                            result.putParcelableArrayList(rKeyListBooks, (ArrayList<? extends Parcelable>) bookList);
-                            // Casting is needed since Book is Parcelable,
-                            // but bookList is ArrayList which is not Parcelable
-                            //endregion
-                        }//if
-                        else {
-                            //region User has borrowed no books
-                            // if elList doesn't have elements, then that means
-                            // user hasn't borrowed any books
-                            resultCode = RETURN_NO_BORROWED_BOOKS;
-                            //endregion
-                        }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        // Set server unreachable error code
-                        setErrorServerUnreachable();
-                    }
-                }//else
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    // Set server unreachable error code
+                    setErrorServerUnreachable();
+                }
                 //endregion
                 break;
             case SEND_REISSUE:
                 try {
-                    Connection.Response outDocsPage = Jsoup.connect(gUrlOutDocs)
-                            .cookies(cookies)
-                            .method(Connection.Method.GET)
-                            .execute();
-                    Document docOutDocs = outDocsPage.parse();
 
-                    // Checkbox inputs
-                    Elements checkBoxInputTags = docOutDocs.select("input[checked]");
-
-                    // Select the element which are not checkboxes, and have to be submitted in anycase
-                    Elements userIndependentInputTags = docOutDocs.select("input:not([checked])");
-
-                    Connection connToReissue = Jsoup.connect(this.gUrlOutForm)
-                            .cookies(this.cookies)
-                            .method(Connection.Method.POST);
-
-                    for(Element e : userIndependentInputTags){
-                        // Add the inputs to connection
-                        connToReissue.data(e.attr("name"), e.attr("value"));
-                    }
-
-
-                    for(Book book : this.booksToReissue){
-                        // for each book find its correct tag
-
-                        // if userIndependent tag name begins with m_accno, then get that value
-                        // Compare with book acc_no, if they are same, then that's the checkbox for the book
-                        for(Element element : userIndependentInputTags){
-                            if(element.attr("name").contains("m_accno")){
-                                // this is a named attribute that may be associated with a book
-
-                                String book_accno = book.getAcc_no().substring(1);
-                                String input_accno = element.attr("value");
-
-                                // element will have the 1234 for a book 'B1234', we will now compare
-                                // those values, if they are same, then we have the input checkbox number for the book
-                                if(book_accno.equals(input_accno)){
-                                    String name = element.attr("name");
-                                    // this will be m_accnoN, N = number
-                                    // this N will tell us which checkbox to add to the connection
-
-                                    // Get the last char of the name attribute
-                                    String N = name.substring(name.length() - 1);
-
-                                    // Find the checkbox of current book
-                                    for(Element e : checkBoxInputTags){
-                                        if(e.attr("name").equals("m_chk" + N)){
-                                            // Add this checkbox to the connection
-                                            connToReissue.data(e.attr("name"),
-                                                    e.attr("value"));
-                                        }
-                                    }
-
-                                }
-                            }
-                        }
-                    }// Book loop
-
-
-                    // Finally execute the connection
-                    Connection.Response successPage = connToReissue.execute();
-                    Document docSucc = successPage.parse();
-
-                    // There is single bold tag
-                    Elements boldTag = docSucc.select("b");
-
-                    for(Element b : boldTag){
-                        if(b.text().contains("Document")){
-                            // Then we have successfully posted
-                            this.resultCode = RETURN_POST_TO_REISSUE_SUCCESS;
-                            break;
-                        }
-                        else{
-                            this.resultCode = ERROR_POST_TO_REISSUE_FAILED;
-                        }
-                    }
-
+                    // Get fresh cookies by logging in again
+                    methodLoginAndGetCookies();
+                    // Actually send the post with new cookies
+                    methodSendReissuePOST();
 
                 }
                 catch (IOException e){
@@ -432,4 +264,198 @@ public class GoGoGadget implements Runnable {
             }// run method of handler Runnable
         });// handler.post()
     }// run method of GoGoGadget
+
+    private void methodLoginAndGetCookies() throws IOException{
+        Connection.Response loginForm = Jsoup.connect(this.gUrlMainPage)
+                .method(Connection.Method.GET)
+                .timeout(100000)
+                .execute();
+        cookies = loginForm.cookies();
+
+        Document docMainPage = loginForm.parse();
+
+        // default input tags whose values we need to mention as they as in the source
+        String submitValue = docMainPage.select("input[type=submit]").attr("value");
+        String resetValue = docMainPage.select("input[type=reset]").attr("value");
+
+        Connection.Response responseLoginForm = Jsoup.connect(this.gUrlLoginFormAction)
+                .cookies(this.cookies)
+                .data("m_mem_id", myCallback.getPid())
+                .data("m_mem_pwd", myCallback.getPwd())
+                .data("Submit", submitValue)
+                .data("Submit2", resetValue)
+                .method(Connection.Method.POST)
+                .execute();
+
+        Document docProfilePage = responseLoginForm.parse();
+
+        // If following tag is present, then we have successfully logged in
+        String name = docProfilePage.select("font[color=purple][face=Arial][size=3]").html();
+        // This tag contains name of student
+
+        if (name.length() > 0) {
+            // Correct Login
+            this.result.putString(rKeyName, name);
+            this.resultCode = RETURN_NAME;
+        } else {
+            // incorrect login
+            this.resultCode = ERROR_INCORRECT_PID_OR_PASSWORD;
+        }
+    }
+
+    private void methodGetOutDocs() throws IOException{
+        if (cookies == null) {
+            // Can't login without the original cookies
+            resultCode = ERROR_NOT_LOGGED_IN;
+        } else {
+            //Check outstanding documents
+
+                Connection.Response outR = Jsoup.connect(gUrlOutDocs)
+                        .cookies(cookies)
+                        .method(Connection.Method.GET)
+                        .execute();
+                Document docOutDocs = outR.parse();
+
+                // Inside these tags, the attributes are present
+                // <td valign="top">
+                // <font face="Arial" color="black" size="2">
+
+                // We get a list of all elements that satisfy the following params
+                Elements elList = docOutDocs.select("tr td[valign=top]");
+
+                if(elList.size() >0){
+                    //region User has borrowed books
+                    // if elList has more than one element
+                    // this means that the table which shows the books exists
+
+                    List<Book> bookList = new ArrayList<>();
+
+                    int noOfBooks = elList.size() / 7;
+                    // Since there are seven attributes for each book
+                    // -1 is not needed since when last row is empty
+                    // it doesn't have [valign=top] tag
+                    for (int i = 0; i < noOfBooks; i++) {
+                        Book book = new Book();
+                        book.setAcc_no(       elList.get(i * 7 + 0).text().trim());
+                        book.setTitle(        elList.get(i * 7 + 1).text().trim());
+                        book.setDueDate(      elList.get(i * 7 + 2).text().trim());
+                        book.setFineAmount(   elList.get(i * 7 + 3).text().trim());
+                        book.setRenewCount(   elList.get(i * 7 + 4).text().trim());
+                        book.setReservations( elList.get(i * 7 + 5).text().trim());
+
+                        // Check if book can be renew or not
+                        String canRenew = elList.get(i * 7 + 6).html();
+                        if (canRenew.contains("&nbsp;") || canRenew.contains("&nb")) {
+                            // book can't be renewed right now
+                            book.setCanRenew(false);
+                        } else {
+                            //if we have input tag
+                            // book can be renewed
+                            book.setCanRenew(true);
+                        }
+
+                        bookList.add(book);
+
+                    }// for
+
+                    // Put the list of books in result bundle
+                    resultCode = RETURN_LIST_BOOKS;
+                    result.putParcelableArrayList(rKeyListBooks, (ArrayList<? extends Parcelable>) bookList);
+                    // Casting is needed since Book is Parcelable,
+                    // but bookList is ArrayList which is not Parcelable
+                    //endregion
+                }//if
+                else {
+                    //region User has borrowed no books
+                    // if elList doesn't have elements, then that means
+                    // user hasn't borrowed any books
+                    resultCode = RETURN_NO_BORROWED_BOOKS;
+                    //endregion
+                }
+
+
+        }//else
+    }
+
+    private void methodSendReissuePOST() throws IOException{
+        Connection.Response outDocsPage = Jsoup.connect(gUrlOutDocs)
+                .cookies(cookies)
+                .method(Connection.Method.GET)
+                .execute();
+        Document docOutDocs = outDocsPage.parse();
+
+        // Checkbox inputs
+        Elements checkBoxInputTags = docOutDocs.select("input[checked]");
+
+        // Select the element which are not checkboxes, and have to be submitted in anycase
+        Elements userIndependentInputTags = docOutDocs.select("input:not([checked])");
+
+        Connection connToReissue = Jsoup.connect(this.gUrlOutForm)
+                .cookies(this.cookies)
+                .method(Connection.Method.POST);
+
+        for(Element e : userIndependentInputTags){
+            // Add the inputs to connection
+            connToReissue.data(e.attr("name"), e.attr("value"));
+        }
+
+
+        for(Book book : this.booksToReissue){
+            // for each book find its correct tag
+
+            // if userIndependent tag name begins with m_accno, then get that value
+            // Compare with book acc_no, if they are same, then that's the checkbox for the book
+            for(Element element : userIndependentInputTags){
+                if(element.attr("name").contains("m_accno")){
+                    // this is a named attribute that may be associated with a book
+
+                    String book_accno = book.getAcc_no().substring(1);
+                    String input_accno = element.attr("value");
+
+                    // element will have the 1234 for a book 'B1234', we will now compare
+                    // those values, if they are same, then we have the input checkbox number for the book
+                    if(book_accno.equals(input_accno)){
+                        String name = element.attr("name");
+                        // this will be m_accnoN, N = number
+                        // this N will tell us which checkbox to add to the connection
+
+                        // Get the last char of the name attribute
+                        String N = name.substring(name.length() - 1);
+
+                        // Find the checkbox of current book
+                        for(Element e : checkBoxInputTags){
+                            if(e.attr("name").equals("m_chk" + N)){
+                                // Add this checkbox to the connection
+                                connToReissue.data(e.attr("name"),
+                                        e.attr("value"));
+                            }
+                        }
+
+                    }
+                }
+            }
+        }// Book loop
+
+
+        // Finally execute the connection
+        Connection.Response successPage = connToReissue.execute();
+        Document docSucc = successPage.parse();
+
+        // There is single bold tag
+        Elements boldTag = docSucc.select("b");
+
+        for(Element b : boldTag){
+            if(b.text().contains("Document")){
+                // Then we have successfully posted
+                this.resultCode = RETURN_POST_TO_REISSUE_SUCCESS;
+                break;
+            }
+            else{
+                this.resultCode = ERROR_POST_TO_REISSUE_FAILED;
+            }
+        }
+
+    }
+
+
 }// class GoGoGadget
