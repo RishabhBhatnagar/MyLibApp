@@ -53,6 +53,22 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
     // For loading dialog
     AlertDialog.Builder alertDialogBuilder;
     Dialog loadingDialog;
+    AlertDialog loginSuccessDialog;
+    AlertDialog loginFailedDialog;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Dismiss all alert dialogs to prevent window leak
+        Dialog [] arrayDialog = new Dialog[]{
+                this.loadingDialog, this.loginSuccessDialog, this.loginFailedDialog};
+        for(Dialog d : arrayDialog){
+            if(d != null && d.isShowing()){
+                d.dismiss();
+            }
+        }
+    }
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -213,7 +229,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
         setLoadingDialog(false);
 
         // Go to MainActivity
-        final AlertDialog loginSuccessDialog = new AlertDialog.Builder(
+        loginSuccessDialog = new AlertDialog.Builder(
                 this).create();
         loginSuccessDialog.setTitle("Login Successful!");
         loginSuccessDialog.setMessage("Welcome "+ name);
@@ -284,7 +300,7 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
 
 
                 // Create AlertDialog for login failure
-                AlertDialog loginFailedDialog = new AlertDialog.Builder(this).create();
+                loginFailedDialog = new AlertDialog.Builder(this).create();
                 loginFailedDialog.setTitle("Login Failed!");
 
                 // Set reason for failure
@@ -324,8 +340,6 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
                 throw new RuntimeException("Unknown Error code");
         }// switch
     }
-
-
 
 
     @Override

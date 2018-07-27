@@ -67,6 +67,24 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     // Loading Dialog
     AlertDialog.Builder alertDialogBuilder;
     Dialog loadingDialog;
+    AlertDialog reissueSuccessDialog;
+    AlertDialog signOut;
+    AlertDialog loginFailedDialog;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Dismiss all alert dialogs to prevent window leak
+        Dialog[] arrayDialog = new Dialog[]{
+                this.loadingDialog, this.reissueSuccessDialog,
+                this.signOut, this.loginFailedDialog};
+        for(Dialog d: arrayDialog){
+            if(d != null && d.isShowing()){
+                d.dismiss();
+            }
+        }
+    }
 
     Map<String, String> cookies;
     List<Book> bookList;
@@ -246,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 break;
             case R.id.option_sign_out:
 
-                AlertDialog signOut = new AlertDialog.Builder(this).create();
+                signOut = new AlertDialog.Builder(this).create();
                 signOut.setTitle("Do you want to sign out?");
                 //region Set Positive Button for signOut
                 signOut.setButton(DialogInterface.BUTTON_POSITIVE,
@@ -391,7 +409,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         // Reissue post request has been success
         setLoadingDialog(false);
 
-        AlertDialog reissueSuccessDialog = new AlertDialog.Builder(this).create();
+        reissueSuccessDialog = new AlertDialog.Builder(this).create();
         reissueSuccessDialog.setTitle("Books reissued successfully!");
         reissueSuccessDialog.setMessage("Do you want to reload?");
         reissueSuccessDialog.setButton(DialogInterface.BUTTON_NEUTRAL,
@@ -419,7 +437,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 // So, to avoid that warning, adding a impossible value here.
 
                 //region Create AlertDialog(loginFailedDialog) for network failure
-                AlertDialog loginFailedDialog = new AlertDialog.Builder(this).create();
+                loginFailedDialog = new AlertDialog.Builder(this).create();
                 if ( errorCode == ERROR_NO_INTERNET) {
                     loginFailedDialog.setTitle("You are not connected to the internet");
                     loginFailedDialog.setMessage("Please connect to the internet and try again.");
