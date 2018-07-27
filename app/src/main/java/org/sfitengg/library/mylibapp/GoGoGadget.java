@@ -182,6 +182,7 @@ public class GoGoGadget implements Runnable {
                 //endregion
                 break;
             case SEND_REISSUE:
+                //region Send Reissue Request
                 try {
 
                     // Get fresh cookies by logging in again
@@ -195,6 +196,7 @@ public class GoGoGadget implements Runnable {
                     // Set server unreachable error code
                     setErrorServerUnreachable();
                 }
+                //endregion
                 break;
             default:
                 // action variable has to be initialized
