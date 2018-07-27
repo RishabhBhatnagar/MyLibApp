@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(org.sfitengg.library.mylibapp.R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
         //region Create a loadingDialog instance for the activity to show during network operations
         alertDialogBuilder = new AlertDialog.Builder(this);
@@ -190,7 +190,8 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 book.getFineAmount() + attributeSeperator +
                 book.getRenewCount() + attributeSeperator +
                 book.getReservations() + attributeSeperator +
-                book.getTitle() + bookSeperator;
+                book.getTitle() + attributeSeperator +
+                String.valueOf(book.isCanRenew()) + bookSeperator;
     }
 
     private List<Book> stringToBooks(String booksListsString) {
@@ -210,6 +211,14 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 book.setRenewCount(attributes.get(3));
                 book.setReservations(attributes.get(4));
                 book.setTitle(attributes.get(5));
+
+                if(attributes.get(6).equals("true")){
+                    // if true is written in string
+                    book.setCanRenew(true);
+                }
+                else{
+                    book.setCanRenew(false);
+                }
 
                 bL.add(book);
             }
@@ -353,13 +362,12 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
 
 
-        String booksString = "";
+        StringBuilder bookStringBuilder = new StringBuilder();
         for(Book book:books){
-            booksString += bookToString(book);
+            bookStringBuilder.append(bookToString(book));
         }
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(BOOKS_STRING_TAG, booksString);
+
+        editor.putString(BOOKS_STRING_TAG, bookStringBuilder.toString());
         editor.apply();
 
 
