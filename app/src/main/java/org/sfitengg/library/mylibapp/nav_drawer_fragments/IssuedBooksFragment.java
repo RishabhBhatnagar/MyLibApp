@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,7 @@ import org.sfitengg.library.mylibapp.GoGoGadget;
 import org.sfitengg.library.mylibapp.MainActivity;
 import org.sfitengg.library.mylibapp.data.Book;
 import org.sfitengg.library.mylibapp.R;
+import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,6 +43,8 @@ private static String KEY_BOOKS = "books";
     private BooksAdapter mBooksAdapter;
     private static int numberOfBooksSelected = 0;
     Button reIssueButtton;
+    SwipeRefreshLayout swipeLayout;
+
 
     public static IssuedBooksFragment newInstance(List<Book> bookList){
         IssuedBooksFragment issuedBooksFragment = new IssuedBooksFragment();
@@ -59,6 +63,7 @@ private static String KEY_BOOKS = "books";
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_issued_books, container, false);
         reIssueButtton=view.findViewById(R.id.re_issue_button);
+        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
 
         Bundle args = getArguments();
 
@@ -95,6 +100,20 @@ private static String KEY_BOOKS = "books";
 
         // On click listener for reissue
 
+
+        swipeLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        // This method performs the actual data-refresh operation.
+                        // The method calls setRefreshing(false) when it's finished.
+                        myUpdateOperation();
+                    }
+                }
+        );
+
+
+
         reIssueButtton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,6 +130,26 @@ private static String KEY_BOOKS = "books";
         return view;
     }
 
+    void myUpdateOperation(){
+        IssuedBooksFragment issuedBooksFragment = new IssuedBooksFragment();
+        Bundle args = new Bundle();
+        args.putParcelableArrayList(KEY_BOOKS, (ArrayList<? extends Parcelable>) bookList);
+        issuedBooksFragment.setArguments(args);
+        Bundle args1 = getArguments();
+
+        List<Parcelable> parcelBooks = args1.getParcelableArrayList(KEY_BOOKS);
+        for (Parcelable p : parcelBooks) {
+            Book b = (Book) p;
+            bookList.add(b);
+        }
+        mBooksAdapter = new BooksAdapter(bookList, getContext());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mBooksAdapter);
+        swipeLayout.setRefreshing(false);
+    }
+
     // private since we only need it inside this class
     private class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.MyViewHolder> {
 
@@ -118,6 +157,7 @@ private static String KEY_BOOKS = "books";
         private List<Book> bookList;
         private boolean anyBookSelected = false;
         private boolean selectedList[];
+
 
         private List<Book> getBooks(){
             List<Book> selectedBooks = new ArrayList<>();
@@ -129,12 +169,14 @@ private static String KEY_BOOKS = "books";
             return selectedBooks;
         }
 
+
         public class MyViewHolder extends RecyclerView.ViewHolder{
 
-            public TextView tv_title,tv_duedate,tv_fine,tv_reissue_count,tv_daysLeft;
+            public TextView tv_title,tv_duedate,tv_fine,tv_reissue_count;
             public RelativeLayout relativeLayout;
             public CheckBox reissueCheckBox;
             private boolean selected = false;
+            public TextView tv_daysLeft;
 
 
             public void canRenew(){
@@ -144,6 +186,8 @@ private static String KEY_BOOKS = "books";
                     reissueCheckBox.setEnabled(false);
                     Toast.makeText(getContext(), "RE-ISSUE BLOCKED PLEASE RETURN THE BOOK !", Toast.LENGTH_SHORT).show();
                 }
+
+
             }
 
             public void Onclick(){
@@ -179,12 +223,18 @@ private static String KEY_BOOKS = "books";
                 reissueCheckBox = view.findViewById(R.id.reissue_checkbox);
                 relativeLayout=view.findViewById(R.id.relative_layout);
 
+
+
+
+
+
                 //region onclicklistener reissue
                 reissueCheckBox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         canRenew();  // to disable the checkbox if canRenew boolean is false
                          Onclick();
+
                         // https://stackoverflow.com/questions/29983848/how-to-highlight-the-selected-item-of-recycler-view
                         selectedList[getAdapterPosition()] = selected;
                         relativeLayout.setSelected(selected);
@@ -221,6 +271,7 @@ private static String KEY_BOOKS = "books";
                     }
                 });
 
+
             }
 
         }
@@ -239,6 +290,7 @@ private static String KEY_BOOKS = "books";
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.card_single_book, parent, false);
+
 
             return new MyViewHolder(itemView);
         }
@@ -271,6 +323,10 @@ private static String KEY_BOOKS = "books";
                 }
 
         }
+        private int DptoPxConvertion(int dpValue)
+        {
+            return (int)((dpValue * getContext().getResources().getDisplayMetrics().density) + 0.5);
+        }
 
         @Override
         public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
@@ -282,8 +338,12 @@ private static String KEY_BOOKS = "books";
             holder.tv_reissue_count.setText(currentBook.getRenewCount());
             holder.tv_daysLeft.setText(daysleft(position));
 
+
+
+
+
             if(bookList.get(position).isCanRenew()){
-                Toast.makeText(context, "can renew" + bookList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "You can renew" + bookList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
             }
             else{
                 holder.reissueCheckBox.setChecked(false);

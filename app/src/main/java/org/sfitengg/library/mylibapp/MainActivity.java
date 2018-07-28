@@ -105,6 +105,10 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
+
+
         //region Create a loadingDialog instance for the activity to show during network operations
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(R.layout.loading_dialog);
