@@ -62,7 +62,7 @@ private static String KEY_BOOKS = "books";
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_issued_books, container, false);
-        reIssueButtton=view.findViewById(R.id.re_issue_button);
+        reIssueButtton = view.findViewById(R.id.re_issue_button);
         swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
 
         Bundle args = getArguments();
@@ -131,22 +131,8 @@ private static String KEY_BOOKS = "books";
     }
 
     void myUpdateOperation(){
-        IssuedBooksFragment issuedBooksFragment = new IssuedBooksFragment();
-        Bundle args = new Bundle();
-        args.putParcelableArrayList(KEY_BOOKS, (ArrayList<? extends Parcelable>) bookList);
-        issuedBooksFragment.setArguments(args);
-        Bundle args1 = getArguments();
 
-        List<Parcelable> parcelBooks = args1.getParcelableArrayList(KEY_BOOKS);
-        for (Parcelable p : parcelBooks) {
-            Book b = (Book) p;
-            bookList.add(b);
-        }
-        mBooksAdapter = new BooksAdapter(bookList, getContext());
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mBooksAdapter);
+        ((MainActivity)getActivity()).startGetOutDocsAndCreateBooks();
         swipeLayout.setRefreshing(false);
     }
 

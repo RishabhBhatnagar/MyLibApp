@@ -171,22 +171,12 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         if(!sharedPreferences.getBoolean(LoginActivity.SKIPPED, false)) {
             // If LoginActivity was not skipped, then get books from the internet
 
-            //region Get outstanding documents for user before he requests it, ie in the onCreate
-            Intent intent = getIntent();
-            // https://stackoverflow.com/a/7578313/9485900
-            cookies = (HashMap<String, String>) intent.getSerializableExtra(KEY_COOKIES);
-            // Now we have cookies, so get the data in the books
-            gForBooks = new GoGoGadget((MyCallback) this,
-                    dataHolder.getBundleURLs(),
-                    GoGoGadget.GET_OUT_DOCS,
-                    handler);
+            //region Get outstanding documents for user
 
-            new Thread(gForBooks).start();
+            // Start thread operation to retrieve books
+            startGetOutDocsAndCreateBooks();
 
-            // Start a indefinite loading dialog
-            setLoadingDialog(true);
-
-            // This will be stopped in one of the callback methods
+            // The result will be gotten in one of the callback methods
 
             //endregion
         }
@@ -371,6 +361,18 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
 
         new Thread(gSendReissue).start();
+    }
+
+    public void startGetOutDocsAndCreateBooks(){
+
+        // Start a indefinite loading dialog
+        setLoadingDialog(true);
+
+        GoGoGadget gGetDocs = new GoGoGadget((MyCallback)this,
+                dataHolder.getBundleURLs(),
+                GoGoGadget.GET_OUT_DOCS,
+                handler);
+        new Thread(gGetDocs).start();
     }
 
     private void setLoadingDialog(boolean show){
