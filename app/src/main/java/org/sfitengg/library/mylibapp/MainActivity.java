@@ -30,6 +30,7 @@ import android.widget.Toast;
 import org.sfitengg.library.mylibapp.data.Book;
 import org.sfitengg.library.mylibapp.data.DataHolder;
 import org.sfitengg.library.mylibapp.nav_drawer_fragments.AboutFragment;
+import org.sfitengg.library.mylibapp.nav_drawer_fragments.FaqFragment;
 import org.sfitengg.library.mylibapp.nav_drawer_fragments.IssuedBooksFragment;
 import org.sfitengg.library.mylibapp.nav_drawer_fragments.LibExtrasFragment;
 
@@ -186,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
             //endregion
         }
         else {
+            // user was already  logged in and the loginActivity was skipped.
 
             bookList = stringToBooks(sharedPreferences.getString(MainActivity.BOOKS_STRING_TAG, NO_BOOKS_BORROWED));
 
@@ -265,6 +267,10 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
             case R.id.frag_about:
                 newFragmentToPutInFrame = new AboutFragment();
                 break;
+            case R.id.frag_faq:{
+                newFragmentToPutInFrame = new FaqFragment();
+                break;
+            }
             case R.id.option_sign_out:
 
                 signOut = new AlertDialog.Builder(this).create();
@@ -322,7 +328,6 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
                 // No Fragment for sign out option
                 return;
-
         }// switch
 
 

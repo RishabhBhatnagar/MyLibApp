@@ -18,5 +18,9 @@
             android:id="@+id/option_sign_out"
             android:icon="@drawable/ic_logout"
             android:title="Sign Out"/>
+        <item
+            android:id="@+id/frag_faq"
+            android:icon="@drawable/ic_faq"
+            android:title="FAQ"/>
     </group>
 </menu>

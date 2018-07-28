@@ -26,7 +26,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/name"
             android:textSize="24sp"
-            android:text="skgvdfhf jdfvjnfvnvl  dfvfv  flfdfhh dv  ljss"
             android:textAllCaps="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="5sp"
@@ -75,6 +74,12 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:textStyle="bold"
+                        android:id="@+id/days_left"
+                        android:gravity="center"
+                        android:textColor="#ed044e"
+                        android:textSize="46dp"
+                        android:text="2"
+                        android:padding="1dp"
                         android:layout_alignParentEnd="true"
                         android:background="@drawable/shape2"
                         android:layout_centerVertical="true"
@@ -89,23 +94,6 @@
                         android:textStyle="bold"
                         android:textSize="@dimen/sub_heads_size"
                         />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:id="@+id/days_left"
-                        android:textColor="#ed044e"
-                        android:textSize="50dp"
-                        android:text="2"
-                        android:layout_centerVertical="true"
-                        android:textStyle="bold"
-                        android:layout_marginRight="15dp"
-                        android:paddingRight="@dimen/counter_right_buffer"
-                        android:paddingEnd="@dimen/counter_right_buffer"
-                        />
-
                 </RelativeLayout>
 
                 <RelativeLayout

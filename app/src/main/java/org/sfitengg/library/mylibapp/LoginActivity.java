@@ -19,7 +19,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.sfitengg.library.mylibapp.data.Book;
 import org.sfitengg.library.mylibapp.data.DataHolder;
@@ -129,12 +128,11 @@ public class LoginActivity extends AppCompatActivity implements MyCallback{
             }
 
             editor.putBoolean(SKIPPED, false);
-
-
             new Thread(goGoGadget).start();
             //endregion
         }
         else {
+
             //region No Logged in user
 
             // If there is no logged in user,
