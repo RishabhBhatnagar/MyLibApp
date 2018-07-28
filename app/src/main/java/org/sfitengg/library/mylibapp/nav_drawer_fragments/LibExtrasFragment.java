@@ -60,7 +60,7 @@ public class LibExtrasFragment extends Fragment {
         dataSet.add(new Url("http://www.sfitengg.org/library_services.php", "Services"));
         dataSet.add(new Url("http://www.sfitengg.org/library/Virtual_References_E_Books.htm", "eBooks"));
         dataSet.add(new Url("http://www.sfitengg.org/library_download.php", "Syllabus download"));
-        dataSet.add(new Url("http://www.sfitengg.org/library_iitb.php", "IIT-B Memberfhip"));
+        dataSet.add(new Url("http://www.sfitengg.org/library_iitb.php", "IIT-B Membership"));
         dataSet.add(new Url("http://www.sfitengg.org/library_statistics.php", "Library Statistics"));
         dataSet.add(new Url("http://www.sfitengg.org/library_ejournals.php", "E-Journals"));
     }
