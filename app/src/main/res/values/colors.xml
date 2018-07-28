@@ -8,4 +8,5 @@
     <color name="cardview_name_color">#1295C9</color>
     <color name="dark_grey">#666666</color>
     <color name="main_activity_background">#EDEDED</color>
+    <color name="faqParentBgColor">#696969</color>
 </resources>
