@@ -33,6 +33,11 @@ public class UrlAdapter extends RecyclerView.Adapter<UrlAdapter.UrlViewHolder> {
     private Context context;
     private List<Url> urlList;
 
+    public static final String K_URL = "url";
+    public static final String K_NAME = "name1";
+    public static final String K_URL_LIST = "urllist1";
+    public static final String K_URL_NAMES = "urlnames1";
+
     public UrlAdapter(Context context, List<Url> urlList) {
         this.context = context;
         this.urlList = urlList;
@@ -86,10 +91,10 @@ public class UrlAdapter extends RecyclerView.Adapter<UrlAdapter.UrlViewHolder> {
             urlNames.add(url1.getName());
         }
         Intent intent = new Intent(context, WebViewActivity.class);
-        intent.putExtra("url", url);
-        intent.putExtra("name", name);
-        intent.putStringArrayListExtra("urlList", (ArrayList<String>) urlStrings);
-        intent.putStringArrayListExtra("urlNames", (ArrayList<String>) urlNames);
+        intent.putExtra(K_URL, url);
+        intent.putExtra(K_NAME, name);
+        intent.putStringArrayListExtra(K_URL_LIST, (ArrayList<String>) urlStrings);
+        intent.putStringArrayListExtra(K_URL_NAMES, (ArrayList<String>) urlNames);
         context.startActivity(intent);
     }
 }

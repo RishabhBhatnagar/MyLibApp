@@ -19,6 +19,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.sfitengg.library.mylibapp.R;
+import org.sfitengg.library.mylibapp.data.UrlAdapter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,8 +48,8 @@ public class WebViewActivity extends AppCompatActivity {
         setContentView(R.layout.loading_screen);
 
 
-        String url = getIntent().getExtras().getString("url");
-        ArrayList<String> urlStrings = getIntent().getExtras().getStringArrayList("urlList");
+        String url = getIntent().getExtras().getString(UrlAdapter.K_URL);
+        ArrayList<String> urlStrings = getIntent().getExtras().getStringArrayList(UrlAdapter.K_URL_LIST);
 
         if(url.equals("") || url == null || urlStrings == null){
             Toast.makeText(this, "Url could not be loaded.", Toast.LENGTH_SHORT).show();

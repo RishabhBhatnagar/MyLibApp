@@ -53,6 +53,7 @@ import static org.sfitengg.library.mylibapp.LoginActivity.titleSharedPrefs;
 public class MainActivity extends AppCompatActivity implements MyCallback{
 
     protected static final String BOOKS_STRING_TAG = "bst";
+    public static final String NO_BOOKS_BORROWED = "none";
     private DrawerLayout mDrawerLayout;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
@@ -184,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
             //endregion
         }
         else{
-            bookList = stringToBooks(sharedPreferences.getString(MainActivity.BOOKS_STRING_TAG, "none"));
+            bookList = stringToBooks(sharedPreferences.getString(MainActivity.BOOKS_STRING_TAG, NO_BOOKS_BORROWED));
 
             // Find the menu item for Issued Books
             MenuItem menuItemIssuedBooks =
@@ -213,8 +214,9 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
     private List<Book> stringToBooks(String booksListsString) {
         List<Book> bL = new ArrayList<>();
-        if(booksListsString.equals("none")){
-            //TODO : no bookList String found.
+        if(booksListsString.equals(NO_BOOKS_BORROWED)){
+            // Since no books are available, set list to null
+            // This null will be handled in the IssuedBooksFragment
             bL = null;
         }
         else{
