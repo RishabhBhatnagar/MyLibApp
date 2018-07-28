@@ -105,6 +105,10 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
+
+
         //region Create a loadingDialog instance for the activity to show during network operations
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(R.layout.loading_dialog);
@@ -167,22 +171,12 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         if(!sharedPreferences.getBoolean(LoginActivity.SKIPPED, false)) {
             // If LoginActivity was not skipped, then get books from the internet
 
-            //region Get outstanding documents for user before he requests it, ie in the onCreate
-            Intent intent = getIntent();
-            // https://stackoverflow.com/a/7578313/9485900
-            cookies = (HashMap<String, String>) intent.getSerializableExtra(KEY_COOKIES);
-            // Now we have cookies, so get the data in the books
-            gForBooks = new GoGoGadget((MyCallback) this,
-                    dataHolder.getBundleURLs(),
-                    GoGoGadget.GET_OUT_DOCS,
-                    handler);
+            //region Get outstanding documents for user
 
-            new Thread(gForBooks).start();
+            // Start thread operation to retrieve books
+            startGetOutDocsAndCreateBooks();
 
-            // Start a indefinite loading dialog
-            setLoadingDialog(true);
-
-            // This will be stopped in one of the callback methods
+            // The result will be gotten in one of the callback methods
 
             //endregion
         }
@@ -369,6 +363,18 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         new Thread(gSendReissue).start();
     }
 
+    public void startGetOutDocsAndCreateBooks(){
+
+        // Start a indefinite loading dialog
+        setLoadingDialog(true);
+
+        GoGoGadget gGetDocs = new GoGoGadget((MyCallback)this,
+                dataHolder.getBundleURLs(),
+                GoGoGadget.GET_OUT_DOCS,
+                handler);
+        new Thread(gGetDocs).start();
+    }
+
     private void setLoadingDialog(boolean show){
         // Sauce for dialog creation, and this setter method:
         // https://stackoverflow.com/a/14853439/9485900
@@ -436,7 +442,10 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // Recreate the activity to reload everything
-                        recreate();
+                        // recreate();
+
+                        // Reload out docs books
+                        startGetOutDocsAndCreateBooks();
                     }
                 });
 

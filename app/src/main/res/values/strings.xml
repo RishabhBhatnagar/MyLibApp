@@ -9,4 +9,5 @@
     <string name="due_date_text">DUE DATE</string>
     <string name="fine_amt_text">FINE AMT</string>
     <string name="counter_text">COUNTER</string>
+
 </resources>

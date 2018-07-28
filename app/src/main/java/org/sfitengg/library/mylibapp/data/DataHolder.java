@@ -9,7 +9,7 @@ public class DataHolder {
     // Using a singleton design pattern, since we only need one instance for this class
 
     // To set data for flask server, set this boolean to true
-    private boolean testing = true;
+    private boolean testing = false;
 
     // Single instance for DataHolder that will be shared throughout the application
     private static DataHolder dataHolder;

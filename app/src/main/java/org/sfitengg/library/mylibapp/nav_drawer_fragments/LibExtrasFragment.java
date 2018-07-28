@@ -14,6 +14,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+
 import org.sfitengg.library.mylibapp.R;
 import org.sfitengg.library.mylibapp.data.Url;
 import org.sfitengg.library.mylibapp.data.UrlAdapter;
@@ -35,9 +36,6 @@ public class LibExtrasFragment extends Fragment {
         View view = inflater.inflate(R.layout.frag_lib_extras, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
         parent = view.findViewById(R.id.parent);
-
-
-
         //getting recycler view ready.
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -58,11 +56,12 @@ public class LibExtrasFragment extends Fragment {
         dataSet.add(new Url("http://www.sfitengg.org/library_digital.php", "Digital Library"));
         dataSet.add(new Url("http://www.sfitengg.org/library_about.php", "About Library"));
         dataSet.add(new Url("http://www.sfitengg.org/library_services.php", "Services"));
-        dataSet.add(new Url("http://www.sfitengg.org/library/Virtual_References_E_Books.htm", "eBooks"));
+        dataSet.add(new Url("https://www.sfitengg.org/library/Virtual_References_E_Books.htm", "eBooks"));
         dataSet.add(new Url("http://www.sfitengg.org/library_download.php", "Syllabus download"));
         dataSet.add(new Url("http://www.sfitengg.org/library_iitb.php", "IIT-B Membership"));
         dataSet.add(new Url("http://www.sfitengg.org/library_statistics.php", "Library Statistics"));
         dataSet.add(new Url("http://www.sfitengg.org/library_ejournals.php", "E-Journals"));
+
     }
 
 }

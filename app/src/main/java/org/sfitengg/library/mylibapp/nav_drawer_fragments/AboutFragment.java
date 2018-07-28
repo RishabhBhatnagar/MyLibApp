@@ -21,10 +21,13 @@ public class AboutFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_about, container, false);
         TextView tv = view.findViewById(R.id.tv_about);
+        TextView tv0 = view.findViewById(R.id.tv_about0);
 
-        tv.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+        //tv.
+        //tv.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
         //tv.setTextAppearance(getActivity(), R.style.fontForNotificationLandingPage);
-        tv.setText("This app is created by the joint efforts of\n" +
+        tv0.setText("\"This app is created by the joint efforts of\n");
+        tv.setText(
                 "1. Vinay Deshmukh\n" +
                 "2. Rishabh Bhatnagar\n" +
                 "3. Sunny D'Souza\n" +
