@@ -1,6 +1,7 @@
 package org.sfitengg.library.mylibapp.nav_drawer_fragments;
 
 import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,13 +21,20 @@ public class AboutFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_about, container, false);
+        getActivity().setRequestedOrientation(
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         TextView tv = view.findViewById(R.id.tv_about);
-        TextView tv0 = view.findViewById(R.id.tv_about0);
+        TextView data = view.findViewById(R.id.tv_data);
+        TextView head = view.findViewById(R.id.tv_head);
 
-        //tv.
-        //tv.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-        //tv.setTextAppearance(getActivity(), R.style.fontForNotificationLandingPage);
-        tv0.setText("\"This app is created by the joint efforts of\n");
+
+        head.setText("developed by :");
+
+
+
+        data.setText("This application helps you keep track the number of days left to return the books you have issued. You can re-issue the books via the app as well as get timely notification about books to be submitted "
+                );
+
         tv.setText(
                 "1. Vinay Deshmukh\n" +
                 "2. Rishabh Bhatnagar\n" +

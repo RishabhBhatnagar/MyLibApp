@@ -1,5 +1,6 @@
 package org.sfitengg.library.mylibapp.nav_drawer_fragments;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -47,6 +48,8 @@ public class FaqFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_faq, container, false);
+        getActivity().setRequestedOrientation(
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         questionAndAnswers = new ArrayList<>();
         recyclerView = view.findViewById(R.id.recyclerView);

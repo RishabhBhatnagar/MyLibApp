@@ -1,5 +1,6 @@
 package org.sfitengg.library.mylibapp.nav_drawer_fragments;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -34,6 +35,8 @@ public class LibExtrasFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_lib_extras, container, false);
+        getActivity().setRequestedOrientation(
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         recyclerView = view.findViewById(R.id.recyclerView);
         parent = view.findViewById(R.id.parent);
         //getting recycler view ready.

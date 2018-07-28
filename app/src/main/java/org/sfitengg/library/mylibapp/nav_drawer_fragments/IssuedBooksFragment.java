@@ -2,6 +2,7 @@ package org.sfitengg.library.mylibapp.nav_drawer_fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -62,6 +63,8 @@ private static String KEY_BOOKS = "books";
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_issued_books, container, false);
+        getActivity().setRequestedOrientation(
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         reIssueButtton = view.findViewById(R.id.re_issue_button);
         swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
 
