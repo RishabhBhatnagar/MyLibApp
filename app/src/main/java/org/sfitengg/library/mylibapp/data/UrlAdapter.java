@@ -70,13 +70,13 @@ public class UrlAdapter extends RecyclerView.Adapter<UrlAdapter.UrlViewHolder> {
 
         TextView textView;
 
-        public UrlViewHolder(View itemView) {
+        UrlViewHolder(View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.url_name);
         }
     }
 
-    public void loadUrl(final String url, String name){
+    private void loadUrl(final String url, String name){
 
         List<String> urlStrings = new ArrayList<>();
         List<String> urlNames = new ArrayList<>();

@@ -35,6 +35,13 @@ public class WebViewActivity extends AppCompatActivity {
         // We will set this to content in setContentToWebViewAndLoadData
         webView = new WebView(this);
 
+
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setBuiltInZoomControls(true);
+        webSettings.setDisplayZoomControls(false);
+
+
+
         // Originally display a loading screen,
         // This will be changed to webView when data is received
         setContentView(R.layout.loading_screen);
@@ -81,28 +88,43 @@ public class WebViewActivity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    StringBuilder builder = new StringBuilder();
+                    final StringBuilder builder = new StringBuilder();
 
                     try {
                         Document doc = Jsoup.connect(url).get();
-                        Elements links = doc.select("div.inner_the");
 
-                        for (Element link : links) {
-                            builder.append(link.outerHtml());
+                        Element singleDiv = doc.select("div.inner_the").first();
+
+                        //region Convert relative urls to absolute for <a> and <img>
+                        Elements select = singleDiv.select("a");
+                        for (Element e : select){
+                            // baseUri will be used by absUrl
+                            String absUrl = e.absUrl("href");
+                            e.attr("href", absUrl);
                         }
+
+                        //now we process the imgs
+                        select = singleDiv.select("img");
+                        for (Element e : select){
+                            e.attr("src", e.absUrl("src"));
+                        }
+                        //endregion
+
+                        // Set the final parsed div tag to builder to send to webview
+                        builder.append(singleDiv.outerHtml());
+
+
                     } catch (IOException e) {
+                        e.printStackTrace();
                         builder.append("Error : ").append(e.getMessage()).append("\n");
                     }
 
-                    String s = new String(builder);
-                    s = s.replaceAll("src=\"", "src=\"http://www.sfitengg.org/");
-                    final String finalS = s;
 
                     // Finally send the data back to UI thread to draw webview
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            setContentToWebViewAndLoadData(finalS);
+                            setContentToWebViewAndLoadData(builder.toString());
                         }
                     });
 
@@ -117,13 +139,7 @@ public class WebViewActivity extends AppCompatActivity {
         // Now that data is arrived, setContentView to webview
         setContentView(webView);
 
-
-        WebSettings webSettings = webView.getSettings();
-
-        webSettings.setBuiltInZoomControls(true);
-        webSettings.setDisplayZoomControls(false);
-
-
+        // Set the data to webview
         webView.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
     }
 
