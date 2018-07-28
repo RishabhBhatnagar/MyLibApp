@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="192dp"
-    android:background="@drawable/abb"
-    android:gravity="bottom"
+    android:layout_height="96dp"
+    android:background="#ff4081"
+    android:gravity="center_vertical"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="8dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:id="@+id/navigation_view">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Current User:"
+        android:textColor="#000"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:layout_marginBottom="5dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,7 +23,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:id="@+id/header_name"
         android:textColor="#000000"
-        android:textStyle="bold"
+
 
         />
 </LinearLayout>
