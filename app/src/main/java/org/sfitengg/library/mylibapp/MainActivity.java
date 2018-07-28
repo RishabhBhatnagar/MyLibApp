@@ -442,7 +442,10 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // Recreate the activity to reload everything
-                        recreate();
+                        // recreate();
+
+                        // Reload out docs books
+                        startGetOutDocsAndCreateBooks();
                     }
                 });
 
