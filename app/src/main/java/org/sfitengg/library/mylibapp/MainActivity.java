@@ -164,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
 
         if(!sharedPreferences.getBoolean(LoginActivity.SKIPPED, false)) {
+            // If LoginActivity was not skipped, then get books from the internet
 
             //region Get outstanding documents for user before he requests it, ie in the onCreate
             Intent intent = getIntent();
@@ -184,7 +185,8 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
             //endregion
         }
-        else{
+        else {
+
             bookList = stringToBooks(sharedPreferences.getString(MainActivity.BOOKS_STRING_TAG, NO_BOOKS_BORROWED));
 
             // Find the menu item for Issued Books
@@ -382,14 +384,23 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
 
 
-        StringBuilder bookStringBuilder = new StringBuilder();
-        for(Book book:books){
-            bookStringBuilder.append(bookToString(book));
+        if(books != null) {
+            // If user has some borrowed books
+
+            StringBuilder bookStringBuilder = new StringBuilder();
+            for (Book book : books) {
+                bookStringBuilder.append(bookToString(book));
+            }
+
+            editor.putString(BOOKS_STRING_TAG, bookStringBuilder.toString());
+
+        } else {
+            // If user has not borrwed any books
+
+            editor.putString(BOOKS_STRING_TAG, NO_BOOKS_BORROWED);
         }
 
-        editor.putString(BOOKS_STRING_TAG, bookStringBuilder.toString());
         editor.apply();
-
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
