@@ -9,4 +9,7 @@
     <color name="dark_grey">#666666</color>
     <color name="main_activity_background">#EDEDED</color>
     <color name="faqParentBgColor">#696969</color>
+    <color name="navigationColour">#F1E9E9</color>
+    <color name="cardViewColour">#8e8c8c</color>
+    <color name="helpView">#666666</color>
 </resources>

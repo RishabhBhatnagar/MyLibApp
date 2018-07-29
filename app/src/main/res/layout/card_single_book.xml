@@ -44,12 +44,12 @@
             android:layout_margin="5sp"
             card_view:cardCornerRadius="5sp"
             card_view:cardElevation="5sp"
-            android:background="#8e8c8c">
+            android:background="@color/cardViewColour">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#8e8c8c">
+                android:background="@color/cardViewColour">
 
                 <RelativeLayout
                     android:layout_width="match_parent"

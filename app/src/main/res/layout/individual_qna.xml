@@ -20,7 +20,7 @@
             android:id="@+id/hr"
             android:layout_marginTop="5dp"
             android:layout_width="match_parent"
-            android:background="@color/dark_grey"
+            android:background="@color/helpView"
             android:layout_height="1dp"
             android:orientation="horizontal" />
         <TextView
