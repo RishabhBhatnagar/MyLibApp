@@ -312,10 +312,7 @@ private static String KEY_BOOKS = "books";
                 }
 
         }
-        private int DptoPxConvertion(int dpValue)
-        {
-            return (int)((dpValue * getContext().getResources().getDisplayMetrics().density) + 0.5);
-        }
+
 
         @Override
         public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {

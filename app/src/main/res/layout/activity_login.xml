@@ -61,7 +61,6 @@
 
             <Button
                 android:id="@+id/btn_login_submit"
-
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -71,16 +70,22 @@
                 android:text="SUBMIT"
                 android:textColor="#ffff"
                 />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hint : Your default password is your pid "
+                android:layout_gravity="center_horizontal"
+                />
 
 
             <TextView
+                android:layout_marginTop="12dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/home"
                 android:autoLink="web"
                 android:clickable="true"
                 android:layout_gravity="center_horizontal"
-
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -89,7 +94,6 @@
                 android:autoLink="web"
                 android:clickable="true"
                 android:layout_gravity="center_horizontal"
-
                 />
 
 
