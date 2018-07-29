@@ -1,4 +1,4 @@
-package org.example.vinay.mylibapp;
+package org.sfitengg.library.mylibapp;
 
 import org.junit.Test;
 

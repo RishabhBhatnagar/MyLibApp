@@ -24,7 +24,7 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/MainActivityTheme" />
-        <activity android:name=".nav_drawer_fragments.WebViewActivity"></activity>
+        <activity android:name=".nav_drawer_fragments.WebViewActivity" />
     </application>
 
 </manifest>
