@@ -331,15 +331,13 @@ private static String KEY_BOOKS = "books";
 
 
 
-            if(bookList.get(position).isCanRenew()){
-                Toast.makeText(context, "You can renew" + bookList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
-            }
-            else{
+            if(!bookList.get(position).isCanRenew()) {
                 holder.reissueCheckBox.setChecked(false);
                 holder.reissueCheckBox.setEnabled(false);
                 holder.relativeLayout.setEnabled(false);
                 holder.relativeLayout.setSelected(false);
             }
+
         }
 
         @Override
