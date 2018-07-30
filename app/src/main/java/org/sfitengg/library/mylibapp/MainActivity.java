@@ -1,16 +1,15 @@
 package org.sfitengg.library.mylibapp;
 
-import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -21,10 +20,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,11 +33,10 @@ import org.sfitengg.library.mylibapp.nav_drawer_fragments.AboutFragment;
 import org.sfitengg.library.mylibapp.nav_drawer_fragments.FaqFragment;
 import org.sfitengg.library.mylibapp.nav_drawer_fragments.IssuedBooksFragment;
 import org.sfitengg.library.mylibapp.nav_drawer_fragments.LibExtrasFragment;
+import org.sfitengg.library.mylibapp.nav_drawer_fragments.LoggerInFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,19 +45,21 @@ import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_NOT_LOGGED_IN;
 import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_NO_INTERNET;
 import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_POST_TO_REISSUE_FAILED;
 import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_SERVER_UNREACHABLE;
-import static org.sfitengg.library.mylibapp.LoginActivity.KEY_COOKIES;
-import static org.sfitengg.library.mylibapp.LoginActivity.KEY_PID;
-import static org.sfitengg.library.mylibapp.LoginActivity.KEY_PWD;
-import static org.sfitengg.library.mylibapp.LoginActivity.titleSharedPrefs;
 
 public class MainActivity extends AppCompatActivity implements MyCallback{
 
+    public static final String KEY_COOKIES = "cookies";
+    public static final String KEY_USER_NAME = "username";
+    public static final String titleSharedPrefs = "my_prefs";
+    public static final String KEY_PID = "pid";
+    public static final String KEY_PWD = "pwd";
     protected static final String BOOKS_STRING_TAG = "bst";
     public static final String NO_BOOKS_BORROWED = "none";
+    protected static final String SKIPPED = "skipped";
     private DrawerLayout mDrawerLayout;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
-    private ActionBarDrawerToggle drawerToggle;
+
 
     // SharedPreferences
     SharedPreferences sharedPreferences;
@@ -100,7 +100,26 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     String attributeSeperator = ", ";
     String bookSeperator = "#";
 
-    @SuppressLint("ResourceType")
+
+    String pid;
+    String pwd;
+    public void startLoginFromFragment(String pid, String pwd){
+        // This method will be called from LoggerInFragment
+        // It will start the login process
+
+        setLoadingDialog(true);
+
+        // Set the logging in values
+        this.pid = pid;
+        this.pwd = pwd;
+
+        GoGoGadget goGoGadget = new GoGoGadget((MyCallback) this,
+            dataHolder.getBundleURLs(),
+            GoGoGadget.LOGIN_AND_GET_COOKIES,
+            handler);
+        new Thread(goGoGadget).start();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,18 +154,39 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
         // Find our drawer view
         mDrawerLayout = findViewById(R.id.drawer_layout);
+        mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                hideKeyboard(MainActivity.this);
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                hideKeyboard(MainActivity.this);
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                hideKeyboard(MainActivity.this);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                hideKeyboard(MainActivity.this);
+            }
+        });
 
         //region Nav Drawer Init and Listener
         nvDrawer = findViewById(R.id.nvDrawer);
 
         //region Set the username in nav drawer header
-        String user_name = sharedPreferences.getString(LoginActivity.KEY_USER_NAME, null);
+        String user_name = sharedPreferences.getString(KEY_USER_NAME, null);
         View headerView = nvDrawer.getHeaderView(0);
         TextView nameHeader = headerView.findViewById(R.id.header_name);
         if(user_name != null)
             nameHeader.setText(user_name);
         else
-            nameHeader.setText("User");
+            nameHeader.setText("Guest");
         //endregion
 
 
@@ -154,6 +194,10 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                        // Hide the keyboard
+                        hideKeyboard(MainActivity.this);
+
                         // set item as selected to persist highlight
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
@@ -169,22 +213,44 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         //endregion
 
 
-        if(!sharedPreferences.getBoolean(LoginActivity.SKIPPED, false)) {
-            // If LoginActivity was not skipped, then get books from the internet
+        // IssuedBooks MenuItem should be checked from default
+        nvDrawer.getMenu().findItem(R.id.frag_issued_books).setChecked(true);
 
-            //region Get outstanding documents for user
+        pid = sharedPreferences.getString(KEY_PID, null);
+        pwd = sharedPreferences.getString(KEY_PWD, null);
 
-            // Start thread operation to retrieve books
-            startGetOutDocsAndCreateBooks();
+        if(pid != null && pwd != null){
+            //region Previous logged in user exists
+            // Then he will have his books stored
 
-            // The result will be gotten in one of the callback methods
+            String booksString = sharedPreferences.getString(BOOKS_STRING_TAG, null);
+
+            if(booksString != null){
+                // User has previously downloaded books
+
+                bookList = stringToBooks(sharedPreferences.getString(MainActivity.BOOKS_STRING_TAG, NO_BOOKS_BORROWED));
+
+                // Find the menu item for Issued Books
+                MenuItem menuItemIssuedBooks =
+                        nvDrawer.getMenu().findItem(R.id.frag_issued_books);
+
+                // Highlight it in the drawer
+                menuItemIssuedBooks.setChecked(true);
+
+                // Call the logic needed to set IssuedBooksFragment on FrameLayout
+                selectDrawerItem(menuItemIssuedBooks);
+            }
+            else {
+                // Start thread operation to retrieve books
+                startGetOutDocsAndCreateBooks();
+
+            }
 
             //endregion
         }
         else {
-            // user was already  logged in and the loginActivity was skipped.
-
-            bookList = stringToBooks(sharedPreferences.getString(MainActivity.BOOKS_STRING_TAG, NO_BOOKS_BORROWED));
+            // If no previous logged in user
+            // Start login fragment
 
             // Find the menu item for Issued Books
             MenuItem menuItemIssuedBooks =
@@ -193,13 +259,18 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
             // Highlight it in the drawer
             menuItemIssuedBooks.setChecked(true);
 
-            // Call the logic needed to set IssuedBooksFragment on FrameLayout
-            selectDrawerItem(menuItemIssuedBooks);
+
+            // Insert the fragment by replacing any existing fragment
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_frame, new LoggerInFragment()).commit();
+
+            // Set action bar title
+            setTitle(menuItemIssuedBooks.getTitle());
+
+
         }
-
-
     }
-
 
     private String bookToString(Book book){
         return  book.getAcc_no() + attributeSeperator +
@@ -252,7 +323,15 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
             case R.id.frag_issued_books:
             default:
                 // default is used, so that IssuedBooksFragment is loaded for invalid menuItme
-                newFragmentToPutInFrame = IssuedBooksFragment.newInstance(bookList);
+                if(null != sharedPreferences.getString(KEY_USER_NAME, null)){
+                    // if user name is not null, then someone is logged in
+                    newFragmentToPutInFrame = IssuedBooksFragment.newInstance(bookList);
+                }
+                else{
+                    // no one is logged in
+                    newFragmentToPutInFrame = new LoggerInFragment();
+                }
+
                 break;
             case R.id.frag_lib_extras:
                 newFragmentToPutInFrame = new LibExtrasFragment();
@@ -269,54 +348,79 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
             case R.id.option_sign_out:
 
                 signOut = new AlertDialog.Builder(this).create();
-                signOut.setTitle("Do you want to sign out?");
-                //region Set Positive Button for signOut
-                signOut.setButton(DialogInterface.BUTTON_POSITIVE,
-                        "YES",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                SharedPreferences sp = getSharedPreferences(titleSharedPrefs, MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sp.edit();
-                                editor.apply();
 
-                                // TODO: Maybe only clear the two keys, instead of clearing the shared prefs
-                                editor.clear();
-                                editor.apply();
+                if(null != sharedPreferences.getString(KEY_USER_NAME, null)) {
+                    // Set positive negative buttons, when user is logged in
 
-                                // Go back to LoginActivity
-                                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    signOut.setTitle("Do you want to sign out?");
 
-                                // End this activity
-                                finish();
-                            }
-                        });
-                //endregion
-                //region Set Negative Button for signOut
-                signOut.setButton(DialogInterface.BUTTON_NEGATIVE,
-                        "NO",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
+                    //region Set Positive Button for signOut
+                    signOut.setButton(DialogInterface.BUTTON_POSITIVE,
+                            "YES",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    SharedPreferences sp = getSharedPreferences(titleSharedPrefs, MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sp.edit();
+                                    editor.apply();
 
-                                //region Set the IssuedBooksFragment when sign out is denied
+                                    // TODO: Maybe only clear the two keys, instead of clearing the shared prefs
+                                    editor.clear();
+                                    editor.apply();
 
-                                // Find the menu item for Issued Books
-                                MenuItem menuItemIssuedBooks =
-                                        nvDrawer.getMenu().findItem(R.id.frag_issued_books);
+                                    // Show LoggerInFragment
+                                    getSupportFragmentManager()
+                                            .beginTransaction()
+                                            .replace(R.id.fragment_frame, new LoggerInFragment())
+                                            .commit();
 
-                                // Highlight it in the drawer
-                                menuItemIssuedBooks.setChecked(true);
 
-                                // Call the logic needed to set IssuedBooksFragment on FrameLayout
-                                selectDrawerItem(menuItemIssuedBooks);
-                                //endregion
+                                }
+                            });
+                    //endregion
+                    //region Set Negative Button for signOut
+                    signOut.setButton(DialogInterface.BUTTON_NEGATIVE,
+                            "NO",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
 
-                                // Dismiss the dialog
-                                dialogInterface.dismiss();
-                            }
-                        });
-                //endregion
+                                    //region Set the IssuedBooksFragment when sign out is denied
+
+                                    // Find the menu item for Issued Books
+                                    MenuItem menuItemIssuedBooks =
+                                            nvDrawer.getMenu().findItem(R.id.frag_issued_books);
+
+                                    // Highlight it in the drawer
+                                    menuItemIssuedBooks.setChecked(true);
+
+                                    // Call the logic needed to set IssuedBooksFragment on FrameLayout
+                                    selectDrawerItem(menuItemIssuedBooks);
+                                    //endregion
+
+                                    // Dismiss the dialog
+                                    dialogInterface.dismiss();
+                                }
+                            });
+                    //endregion
+
+                }
+                else {
+                    // When user is not logged in
+                    signOut.setTitle("You are not logged in!");
+
+                    //region OK button for doing nothing
+                    signOut.setButton(DialogInterface.BUTTON_NEUTRAL,
+                            "OK",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    // do nothing
+                                    dialogInterface.dismiss();
+                                }
+                            });
+                    //endregion
+                }
 
                 // Actually show the alert dialog
                 signOut.show();
@@ -426,7 +530,48 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     @Override
     public void sendStudentNameToCaller(String name) {
         // Used only during login
-        // Will not be called in this activity
+        // This method will be called when login is correct
+
+        // Add the correct pid/pwd to shared prefs
+        editor.putString(KEY_PID, pid);
+        editor.putString(KEY_PWD, pwd);
+        // Add the username to shared prefs
+        editor.putString(KEY_USER_NAME, name);
+        editor.apply();
+
+
+        setLoadingDialog(false);
+
+        // Go to MainActivity
+        AlertDialog loginSuccessDialog = new AlertDialog.Builder(
+                this).create();
+        loginSuccessDialog.setTitle("Login Successful!");
+        loginSuccessDialog.setMessage("Welcome "+ name);
+        loginSuccessDialog.setCancelable(false);
+        loginSuccessDialog.setCanceledOnTouchOutside(false);
+
+
+
+        //region Set OK button for loginSuccessDialog
+        loginSuccessDialog.setButton(
+                Dialog.BUTTON_NEUTRAL,
+                "OK",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int whichButton) {
+
+                        // Dismiss the dialog box
+                        dialogInterface.dismiss();
+
+                        // Get the out docs for this user now
+                        startGetOutDocsAndCreateBooks();
+
+                    }
+                });
+        //endregion
+
+        // Actually show the dialog
+        loginSuccessDialog.show();
     }
 
     @Override
@@ -466,6 +611,8 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
                 //region Create AlertDialog(loginFailedDialog) for network failure
                 loginFailedDialog = new AlertDialog.Builder(this).create();
+                loginFailedDialog.setCanceledOnTouchOutside(false);
+                loginFailedDialog.setCancelable(true);
                 if ( errorCode == ERROR_NO_INTERNET) {
                     loginFailedDialog.setTitle("You are not connected to the internet");
                     loginFailedDialog.setMessage("Please connect to the internet and try again.");
@@ -511,14 +658,14 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     public String getPid() {
         // Used only during login
         // Will be called in this activity since we need to login again to get fresh cookies
-        return sharedPreferences.getString(KEY_PID, "1"); // 1 is any non null value
+        return pid;//sharedPreferences.getString(KEY_PID, "1"); // 1 is any non null value
     }
 
     @Override
     public String getPwd() {
         // Used only during login
         // Will be called in this activity since we need to login again to get fresh cookies
-        return sharedPreferences.getString(KEY_PWD, "1"); // 1 is any non null value
+        return pwd;//sharedPreferences.getString(KEY_PWD, "1"); // 1 is any non null value
     }
 
     @Override
@@ -530,6 +677,17 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
         return isConnected;
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
 

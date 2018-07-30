@@ -28,12 +28,4 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <!--Use this style for LoginActivity which needs a ActionBar-->
-    <style name="LoginActivityTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-
 </resources>
