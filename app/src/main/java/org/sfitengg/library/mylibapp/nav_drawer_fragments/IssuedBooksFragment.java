@@ -79,10 +79,7 @@ private static String KEY_BOOKS = "books";
             textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             textView.setTextAppearance(getActivity(), R.style.TextAppearance_AppCompat_Medium);
             textView.setText("You have not issued \nany books from the library\n\n" +
-                    "Please issue books \nto see them here! \n\n " +
-                    "Or \n\n" +
-                    " No Internet Connection while login\n" +
-                    "Try signOut and signIn.");
+                    "Please issue books \nto see them here! \n\n");
 
             return textView;
         }

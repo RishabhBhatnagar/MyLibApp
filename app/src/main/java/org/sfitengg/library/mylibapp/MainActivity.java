@@ -27,6 +27,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.sfitengg.library.mylibapp.data.Book;
 import org.sfitengg.library.mylibapp.data.DataHolder;
 import org.sfitengg.library.mylibapp.nav_drawer_fragments.AboutFragment;
@@ -97,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
 
     //constants for encoding  books into strings.
-    String attributeSeperator = ", ";
+    String attributeSeperator = "======";
     String bookSeperator = "#";
 
 
@@ -273,13 +276,24 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     }
 
     private String bookToString(Book book){
-        return  book.getAcc_no() + attributeSeperator +
+        String result =
+                book.getAcc_no() + attributeSeperator +
                 book.getDueDate() + attributeSeperator +
                 book.getFineAmount() + attributeSeperator +
                 book.getRenewCount() + attributeSeperator +
                 book.getReservations() + attributeSeperator +
                 book.getTitle() + attributeSeperator +
-                String.valueOf(book.isCanRenew()) + bookSeperator;
+                String.valueOf(book.isCanRenew()) + attributeSeperator;
+
+        if(!book.isInpNull()) {
+            // If inp tags are not null, then retrieve
+            // Store the input tags to retrieve them in reissue
+            result += book.getInp_accno().outerHtml() + attributeSeperator +
+                    book.getInp_media().outerHtml() + attributeSeperator +
+                    book.getInp_chk().outerHtml() + attributeSeperator;
+        }
+        result += bookSeperator;
+        return result;
     }
 
     private List<Book> stringToBooks(String booksListsString) {
@@ -309,6 +323,17 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                     book.setCanRenew(false);
                 }
 
+                if(attributes.size() > 7) {
+                    // If more than 7 elements exist, ie if the input tags are present
+                    // Get inp tags back
+                    Element inp_acc = Jsoup.parse(attributes.get(7)).selectFirst("input");
+                    Element inp_med = Jsoup.parse(attributes.get(8)).selectFirst("input");
+                    Element inp_chk = Jsoup.parse(attributes.get(9)).selectFirst("input");
+
+                    book.setInp_accno(inp_acc);
+                    book.setInp_media(inp_med);
+                    book.setInp_chk(inp_chk);
+                }
                 bL.add(book);
             }
         }
