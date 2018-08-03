@@ -32,7 +32,7 @@ public class AboutFragment extends Fragment {
 
 
 
-        data.setText("This application helps you keep track the number of days left to return the books you have issued. You can re-issue the books via the app as well as get timely notification about books to be submitted "
+        data.setText("This application helps you in showing you your due date, keep track the number of days left to return the books you have issued. You can also re-issue the books via the app itself  "
                 );
 
         tv.setText(

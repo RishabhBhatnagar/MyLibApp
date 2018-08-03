@@ -54,8 +54,7 @@ public class FaqFragment extends Fragment {
 
         // todo : add more question and answers here.
 
-        questionAndAnswers.add(new QuestionAndAnswer("WHY DID I DOWNLOAD THIS APP ?", "This app lets users view their issued books with the days left for returning them and users also can re-issue their books via this app as well as get timely notification " +
-                "to return the issued books", color("#ed044e")));
+        questionAndAnswers.add(new QuestionAndAnswer("WHY DID I DOWNLOAD THIS APP ?", "This app lets users view their issued books with the days left for returning them and users also can re-issue their books via this app" , color("ed044e")));
         questionAndAnswers.add(new QuestionAndAnswer("I FORGOT MY PASSWORD", "Contact the Library employees", color("#89f07f")));
         questionAndAnswers.add(new QuestionAndAnswer("WHY IS MY RE-ISSUE CHECKBOX DISABLED ? ", "There are two reasons for this. " +
                 "a) You cannot re-issue the books on the same day you issued/re-issued those books." +
