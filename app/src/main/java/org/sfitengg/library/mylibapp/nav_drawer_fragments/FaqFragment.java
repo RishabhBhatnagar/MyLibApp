@@ -21,29 +21,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 class QuestionAndAnswer{
-    String question;
-    String answer;
-    int hrColor;
-    public QuestionAndAnswer(String question, String answer, int hrColor) {
+    private String question;
+    private String answer;
+    private int hrColor;
+    QuestionAndAnswer(String question, String answer, int hrColor) {
         this.question = question;
         this.answer = answer;
         this.hrColor = hrColor;
     }
-    public String getQuestion() {
+    String getQuestion() {
         return question;
     }
-    public String getAnswer() {
+    String getAnswer() {
         return answer;
     }
-    public int getHrColor(){
+    int getHrColor(){
         return hrColor;
     }
 }
 
 public class FaqFragment extends Fragment {
 
-    private List<QuestionAndAnswer> questionAndAnswers;
-    private RecyclerView recyclerView;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -51,11 +49,25 @@ public class FaqFragment extends Fragment {
         getActivity().setRequestedOrientation(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        questionAndAnswers = new ArrayList<>();
-        recyclerView = view.findViewById(R.id.recyclerView);
+        List<QuestionAndAnswer> questionAndAnswers = new ArrayList<>();
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
 
         // todo : add more question and answers here.
-        questionAndAnswers.add(new QuestionAndAnswer("Question", "Answer", color("#89f07f")));
+
+        questionAndAnswers.add(new QuestionAndAnswer("WHY DID I DOWNLOAD THIS APP ?", "This app lets users view their issued books with the days left for returning them and users also can re-issue their books via this app as well as get timely notification " +
+                "to return the issued books", color("#ed044e")));
+        questionAndAnswers.add(new QuestionAndAnswer("I FORGOT MY PASSWORD", "Contact the Library employees", color("#89f07f")));
+        questionAndAnswers.add(new QuestionAndAnswer("WHY IS MY RE-ISSUE CHECKBOX DISABLED ? ", "There are two reasons for this. " +
+                "a) You cannot re-issue the books on the same day you issued/re-issued those books." +
+                "b)Once you cross the due date you cannot re-issue the books", color("#89f07f")));
+        questionAndAnswers.add(new QuestionAndAnswer("DOES THIS APP REQUIRE AN ACTIVE INTERNET CONNECTION ?", "Without Internet you'll still be able to use some basic functions of the app and also be able to view your issued books",color("#ed044e")));
+        questionAndAnswers.add(new QuestionAndAnswer("WHY DOES AN ERROR APPEAR ?", "Error will be displayed if you are not connected to the internet or when the Library servers are down", color("#1295C9")));
+        questionAndAnswers.add(new QuestionAndAnswer("HOW MANY TIMES CAN I RE-ISSUE THE BOOKS ?", " You can re-issue the books 3 times. (Limit applicable to only BE students)", color("#89f07f")));
+       // questionAndAnswers.add(new QuestionAndAnswer("WHEN WILL THE APP START NOTIFYING ME OF THE SUBMISSION DATE ?", "The app will remind the user of the submission date from 3 days prior to the due date", color("#89f07f")));
+        questionAndAnswers.add(new QuestionAndAnswer("CAN I LOG IN WITH THE SAME PID ON MULTIPLE DEVICES ?", " Yes", color("#89f07f")));
+        questionAndAnswers.add(new QuestionAndAnswer("CAN I RE-ISSUE MULTIPLE BOOKS AT THE SAME TIME ?", "Yes , just hold a book then select multiple books to Re-issue ", color("#89f07f")));
+
+
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(new QnAAdapter(questionAndAnswers));
@@ -70,8 +82,8 @@ public class FaqFragment extends Fragment {
 
 
 class QnAAdapter extends RecyclerView.Adapter<QnAAdapter.QnAViewHolder>{
-    List<QuestionAndAnswer> qnAs;
-    public QnAAdapter(List<QuestionAndAnswer> qnAs) {
+    private List<QuestionAndAnswer> qnAs;
+    QnAAdapter(List<QuestionAndAnswer> qnAs) {
         this.qnAs = qnAs;
     }
     @NonNull

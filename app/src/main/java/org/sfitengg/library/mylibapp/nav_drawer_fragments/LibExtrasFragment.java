@@ -54,12 +54,11 @@ public class LibExtrasFragment extends Fragment {
     }
 
     private void initialiseUrlNames(List<Url> dataSet) {
-        dataSet.add(new Url("http://www.sfitengg.org/library_virt_ref.php", "VirtualReference"));
+        dataSet.add(new Url("http://www.sfitengg.org/library_virt_ref.php", "Virtual Reference"));
         dataSet.add(new Url("http://www.sfitengg.org/library_resources.php", "Library Resources"));
         dataSet.add(new Url("http://www.sfitengg.org/library_digital.php", "Digital Library"));
         dataSet.add(new Url("http://www.sfitengg.org/library_about.php", "About Library"));
         dataSet.add(new Url("http://www.sfitengg.org/library_services.php", "Services"));
-        dataSet.add(new Url("https://www.sfitengg.org/library/Virtual_References_E_Books.htm", "eBooks"));
         dataSet.add(new Url("http://www.sfitengg.org/library_download.php", "Syllabus download"));
         dataSet.add(new Url("http://www.sfitengg.org/library_iitb.php", "IIT-B Membership"));
         dataSet.add(new Url("http://www.sfitengg.org/library_statistics.php", "Library Statistics"));

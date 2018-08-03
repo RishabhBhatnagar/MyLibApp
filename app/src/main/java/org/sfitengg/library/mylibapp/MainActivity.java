@@ -581,7 +581,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
         reissueSuccessDialog = new AlertDialog.Builder(this).create();
         reissueSuccessDialog.setTitle("Books reissued successfully!");
-        reissueSuccessDialog.setMessage("Do you want to reload?");
+        reissueSuccessDialog.setMessage("Click OK to reload !");
         reissueSuccessDialog.setButton(DialogInterface.BUTTON_NEUTRAL,
                 "OK",
                 new DialogInterface.OnClickListener() {
@@ -616,10 +616,12 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 if ( errorCode == ERROR_NO_INTERNET) {
                     loginFailedDialog.setTitle("You are not connected to the internet");
                     loginFailedDialog.setMessage("Please connect to the internet and try again.");
+
                 } else if ( errorCode == ERROR_SERVER_UNREACHABLE) {
                     loginFailedDialog.setTitle("Connection to the server failed!");
                     loginFailedDialog.setMessage("Server is unreachable.");
                 }
+
                 //endregion
 
                 //region loginFailedDialog OK Button

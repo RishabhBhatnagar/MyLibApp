@@ -161,23 +161,14 @@ private static String KEY_BOOKS = "books";
 
         public class MyViewHolder extends RecyclerView.ViewHolder{
 
-            public TextView tv_title,tv_duedate,tv_fine,tv_reissue_count;
+            public TextView tv_title,tv_duedate,tv_fine,tv_reissue_count,tv_acc;
             public RelativeLayout relativeLayout;
             public CheckBox reissueCheckBox;
             private boolean selected = false;
             public TextView tv_daysLeft;
 
 
-            public void canRenew(){
-                int position = getAdapterPosition();
-                Book currentbook = bookList.get(position);
-                if (!currentbook.isCanRenew()) {
-                    reissueCheckBox.setEnabled(false);
-                    Toast.makeText(getContext(), "RE-ISSUE BLOCKED PLEASE RETURN THE BOOK !", Toast.LENGTH_SHORT).show();
-                }
 
-
-            }
 
             public void Onclick(){
 
@@ -185,13 +176,13 @@ private static String KEY_BOOKS = "books";
                     numberOfBooksSelected -= 1;
                     reissueCheckBox.setChecked(false);
                     if(numberOfBooksSelected==0){
-                        reIssueButtton.setVisibility(View.GONE);
+                        reIssueButtton.setEnabled(false);
                     }
                 }
                 else{
                     numberOfBooksSelected += 1;
                     reissueCheckBox.setChecked(true);
-                    reIssueButtton.setVisibility(View.VISIBLE);
+                    reIssueButtton.setEnabled(true);
 
                 }
                 if(numberOfBooksSelected<1){
@@ -211,17 +202,18 @@ private static String KEY_BOOKS = "books";
                 tv_reissue_count=view.findViewById(R.id.re_issue_counter);
                 reissueCheckBox = view.findViewById(R.id.reissue_checkbox);
                 relativeLayout=view.findViewById(R.id.relative_layout);
+                tv_acc = view.findViewById(R.id.acc);
 
 
 
-
+                reIssueButtton.setEnabled(false);
 
 
                 //region onclicklistener reissue
                 reissueCheckBox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        canRenew();  // to disable the checkbox if canRenew boolean is false
+
                          Onclick();
 
                         // https://stackoverflow.com/questions/29983848/how-to-highlight-the-selected-item-of-recycler-view
@@ -239,7 +231,7 @@ private static String KEY_BOOKS = "books";
                     @Override
                     public boolean onLongClick(View v) {
                         anyBookSelected = true;
-                        canRenew();
+
                          Onclick();
                         // https://stackoverflow.com/questions/29983848/how-to-highlight-the-selected-item-of-recycler-view
                         selectedList[getAdapterPosition()] = false;
@@ -251,7 +243,6 @@ private static String KEY_BOOKS = "books";
                 relativeLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        canRenew();
                          if(anyBookSelected){
                             Onclick();
                             selectedList[getAdapterPosition()] = selected;
@@ -323,6 +314,8 @@ private static String KEY_BOOKS = "books";
             holder.tv_fine.setText(currentBook.getFineAmount());
             holder.tv_reissue_count.setText(currentBook.getRenewCount());
             holder.tv_daysLeft.setText(daysleft(position));
+            holder.tv_acc.setText(currentBook.getAcc_no());
+
 
 
 

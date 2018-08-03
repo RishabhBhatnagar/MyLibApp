@@ -4,19 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+
+    >
 
     <!--Source:-->
     <!--https://stackoverflow.com/questions/4936553/android-how-can-you-align-a-button-at-the-bottom-and-listview-above-->
-
-
 
     <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+
+        >
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/issued_books_recycler_view"
@@ -35,7 +37,7 @@
         android:background="@drawable/shape"
         android:text="RE-ISSUE"
         android:textColor="#ffff"
-        android:visibility="gone" />
+        android:clickable="false" />
 
 
 </LinearLayout>
