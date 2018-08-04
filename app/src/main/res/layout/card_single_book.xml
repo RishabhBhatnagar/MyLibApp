@@ -28,7 +28,7 @@
             android:textSize="24sp"
             android:textAllCaps="true"
             android:layout_centerHorizontal="true"
-            android:layout_margin="5sp"
+            android:layout_margin="5dp"
             android:textStyle="bold"
 
 
@@ -41,9 +41,9 @@
             android:id="@+id/card_view_nested"
             android:layout_below="@id/name"
             android:padding="@dimen/cardview_default_elevation"
-            android:layout_margin="5sp"
-            card_view:cardCornerRadius="5sp"
-            card_view:cardElevation="5sp"
+            android:layout_margin="5dp"
+            card_view:cardCornerRadius="10dp"
+            card_view:cardElevation="5dp"
             android:background="@color/cardViewColour">
 
             <RelativeLayout
@@ -102,7 +102,7 @@
                         android:id="@+id/days_left"
                         android:gravity="center"
                         android:textColor="#ed044e"
-                        android:textSize="46dp"
+                        android:textSize="46sp"
                         android:text="2"
                         android:padding="1dp"
                         android:layout_alignParentEnd="true"
@@ -195,7 +195,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rs. 18"
-                android:layout_marginLeft="300dp"
+                android:layout_marginStart="300dp"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:textColor="#000"
