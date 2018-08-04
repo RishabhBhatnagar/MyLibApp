@@ -3,6 +3,8 @@ package org.sfitengg.library.mylibapp.nav_drawer_fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -177,12 +179,15 @@ private static String KEY_BOOKS = "books";
                     reissueCheckBox.setChecked(false);
                     if(numberOfBooksSelected==0){
                         reIssueButtton.setEnabled(false);
+                        reIssueButtton.setBackgroundResource(R.drawable.disable);
+
                     }
                 }
                 else{
                     numberOfBooksSelected += 1;
                     reissueCheckBox.setChecked(true);
                     reIssueButtton.setEnabled(true);
+                    reIssueButtton.setBackgroundResource(R.drawable.shape);
 
                 }
                 if(numberOfBooksSelected<1){
@@ -206,8 +211,9 @@ private static String KEY_BOOKS = "books";
 
 
 
-                reIssueButtton.setEnabled(false);
 
+                reIssueButtton.setEnabled(false);
+                reIssueButtton.setBackgroundResource(R.drawable.disable);
 
                 //region onclicklistener reissue
                 reissueCheckBox.setOnClickListener(new View.OnClickListener() {
