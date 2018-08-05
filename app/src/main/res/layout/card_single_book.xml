@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_row"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -133,7 +137,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/data_size"
-                        android:text="ACCOUNT NO-"
+                        android:text="ACCOUNT NO"
                         android:textStyle="bold"
                         />
                     <TextView
@@ -210,3 +214,4 @@
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>
+    </RelativeLayout>
