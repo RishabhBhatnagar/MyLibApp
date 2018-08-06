@@ -187,6 +187,8 @@ public class GoGoGadget implements Runnable {
 
                     // Get fresh cookies by logging in again
                     methodLoginAndGetCookies();
+                    // Get and create books
+                    methodGetOutDocs();
                     // Actually send the post with new cookies
                     methodSendReissuePOST();
 
@@ -342,6 +344,13 @@ public class GoGoGadget implements Runnable {
                         book.setTitle(        elList.get(i * 7 + 1).text().trim());
                         book.setDueDate(      elList.get(i * 7 + 2).text().trim());
                         book.setFineAmount(   elList.get(i * 7 + 3).text().trim());
+
+                        // Pick up respective input tags
+                        Element fineAmount = elList.get(i * 7 + 3);
+                        book.setInp_accno(docOutDocs.select(fineAmount.cssSelector() + " + input").first());
+                        book.setInp_media(docOutDocs.select(fineAmount.cssSelector() + " + input + input").first());
+                        String fineCSS = fineAmount.cssSelector();
+
                         book.setRenewCount(   elList.get(i * 7 + 4).text().trim());
                         book.setReservations( elList.get(i * 7 + 5).text().trim());
 
@@ -354,6 +363,11 @@ public class GoGoGadget implements Runnable {
                             //if we have input tag
                             // book can be renewed
                             book.setCanRenew(true);
+
+                            Element td_chk = elList.get(i * 7 + 6);
+                            Element chk = docOutDocs.selectFirst(td_chk.cssSelector() + "> input");
+                            // Set the input tag for checkbox
+                            book.setInp_chk(chk);
                         }
 
                         bookList.add(book);
@@ -386,11 +400,8 @@ public class GoGoGadget implements Runnable {
                 .execute();
         Document docOutDocs = outDocsPage.parse();
 
-        // Checkbox inputs
-        Elements checkBoxInputTags = docOutDocs.select("input[checked]");
-
         // Select the element which are not checkboxes, and have to be submitted in anycase
-        Elements userIndependentInputTags = docOutDocs.select("input:not([checked])");
+        Elements userIndependentInputTags = docOutDocs.select("input[name=m_count], input[name=Submit]");
 
         Connection connToReissue = Jsoup.connect(this.gUrlOutForm)
                 .cookies(this.cookies)
@@ -403,39 +414,35 @@ public class GoGoGadget implements Runnable {
 
 
         for(Book book : this.booksToReissue){
-            // for each book find its correct tag
-
-            // if userIndependent tag name begins with m_accno, then get that value
-            // Compare with book acc_no, if they are same, then that's the checkbox for the book
-            for(Element element : userIndependentInputTags){
-                if(element.attr("name").contains("m_accno")){
-                    // this is a named attribute that may be associated with a book
-
-                    String book_accno = book.getAcc_no().substring(1);
-                    String input_accno = element.attr("value");
-
-                    // element will have the 1234 for a book 'B1234', we will now compare
-                    // those values, if they are same, then we have the input checkbox number for the book
-                    if(book_accno.equals(input_accno)){
-                        String name = element.attr("name");
-                        // this will be m_accnoN, N = number
-                        // this N will tell us which checkbox to add to the connection
-
-                        // Get the last char of the name attribute
-                        String N = name.substring(name.length() - 1);
-
-                        // Find the checkbox of current book
-                        for(Element e : checkBoxInputTags){
-                            if(e.attr("name").equals("m_chk" + N)){
-                                // Add this checkbox to the connection
-                                connToReissue.data(e.attr("name"),
-                                        e.attr("value"));
-                            }
-                        }
-
-                    }
-                }
+            // for each book, attach it's input tags to POST request
+            if(book.isInpNull()){
+                String a = book.toString();
+                continue;
             }
+
+            Element inp_accno = book.getInp_accno();
+            Element inp_media = book.getInp_media();
+            Element inp_chk = book.getInp_chk();
+
+            StringBuilder sb = new StringBuilder();
+            try {
+                for(Element tag : new Element[]{inp_accno, inp_media, inp_chk}) {
+
+                    sb.append("name = ").append(tag.attr("name")).append("\n");
+                    sb.append("value = ").append(tag.attr("value")).append("\n\n");
+
+                    // Send cookie data for all user input tags
+                    connToReissue.data(tag.attr("name"), tag.attr("value"));
+
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                String a = sb.toString();
+            }
+
+            String shit = "shit";
+
         }// Book loop
 
 

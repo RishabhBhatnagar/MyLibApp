@@ -2,7 +2,9 @@ package org.sfitengg.library.mylibapp.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 
 /**
  * Created by vinay on 14-06-2018.
@@ -23,6 +25,11 @@ public class Book implements Parcelable {
     private String reservations;
     private boolean canRenew;
 
+    // <input> for reissuing
+    private Element inp_accno;
+    private Element inp_media;
+    private Element inp_chk;
+
     // Parcellable overrides
     @Override
     public int describeContents() {
@@ -41,6 +48,11 @@ public class Book implements Parcelable {
         // Refer:
         // https://stackoverflow.com/questions/6201311/how-to-read-write-a-boolean-when-implementing-the-parcelable-interface
         dest.writeByte((byte) (canRenew ? 1 : 0));
+
+        // Write outerHtml of input tags
+        dest.writeString(inp_accno.outerHtml());
+        dest.writeString(inp_media.outerHtml());
+        dest.writeString(inp_chk.outerHtml());
     }
 
     public static final Creator CREATOR = new Creator() {
@@ -64,6 +76,12 @@ public class Book implements Parcelable {
         // Refer:
         // https://stackoverflow.com/questions/6201311/how-to-read-write-a-boolean-when-implementing-the-parcelable-interface
         canRenew = in.readByte() != 0;
+
+        // Read the input tags
+        inp_accno = Jsoup.parse(in.readString()).selectFirst("input");
+        inp_media = Jsoup.parse(in.readString()).selectFirst("input");
+        inp_chk = Jsoup.parse(in.readString()).selectFirst("input");
+
 
     }
 
@@ -96,6 +114,18 @@ public class Book implements Parcelable {
 
     public void setCanRenew(boolean canRenew) {
         this.canRenew = canRenew;
+    }
+
+    public void setInp_accno(Element inp_accno) {
+        this.inp_accno = inp_accno;
+    }
+
+    public void setInp_media(Element inp_media) {
+        this.inp_media = inp_media;
+    }
+
+    public void setInp_chk(Element inp_chk) {
+        this.inp_chk = inp_chk;
     }
 
     @Override
@@ -141,4 +171,21 @@ public class Book implements Parcelable {
 
     }
 
+    public Element getInp_accno() {
+        return inp_accno;
+    }
+
+    public Element getInp_media() {
+        return inp_media;
+    }
+
+    public Element getInp_chk() {
+        return inp_chk;
+    }
+
+    public boolean isInpNull() {
+        return inp_accno == null
+                || inp_media == null
+                || inp_chk == null;
+    }
 }

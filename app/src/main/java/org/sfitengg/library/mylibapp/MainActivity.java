@@ -27,6 +27,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.sfitengg.library.mylibapp.data.Book;
 import org.sfitengg.library.mylibapp.data.DataHolder;
 import org.sfitengg.library.mylibapp.nav_drawer_fragments.AboutFragment;
@@ -97,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
 
     //constants for encoding  books into strings.
-    String attributeSeperator = ", ";
+    String attributeSeperator = "======";
     String bookSeperator = "#";
 
 
@@ -273,13 +276,24 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     }
 
     private String bookToString(Book book){
-        return  book.getAcc_no() + attributeSeperator +
+        String result =
+                book.getAcc_no() + attributeSeperator +
                 book.getDueDate() + attributeSeperator +
                 book.getFineAmount() + attributeSeperator +
                 book.getRenewCount() + attributeSeperator +
                 book.getReservations() + attributeSeperator +
                 book.getTitle() + attributeSeperator +
-                String.valueOf(book.isCanRenew()) + bookSeperator;
+                String.valueOf(book.isCanRenew()) + attributeSeperator;
+
+        if(!book.isInpNull()) {
+            // If inp tags are not null, then retrieve
+            // Store the input tags to retrieve them in reissue
+            result += book.getInp_accno().outerHtml() + attributeSeperator +
+                    book.getInp_media().outerHtml() + attributeSeperator +
+                    book.getInp_chk().outerHtml() + attributeSeperator;
+        }
+        result += bookSeperator;
+        return result;
     }
 
     private List<Book> stringToBooks(String booksListsString) {
@@ -309,6 +323,17 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                     book.setCanRenew(false);
                 }
 
+                if(attributes.size() > 7) {
+                    // If more than 7 elements exist, ie if the input tags are present
+                    // Get inp tags back
+                    Element inp_acc = Jsoup.parse(attributes.get(7)).selectFirst("input");
+                    Element inp_med = Jsoup.parse(attributes.get(8)).selectFirst("input");
+                    Element inp_chk = Jsoup.parse(attributes.get(9)).selectFirst("input");
+
+                    book.setInp_accno(inp_acc);
+                    book.setInp_media(inp_med);
+                    book.setInp_chk(inp_chk);
+                }
                 bL.add(book);
             }
         }
@@ -539,6 +564,9 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         editor.putString(KEY_USER_NAME, name);
         editor.apply();
 
+        // Set the username in header
+        TextView nameHeader = nvDrawer.getHeaderView(0).findViewById(R.id.header_name);
+        nameHeader.setText(name);
 
         setLoadingDialog(false);
 
@@ -605,8 +633,9 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         switch (errorCode){
             case ERROR_NO_INTERNET:
             case ERROR_SERVER_UNREACHABLE:
+            case ERROR_INCORRECT_PID_OR_PASSWORD:
             case -8:// This line is used only because the if else ladder below gives a warning for
-                // ERROR_SERVER_UNREACHABLE always true, since it's the last value for this case
+                // ERROR_INCORRECT_PID_OR_PASSWORD always true, since it's the last value for this case
                 // So, to avoid that warning, adding a impossible value here.
 
                 //region Create AlertDialog(loginFailedDialog) for network failure
@@ -620,6 +649,9 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 } else if ( errorCode == ERROR_SERVER_UNREACHABLE) {
                     loginFailedDialog.setTitle("Connection to the server failed!");
                     loginFailedDialog.setMessage("Server is unreachable.");
+                } else if ( errorCode == ERROR_INCORRECT_PID_OR_PASSWORD) {
+                    loginFailedDialog.setTitle("The PID/password that you entered was incorrect!");
+                    loginFailedDialog.setMessage("Please try again!");
                 }
 
                 //endregion
@@ -638,7 +670,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 //endregion
                 break;
 
-            case ERROR_INCORRECT_PID_OR_PASSWORD:
+
             case ERROR_NOT_LOGGED_IN:
                 throw new RuntimeException("If you have reached till MainActivity" +
                         "then these errors will not come.\n" +
@@ -646,8 +678,8 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                         " login, to the MainActivity intent");
             case ERROR_POST_TO_REISSUE_FAILED:
                 Toast.makeText(this,
-                        "Something went wrong when posting to out docs page",
-                        Toast.LENGTH_SHORT).show();
+                        "Something went wrong when reissuing the books. Please try again!",
+                        Toast.LENGTH_LONG).show();
                 break;
             default:
                     Toast.makeText(this,"Error" + errorCode, Toast.LENGTH_SHORT).show();
