@@ -23,6 +23,9 @@ import java.util.Map;
 public class GoGoGadget implements Runnable {
     // Thread class to do Network requests
 
+    // Timeout constant
+    private final static int TIMEOUT = 10000; // milliseconds
+
     // References to Calling activity
     private MyCallback myCallback;
     private Handler handler; // Handler object needed to post messages to calling activity
@@ -272,7 +275,7 @@ public class GoGoGadget implements Runnable {
     private void methodLoginAndGetCookies() throws IOException{
         Connection.Response loginForm = Jsoup.connect(this.gUrlMainPage)
                 .method(Connection.Method.GET)
-                .timeout(100000)
+                .timeout(TIMEOUT)
                 .execute();
         cookies = loginForm.cookies();
 
@@ -316,6 +319,7 @@ public class GoGoGadget implements Runnable {
 
                 Connection.Response outR = Jsoup.connect(gUrlOutDocs)
                         .cookies(cookies)
+                        .timeout(TIMEOUT)
                         .method(Connection.Method.GET)
                         .execute();
                 Document docOutDocs = outR.parse();
@@ -398,6 +402,7 @@ public class GoGoGadget implements Runnable {
         Connection.Response outDocsPage = Jsoup.connect(gUrlOutDocs)
                 .cookies(cookies)
                 .method(Connection.Method.GET)
+                .timeout(TIMEOUT)
                 .execute();
         Document docOutDocs = outDocsPage.parse();
 
