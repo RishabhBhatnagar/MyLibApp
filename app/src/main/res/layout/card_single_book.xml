@@ -34,6 +34,7 @@
             android:layout_centerHorizontal="true"
             android:layout_margin="5dp"
             android:textStyle="bold"
+            android:text="dkandkl cc ksmck ;c lcmc;om;cl;lc;clsdmck"
 
 
             android:textColor="#ed044e"
@@ -121,6 +122,7 @@
                         android:text="@string/counter_text"
                         android:textStyle="bold"
                         android:textSize="@dimen/sub_heads_size"
+                        android:layout_marginLeft="5dp"
                         android:layout_centerHorizontal="true"
                         />
                 </RelativeLayout>
@@ -137,8 +139,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/data_size"
-                        android:text="ACCOUNT NO"
+                        android:text="ACC NO-"
                         android:textStyle="bold"
+                        android:id="@+id/AcNO"
                         />
                     <TextView
                         android:layout_width="wrap_content"
@@ -146,6 +149,7 @@
                         android:textSize="@dimen/data_size"
                         android:text="ACC -"
                         android:id="@+id/acc"
+                        android:layout_toEndOf="@id/AcNO"
                         android:layout_centerHorizontal="true"
                         android:textColor="#fff"
                         android:textStyle="bold"
