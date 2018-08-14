@@ -365,7 +365,8 @@ public class GoGoGadget implements Runnable {
                             book.setCanRenew(true);
 
                             Element td_chk = elList.get(i * 7 + 6);
-                            Element chk = docOutDocs.selectFirst(td_chk.cssSelector() + "> input");
+//                            Element chk = docOutDocs.selectFirst(td_chk.cssSelector() + "> input");
+                            Element chk = docOutDocs.select(td_chk.cssSelector() + "> input").first();
                             // Set the input tag for checkbox
                             book.setInp_chk(chk);
                         }

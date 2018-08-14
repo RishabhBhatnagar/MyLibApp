@@ -326,9 +326,9 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 if(attributes.size() > 7) {
                     // If more than 7 elements exist, ie if the input tags are present
                     // Get inp tags back
-                    Element inp_acc = Jsoup.parse(attributes.get(7)).selectFirst("input");
-                    Element inp_med = Jsoup.parse(attributes.get(8)).selectFirst("input");
-                    Element inp_chk = Jsoup.parse(attributes.get(9)).selectFirst("input");
+                    Element inp_acc = Jsoup.parse(attributes.get(7)).select("input").first();
+                    Element inp_med = Jsoup.parse(attributes.get(8)).select("input").first();
+                    Element inp_chk = Jsoup.parse(attributes.get(9)).select("input").first();
 
                     book.setInp_accno(inp_acc);
                     book.setInp_media(inp_med);

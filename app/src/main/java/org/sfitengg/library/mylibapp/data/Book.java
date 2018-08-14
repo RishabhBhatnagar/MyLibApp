@@ -78,9 +78,9 @@ public class Book implements Parcelable {
         canRenew = in.readByte() != 0;
 
         // Read the input tags
-        inp_accno = Jsoup.parse(in.readString()).selectFirst("input");
-        inp_media = Jsoup.parse(in.readString()).selectFirst("input");
-        inp_chk = Jsoup.parse(in.readString()).selectFirst("input");
+        inp_accno = Jsoup.parse(in.readString()).select("input").first();
+        inp_media = Jsoup.parse(in.readString()).select("input").first();
+        inp_chk = Jsoup.parse(in.readString()).select("input").first();
 
 
     }
