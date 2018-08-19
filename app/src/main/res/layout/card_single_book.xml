@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/selector_row"
+
     xmlns:android="http://schemas.android.com/apk/res/android">
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,7 +16,7 @@
     card_view:cardElevation="@dimen/cardview_default_elevation"
     card_view:cardCornerRadius="15dp"
     android:orientation="horizontal"
-    >
+    android:focusable="true">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -95,7 +95,7 @@
                         android:text="DUE DATE"
                         android:layout_alignParentLeft="true"
                         android:textStyle="bold"
-                        android:textSize="@dimen/sub_heads_size"
+                        android:textSize="@dimen/data_size"
 
                         />
 
@@ -121,7 +121,7 @@
                         android:id="@+id/renew_count_tv"
                         android:text="@string/counter_text"
                         android:textStyle="bold"
-                        android:textSize="@dimen/sub_heads_size"
+                        android:textSize="@dimen/data_size"
                         android:layout_marginLeft="5dp"
                         android:layout_centerHorizontal="true"
                         />
@@ -139,7 +139,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/data_size"
-                        android:text="ACC NO-"
+                        android:text="ACC NO :"
                         android:textStyle="bold"
                         android:id="@+id/AcNO"
                         />
@@ -147,9 +147,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/data_size"
-                        android:text="ACC -"
+                        android:text="BGH12"
                         android:id="@+id/acc"
-                        android:layout_toEndOf="@id/AcNO"
                         android:layout_centerHorizontal="true"
                         android:textColor="#fff"
                         android:textStyle="bold"
@@ -183,33 +182,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="RE-ISSUE"
-                android:textSize="18sp"
+                android:textSize="@dimen/data_size"
                 android:textStyle="bold"
                 android:id="@+id/reissue_checkbox"
                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="FINE AMT :"
+                android:text="FINE :"
                 android:id="@+id/fine_amt_tv"
                 android:layout_centerInParent="true"
                 android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="@dimen/data_size"
                 android:textColor="#000"
-                android:layout_marginTop="2.3dp"
                 />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rs. 18"
-                android:layout_marginStart="300dp"
+                android:layout_alignParentEnd="true"
                 android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="@dimen/data_size"
                 android:textColor="#000"
-                android:layout_marginTop="2.3dp"
                 android:id="@+id/fine_amt"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="3.5dp"
                 />
+
         </RelativeLayout>
 
 

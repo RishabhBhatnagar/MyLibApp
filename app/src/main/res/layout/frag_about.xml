@@ -50,12 +50,116 @@
                 android:background="@color/colorPrimary"
                 android:layout_height="1dp"
                 android:orientation="horizontal" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:textSize="20sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:id="@+id/name1"
+                    android:autoLink="web"
+                    android:clickable="true"
+                    android:focusable="true" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/links"
+                    android:autoLink="web"
+                    android:id="@+id/img1"
+                    android:clickable="true"
+
+                    android:focusable="true"
+                    />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:textSize="20sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:id="@+id/name2"
+                    android:autoLink="web"
+                    android:clickable="true"
+                    android:focusable="true" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/links"
+                    android:autoLink="web"
+                    android:id="@+id/img2"
+                    android:clickable="true"
+
+                    android:focusable="true" />
+
+
+            </LinearLayout><LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
             <TextView
+                android:textSize="20sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
                 android:textStyle="bold"
-                android:id="@+id/tv_about"/>
+                android:id="@+id/name3"
+                android:autoLink="web"
+                android:clickable="true"
+                android:focusable="true" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/links"
+                android:autoLink="web"
+                android:id="@+id/img3"
+                android:clickable="true"
+
+                android:focusable="true"
+                />
+
+
+        </LinearLayout><LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:id="@+id/name4"
+                android:autoLink="web"
+                android:clickable="true"
+                android:focusable="true" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/links"
+                android:autoLink="web"
+                android:id="@+id/img4"
+                android:clickable="true"
+                android:focusable="true"
+                />
+
+
+        </LinearLayout>
         </LinearLayout>
 </android.support.v7.widget.CardView>
 

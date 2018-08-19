@@ -68,7 +68,9 @@ private static String KEY_BOOKS = "books";
         getActivity().setRequestedOrientation(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         reIssueButtton = view.findViewById(R.id.re_issue_button);
-        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
+        swipeLayout =  view.findViewById(R.id.swiperefresh);
+        swipeLayout.setColorSchemeColors(Color.RED,Color.BLUE,Color.YELLOW);
+
 
         Bundle args = getArguments();
 
@@ -279,7 +281,7 @@ private static String KEY_BOOKS = "books";
         }
 
        int DaysLeft=0;
-        @SuppressLint("SimpleDateFormat")// added supress lint to care of US date format which is mm/dd
+        @SuppressLint("SimpleDateFormat")// added supress lint to take care of "US date format" which is mm/dd/yyyy
         public String daysleft(int position) {
             String daysLeft="";
             Book currentBook = bookList.get(position);
