@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -17,10 +19,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -28,7 +30,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.sfitengg.library.mylibapp.data.Book;
 import org.sfitengg.library.mylibapp.data.DataHolder;
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     AlertDialog reissueSuccessDialog;
     AlertDialog signOut;
     AlertDialog loginFailedDialog;
+    private static final String feedback_url = "https://docs.google.com/forms/d/e/1FAIpQLScuO2G5us3_psE8MxA4bWv1A5wnmtm80xj62y8aLuIsLUEGVg/viewform";
 
     @Override
     protected void onPause() {
@@ -208,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
-                        selectDrawerItem(menuItem);
+                        selectDrawerItem(menuItem, nvDrawer.getMenu());
 
                         return true;
                     }
@@ -241,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 menuItemIssuedBooks.setChecked(true);
 
                 // Call the logic needed to set IssuedBooksFragment on FrameLayout
-                selectDrawerItem(menuItemIssuedBooks);
+                selectDrawerItem(menuItemIssuedBooks, nvDrawer.getMenu());
             }
             else {
                 // Start thread operation to retrieve books
@@ -340,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         return bL;
     }
 
-    private void selectDrawerItem(MenuItem menuItem) {
+    private void selectDrawerItem(MenuItem menuItem, Menu menu) {
         // Create a new fragment and specify the fragment to show based on nav item clicked
         Fragment newFragmentToPutInFrame;
 
@@ -368,6 +370,17 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 break;
             case R.id.frag_faq:{
                 newFragmentToPutInFrame = new FaqFragment();
+                break;
+            }
+            case R.id.option_feedback:{
+                newFragmentToPutInFrame = null;
+
+                String url = feedback_url;
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+                menu.getItem(0).setChecked(true);
+
                 break;
             }
             case R.id.option_sign_out:
@@ -420,7 +433,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                                     menuItemIssuedBooks.setChecked(true);
 
                                     // Call the logic needed to set IssuedBooksFragment on FrameLayout
-                                    selectDrawerItem(menuItemIssuedBooks);
+                                    selectDrawerItem(menuItemIssuedBooks, nvDrawer.getMenu());
                                     //endregion
 
                                     // Dismiss the dialog
@@ -455,12 +468,13 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         }// switch
 
 
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragment_frame, newFragmentToPutInFrame).commit();
-
-        // Set action bar title
-        setTitle(menuItem.getTitle());
+        if(newFragmentToPutInFrame != null) {
+            // Insert the fragment by replacing any existing fragment
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.fragment_frame, newFragmentToPutInFrame).commit();
+            // Set action bar title
+            setTitle(menuItem.getTitle());
+        }
 
     }
 
