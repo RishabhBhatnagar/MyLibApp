@@ -47,7 +47,7 @@ public class LibExtrasFragment extends Fragment {
 
         initialiseUrlNames(dataSet);
 
-        adapter = new UrlAdapter(getContext(), dataSet);
+        adapter = (new UrlAdapter(getContext(), dataSet));
         recyclerView.setAdapter(adapter);
 
         return view;
