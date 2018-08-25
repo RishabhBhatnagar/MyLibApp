@@ -20,9 +20,9 @@ public class UrlAdapter extends RecyclerView.Adapter<UrlAdapter.UrlViewHolder> {
     private List<Url> urlList;
 
     public static final String K_URL = "url";
-    public static final String K_NAME = "name1";
+    private static final String K_NAME = "name1";
     public static final String K_URL_LIST = "urllist1";
-    public static final String K_URL_NAMES = "urlnames1";
+    private static final String K_URL_NAMES = "urlnames1";
 
     public UrlAdapter(Context context, List<Url> urlList) {
         this.context = context;
