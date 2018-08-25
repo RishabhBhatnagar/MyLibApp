@@ -17,10 +17,6 @@ import android.widget.TextView;
 import org.sfitengg.library.mylibapp.MainActivity;
 import org.sfitengg.library.mylibapp.R;
 
-/**
- * Created by vinay-deshmukh <vinay_deshmukh@outlook.com> on 30-07-2018.
- */
-
 public class LoggerInFragment extends Fragment {
 
     EditText et_pid;

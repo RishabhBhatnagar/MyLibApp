@@ -2,29 +2,15 @@ package org.sfitengg.library.mylibapp.data;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.print.PrintDocumentInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.sfitengg.library.mylibapp.R;
 import org.sfitengg.library.mylibapp.nav_drawer_fragments.WebViewActivity;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

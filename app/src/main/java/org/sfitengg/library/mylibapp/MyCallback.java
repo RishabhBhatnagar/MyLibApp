@@ -4,9 +4,6 @@ import org.sfitengg.library.mylibapp.data.Book;
 
 import java.util.List;
 
-/**
- * Created by vinay on 14-06-2018.
- */
 
 public interface MyCallback {
 
