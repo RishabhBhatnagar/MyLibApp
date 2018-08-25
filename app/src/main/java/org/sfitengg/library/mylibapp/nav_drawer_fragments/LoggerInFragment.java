@@ -30,6 +30,7 @@ public class LoggerInFragment extends Fragment {
         // This fragment will be called when user is not logged in
 
         View rootLayout = inflater.inflate(R.layout.activity_login, container, false);
+        TextView txt;
 
 
         et_pid = rootLayout.findViewById(R.id.et_pid);
@@ -51,8 +52,8 @@ public class LoggerInFragment extends Fragment {
         });
         //endregion
 
-        TextView txt=  rootLayout.findViewById(R.id.home); //txt is object of TextView
-        txt.setText("Click here to ");
+        txt = rootLayout.findViewById(R.id.home); //txt is object of TextView
+        txt.setText("Click here to \nchange your password");
         txt.setMovementMethod(LinkMovementMethod.getInstance());
         txt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -61,18 +62,6 @@ public class LoggerInFragment extends Fragment {
                 startActivity(browserIntent);
             }
         });
-
-        TextView txt1=  rootLayout.findViewById(R.id.home1); //txt is object of TextView
-        txt1.setText("change your password ");
-        txt1.setMovementMethod(LinkMovementMethod.getInstance());
-        txt1.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setData(Uri.parse("http://115.248.171.105:82/webopac/chgpas.asp"));
-                startActivity(browserIntent);
-            }
-        });
-
         return rootLayout;
     }
 }

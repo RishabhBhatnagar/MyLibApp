@@ -51,8 +51,6 @@ public class FaqFragment extends Fragment {
         List<QuestionAndAnswer> questionAndAnswers = new ArrayList<>();
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
 
-        // todo : add more question and answers here.
-
         questionAndAnswers.add(new QuestionAndAnswer("WHY DID I DOWNLOAD THIS APP ?", "This app lets users view their issued books with the days left for returning them and users also can re-issue their books via this app" , color("#ed044e")));//red
         questionAndAnswers.add(new QuestionAndAnswer("I FORGOT MY PASSWORD", "Contact the Library employees", color("#00C9FF")));//blue
         questionAndAnswers.add(new QuestionAndAnswer("WHY IS MY RE-ISSUE CHECKBOX DISABLED ? ", "There are two reasons for this. " +
@@ -101,12 +99,12 @@ class QnAAdapter extends RecyclerView.Adapter<QnAAdapter.QnAViewHolder>{
     public int getItemCount() {
         return qnAs.size();
     }
-    public class QnAViewHolder extends RecyclerView.ViewHolder{
+    class QnAViewHolder extends RecyclerView.ViewHolder{
         TextView questionTv;
         TextView answerTv;
         LinearLayout hr;
 
-        public QnAViewHolder(View itemView) {
+        QnAViewHolder(View itemView) {
             super(itemView);
             questionTv = itemView.findViewById(R.id.questionTv);
             answerTv = itemView.findViewById(R.id.answerTv);

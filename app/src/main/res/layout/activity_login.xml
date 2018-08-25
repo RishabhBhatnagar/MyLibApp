@@ -4,14 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.sfitengg.library.mylibapp.LoginActivity"
+    tools:context="org.sfitengg.library.mylibapp.nav_drawer_fragments.LoggerInFragment"
     android:orientation="vertical"
-    android:id="@+id/back"
-
-
-
-
-    >
+    android:id="@+id/back" >
 
     <ScrollView
         android:layout_width="match_parent"
@@ -44,6 +39,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:hint="PID" />
+
             </android.support.design.widget.TextInputLayout>
 
             <!--  Password Label -->
@@ -85,19 +81,9 @@
                 android:id="@+id/home"
                 android:autoLink="web"
                 android:clickable="true"
+                android:gravity="center"
                 android:layout_gravity="center_horizontal"
                 />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/home1"
-                android:autoLink="web"
-                android:clickable="true"
-                android:layout_gravity="center_horizontal"
-                />
-
-
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -42,7 +42,6 @@ import org.sfitengg.library.mylibapp.nav_drawer_fragments.LoggerInFragment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_INCORRECT_PID_OR_PASSWORD;
 import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_NOT_LOGGED_IN;
@@ -52,16 +51,13 @@ import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_SERVER_UNREACHABLE;
 
 public class MainActivity extends AppCompatActivity implements MyCallback{
 
-    public static final String KEY_COOKIES = "cookies";
     public static final String KEY_USER_NAME = "username";
     public static final String titleSharedPrefs = "my_prefs";
     public static final String KEY_PID = "pid";
     public static final String KEY_PWD = "pwd";
     protected static final String BOOKS_STRING_TAG = "bst";
     public static final String NO_BOOKS_BORROWED = "none";
-    protected static final String SKIPPED = "skipped";
     private DrawerLayout mDrawerLayout;
-    private Toolbar toolbar;
     private NavigationView nvDrawer;
 
 
@@ -96,9 +92,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         }
     }
 
-    Map<String, String> cookies;
     List<Book> bookList;
-    GoGoGadget gForBooks;
 
 
     //constants for encoding  books into strings.
@@ -118,10 +112,12 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         this.pid = pid;
         this.pwd = pwd;
 
-        GoGoGadget goGoGadget = new GoGoGadget((MyCallback) this,
-            dataHolder.getBundleURLs(),
-            GoGoGadget.LOGIN_AND_GET_COOKIES,
-            handler);
+        GoGoGadget goGoGadget = new GoGoGadget(
+                this,
+                dataHolder.getBundleURLs(),
+                GoGoGadget.LOGIN_AND_GET_COOKIES,
+                handler
+        );
         new Thread(goGoGadget).start();
     }
 
@@ -131,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         setContentView(R.layout.activity_main);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+        Toolbar toolbar;
 
 
         //region Create a loadingDialog instance for the activity to show during network operations
@@ -190,8 +186,10 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         TextView nameHeader = headerView.findViewById(R.id.header_name);
         if(user_name != null)
             nameHeader.setText(user_name);
-        else
-            nameHeader.setText("Guest");
+        // else nameHeader.setText("Guest");
+        // Note : uncomment this when guest login is allowed.
+
+
         //endregion
 
 
@@ -375,9 +373,8 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
             case R.id.option_feedback:{
                 newFragmentToPutInFrame = null;
 
-                String url = feedback_url;
                 Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
+                i.setData(Uri.parse(feedback_url));
                 startActivity(i);
                 menu.getItem(0).setChecked(true);
 
@@ -496,11 +493,13 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         // Start loading dialog
         setLoadingDialog(true);
 
-        GoGoGadget gSendReissue = new GoGoGadget((MyCallback)this,
+        GoGoGadget gSendReissue = new GoGoGadget(
+                this,
                 dataHolder.getBundleURLs(),
                 GoGoGadget.SEND_REISSUE,
                 handler,
-                booksToReissue);
+                booksToReissue
+        );
 
 
 
@@ -512,10 +511,12 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         // Start a indefinite loading dialog
         setLoadingDialog(true);
 
-        GoGoGadget gGetDocs = new GoGoGadget((MyCallback)this,
+        GoGoGadget gGetDocs = new GoGoGadget(
+                this,
                 dataHolder.getBundleURLs(),
                 GoGoGadget.GET_OUT_DOCS,
-                handler);
+                handler
+        );
         new Thread(gGetDocs).start();
     }
 
@@ -722,9 +723,8 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
+        return activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
-        return isConnected;
     }
 
     public static void hideKeyboard(Activity activity) {
