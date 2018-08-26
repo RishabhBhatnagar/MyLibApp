@@ -33,12 +33,12 @@ import java.util.concurrent.TimeUnit;
 
 public class IssuedBooksFragment extends Fragment {
 
-private static String KEY_BOOKS = "books";
-    List<Book> bookList = new ArrayList<>();
+private static final String KEY_BOOKS = "books";
+    private final List<Book> bookList = new ArrayList<>();
     private BooksAdapter mBooksAdapter;
     private static int numberOfBooksSelected = 0;
-    Button reIssueButtton;
-    SwipeRefreshLayout swipeLayout;
+    private Button reIssueButton;
+    private SwipeRefreshLayout swipeLayout;
 
 
     public static IssuedBooksFragment newInstance(List<Book> bookList){
@@ -60,7 +60,7 @@ private static String KEY_BOOKS = "books";
         getActivity().setRequestedOrientation(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         RecyclerView recyclerView;
-        reIssueButtton = view.findViewById(R.id.re_issue_button);
+        reIssueButton = view.findViewById(R.id.re_issue_button);
         swipeLayout =  view.findViewById(R.id.swiperefresh);
         swipeLayout.setColorSchemeColors(Color.RED,Color.BLUE,Color.YELLOW);
 
@@ -110,7 +110,7 @@ private static String KEY_BOOKS = "books";
 
 
 
-        reIssueButtton.setOnClickListener(new View.OnClickListener() {
+        reIssueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 List<Book> booksToReissue = mBooksAdapter.getBooks();
@@ -126,7 +126,7 @@ private static String KEY_BOOKS = "books";
         return view;
     }
 
-    void myUpdateOperation(){
+    private void myUpdateOperation(){
 
         ((MainActivity)getActivity()).startGetOutDocsAndCreateBooks();
         swipeLayout.setRefreshing(false);
@@ -135,9 +135,9 @@ private static String KEY_BOOKS = "books";
     // private since we only need it inside this class
     private class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.MyViewHolder> {
 
-        private List<Book> bookList;
+        private final List<Book> bookList;
         private boolean anyBookSelected = false;
-        private boolean selectedList[];
+        private final boolean[] selectedList;
 
 
         private List<Book> getBooks(){
@@ -153,11 +153,15 @@ private static String KEY_BOOKS = "books";
 
         class MyViewHolder extends RecyclerView.ViewHolder{
 
-            private TextView tv_title,tv_duedate,tv_fine,tv_reissue_count,tv_acc;
-            private RelativeLayout relativeLayout;
-            private CheckBox reissueCheckBox;
+            private final TextView tv_title;
+            private final TextView tv_duedate;
+            private final TextView tv_fine;
+            private final TextView tv_reissue_count;
+            private final TextView tv_acc;
+            private final RelativeLayout relativeLayout;
+            private final CheckBox reissueCheckBox;
             private boolean selected = false;
-            private TextView tv_daysLeft;
+            private final TextView tv_daysLeft;
 
 
 
@@ -168,16 +172,16 @@ private static String KEY_BOOKS = "books";
                     numberOfBooksSelected -= 1;
                     reissueCheckBox.setChecked(false);
                     if(numberOfBooksSelected==0){
-                        reIssueButtton.setEnabled(false);
-                        reIssueButtton.setBackgroundResource(R.drawable.disable);
+                        reIssueButton.setEnabled(false);
+                        reIssueButton.setBackgroundResource(R.drawable.disable);
 
                     }
                 }
                 else{
                     numberOfBooksSelected += 1;
                     reissueCheckBox.setChecked(true);
-                    reIssueButtton.setEnabled(true);
-                    reIssueButtton.setBackgroundResource(R.drawable.shape);
+                    reIssueButton.setEnabled(true);
+                    reIssueButton.setBackgroundResource(R.drawable.shape);
 
                 }
                 if(numberOfBooksSelected<1){
@@ -202,8 +206,8 @@ private static String KEY_BOOKS = "books";
 
 
 
-                reIssueButtton.setEnabled(false);
-                reIssueButtton.setBackgroundResource(R.drawable.disable);
+                reIssueButton.setEnabled(false);
+                reIssueButton.setBackgroundResource(R.drawable.disable);
 
                 //region onclicklistener reissue
                 reissueCheckBox.setOnClickListener(new View.OnClickListener() {

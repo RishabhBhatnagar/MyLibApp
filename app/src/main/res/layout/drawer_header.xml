@@ -6,8 +6,7 @@
     android:gravity="center_vertical"
     android:orientation="vertical"
     android:padding="8dp"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    android:id="@+id/navigation_view">
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <TextView
         android:layout_width="match_parent"

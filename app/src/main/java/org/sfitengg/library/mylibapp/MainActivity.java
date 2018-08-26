@@ -51,30 +51,30 @@ import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_SERVER_UNREACHABLE;
 
 public class MainActivity extends AppCompatActivity implements MyCallback{
 
-    public static final String KEY_USER_NAME = "username";
-    public static final String titleSharedPrefs = "my_prefs";
-    public static final String KEY_PID = "pid";
-    public static final String KEY_PWD = "pwd";
-    protected static final String BOOKS_STRING_TAG = "bst";
-    public static final String NO_BOOKS_BORROWED = "none";
+    private static final String KEY_USER_NAME = "username";
+    private static final String titleSharedPrefs = "my_prefs";
+    private static final String KEY_PID = "pid";
+    private static final String KEY_PWD = "pwd";
+    private static final String BOOKS_STRING_TAG = "bst";
+    private static final String NO_BOOKS_BORROWED = "none";
     private DrawerLayout mDrawerLayout;
     private NavigationView nvDrawer;
 
 
     // SharedPreferences
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     // Obtain the data holder object
-    DataHolder dataHolder = DataHolder.getDataHolder();
-    Handler handler = new Handler();
+    private final DataHolder dataHolder = DataHolder.getDataHolder();
+    private final Handler handler = new Handler();
 
     // Loading Dialog
-    AlertDialog.Builder alertDialogBuilder;
-    Dialog loadingDialog;
-    AlertDialog reissueSuccessDialog;
-    AlertDialog signOut;
-    AlertDialog loginFailedDialog;
+    private AlertDialog.Builder alertDialogBuilder;
+    private Dialog loadingDialog;
+    private AlertDialog reissueSuccessDialog;
+    private AlertDialog signOut;
+    private AlertDialog loginFailedDialog;
     private static final String feedback_url = "https://docs.google.com/forms/d/e/1FAIpQLScuO2G5us3_psE8MxA4bWv1A5wnmtm80xj62y8aLuIsLUEGVg/viewform";
 
     @Override
@@ -92,16 +92,16 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         }
     }
 
-    List<Book> bookList;
+    private List<Book> bookList;
 
 
     //constants for encoding  books into strings.
-    String attributeSeperator = "======";
-    String bookSeperator = "#";
+    private final String attributeSeperator = "======";
+    private final String bookSeperator = "#";
 
 
-    String pid;
-    String pwd;
+    private String pid;
+    private String pwd;
     public void startLoginFromFragment(String pid, String pwd){
         // This method will be called from LoggerInFragment
         // It will start the login process
@@ -657,16 +657,20 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 loginFailedDialog = new AlertDialog.Builder(this).create();
                 loginFailedDialog.setCanceledOnTouchOutside(false);
                 loginFailedDialog.setCancelable(true);
-                if ( errorCode == ERROR_NO_INTERNET) {
-                    loginFailedDialog.setTitle("You are not connected to the Internet");
-                    loginFailedDialog.setMessage("Please connect to the Internet and try again.");
+                switch (errorCode) {
+                    case ERROR_NO_INTERNET:
+                        loginFailedDialog.setTitle("You are not connected to the Internet");
+                        loginFailedDialog.setMessage("Please connect to the Internet and try again.");
 
-                } else if ( errorCode == ERROR_SERVER_UNREACHABLE) {
-                    loginFailedDialog.setTitle("Connection to the server failed!");
-                    loginFailedDialog.setMessage("Server is unreachable.");
-                } else if ( errorCode == ERROR_INCORRECT_PID_OR_PASSWORD) {
-                    loginFailedDialog.setTitle("The PID/password that you entered was incorrect!");
-                    loginFailedDialog.setMessage("Please try again!");
+                        break;
+                    case ERROR_SERVER_UNREACHABLE:
+                        loginFailedDialog.setTitle("Connection to the server failed!");
+                        loginFailedDialog.setMessage("Server is unreachable.");
+                        break;
+                    case ERROR_INCORRECT_PID_OR_PASSWORD:
+                        loginFailedDialog.setTitle("The PID/password that you entered was incorrect!");
+                        loginFailedDialog.setMessage("Please try again!");
+                        break;
                 }
 
                 //endregion
@@ -727,7 +731,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 activeNetwork.isConnectedOrConnecting();
     }
 
-    public static void hideKeyboard(Activity activity) {
+    private static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
         View view = activity.getCurrentFocus();
@@ -737,6 +741,5 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-
 
 }

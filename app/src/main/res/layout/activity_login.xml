@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="org.sfitengg.library.mylibapp.nav_drawer_fragments.LoggerInFragment"
-    android:orientation="vertical"
-    android:id="@+id/back" >
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -23,7 +21,7 @@
             <ImageView android:src="@drawable/ic_book_of_astronomy"
                 android:layout_width="500dp"
                 android:layout_height="150dp"
-
+                android:contentDescription="@string/login_logo"
                 android:layout_marginBottom="24dp"
                 android:layout_gravity="center_horizontal" />
 
@@ -81,6 +79,7 @@
                 android:id="@+id/home"
                 android:autoLink="web"
                 android:clickable="true"
+                android:focusable="true"
                 android:gravity="center"
                 android:layout_gravity="center_horizontal"
                 />

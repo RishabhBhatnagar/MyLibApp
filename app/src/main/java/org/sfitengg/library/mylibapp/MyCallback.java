@@ -5,7 +5,7 @@ import org.sfitengg.library.mylibapp.data.Book;
 import java.util.List;
 
 
-public interface MyCallback {
+interface MyCallback {
 
     void sendBooksToCaller(List<Book> books);
     void sendStudentNameToCaller(String name);

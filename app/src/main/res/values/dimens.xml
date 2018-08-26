@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="sub_heads_size">20sp</dimen>
     <dimen name="rel_lay_margin">5dp</dimen>
     <dimen name="data_size">18sp</dimen>
-    <dimen name="counter_right_buffer">20sp</dimen>
-    <dimen name="cardview_margin">5dp</dimen>
-    <dimen name="cardview_elevation">10dp</dimen>
 </resources>

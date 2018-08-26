@@ -20,9 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 class QuestionAndAnswer{
-    private String question;
-    private String answer;
-    private int hrColor;
+    private final String question;
+    private final String answer;
+    private final int hrColor;
     QuestionAndAnswer(String question, String answer, int hrColor) {
         this.question = question;
         this.answer = answer;
@@ -79,7 +79,7 @@ public class FaqFragment extends Fragment {
 
 
 class QnAAdapter extends RecyclerView.Adapter<QnAAdapter.QnAViewHolder>{
-    private List<QuestionAndAnswer> qnAs;
+    private final List<QuestionAndAnswer> qnAs;
     QnAAdapter(List<QuestionAndAnswer> qnAs) {
         this.qnAs = qnAs;
     }
@@ -100,9 +100,9 @@ class QnAAdapter extends RecyclerView.Adapter<QnAAdapter.QnAViewHolder>{
         return qnAs.size();
     }
     class QnAViewHolder extends RecyclerView.ViewHolder{
-        TextView questionTv;
-        TextView answerTv;
-        LinearLayout hr;
+        final TextView questionTv;
+        final TextView answerTv;
+        final LinearLayout hr;
 
         QnAViewHolder(View itemView) {
             super(itemView);

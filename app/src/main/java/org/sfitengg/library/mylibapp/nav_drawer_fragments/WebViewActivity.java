@@ -65,10 +65,10 @@ public class WebViewActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
-                                // Dimiss the dialog to prevent window leak
+                                // Dismiss the dialog to prevent window leak
                                 dialogInterface.dismiss();
 
-                                // Go back to MainActiviyt
+                                // Go back to MainActivity
                                 finish();
                             }
                         });
@@ -101,7 +101,7 @@ public class WebViewActivity extends AppCompatActivity {
                             e.attr("href", absUrl);
                         }
 
-                        //now we process the imgs
+                        //now we process the images
                         select = singleDiv.select("img");
                         for (Element e : select){
                             e.attr("src", e.absUrl("src"));
@@ -141,7 +141,7 @@ public class WebViewActivity extends AppCompatActivity {
         webView.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
     }
 
-    public boolean isConnectedToInternet() {
+    private boolean isConnectedToInternet() {
         ConnectivityManager cm =
                 (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 

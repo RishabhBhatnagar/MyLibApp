@@ -23,7 +23,7 @@ public class DataHolder {
     // Url where reissue form is sent
     private static String urlOutFormAction = "http://115.248.171.105:82/webopac/l_renew1.asp";
 
-    private Bundle bundleURLs;
+    private final Bundle bundleURLs;
 
     public Bundle getBundleURLs() {
         return bundleURLs;

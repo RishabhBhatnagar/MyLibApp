@@ -19,9 +19,9 @@ import org.sfitengg.library.mylibapp.R;
 
 public class LoggerInFragment extends Fragment {
 
-    EditText et_pid;
-    EditText et_pwd;
-    Button btn_login_submit;
+    private EditText et_pid;
+    private EditText et_pwd;
+    private Button btn_login_submit;
 
     @Nullable
     @Override
