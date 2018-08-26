@@ -21,7 +21,6 @@ public class LoggerInFragment extends Fragment {
 
     private EditText et_pid;
     private EditText et_pwd;
-    private Button btn_login_submit;
 
     @Nullable
     @Override
@@ -35,7 +34,7 @@ public class LoggerInFragment extends Fragment {
 
         et_pid = rootLayout.findViewById(R.id.et_pid);
         et_pwd = rootLayout.findViewById(R.id.et_pwd);
-        btn_login_submit = rootLayout.findViewById(R.id.btn_login_submit);
+        Button btn_login_submit = rootLayout.findViewById(R.id.btn_login_submit);
 
 
         //region btn_login_submit OnClickListener

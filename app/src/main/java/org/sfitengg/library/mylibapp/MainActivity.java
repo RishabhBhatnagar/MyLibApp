@@ -69,8 +69,6 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     private final DataHolder dataHolder = DataHolder.getDataHolder();
     private final Handler handler = new Handler();
 
-    // Loading Dialog
-    private AlertDialog.Builder alertDialogBuilder;
     private Dialog loadingDialog;
     private AlertDialog reissueSuccessDialog;
     private AlertDialog signOut;
@@ -131,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
 
         //region Create a loadingDialog instance for the activity to show during network operations
-        alertDialogBuilder = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(R.layout.loading_dialog);
         loadingDialog = alertDialogBuilder.create();
         loadingDialog.setCancelable(false);

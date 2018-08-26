@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import org.sfitengg.library.mylibapp.R;
 import org.sfitengg.library.mylibapp.data.Url;
 import org.sfitengg.library.mylibapp.data.UrlAdapter;

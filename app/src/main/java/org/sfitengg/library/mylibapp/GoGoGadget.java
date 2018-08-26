@@ -4,13 +4,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 
-import org.jsoup.nodes.Element;
-import org.sfitengg.library.mylibapp.data.Book;
-
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.sfitengg.library.mylibapp.data.Book;
 
 import java.io.IOException;
 import java.util.ArrayList;
