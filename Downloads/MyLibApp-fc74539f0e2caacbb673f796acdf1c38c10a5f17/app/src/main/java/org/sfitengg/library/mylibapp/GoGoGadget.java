@@ -344,7 +344,7 @@ public class GoGoGadget implements Runnable {
                     // it doesn't have [valign=top] tag
                     for (int i = 0; i < noOfBooks; i++) {
                         Book book = new Book();
-                        book.setAcc_no(       elList.get(i * 7 + 0).text().trim());
+                        book.setAcc_no(       elList.get(i * 7).text().trim());
                         book.setTitle(        elList.get(i * 7 + 1).text().trim());
                         book.setDueDate(      elList.get(i * 7 + 2).text().trim());
                         book.setFineAmount(   elList.get(i * 7 + 3).text().trim());

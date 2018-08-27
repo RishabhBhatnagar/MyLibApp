@@ -6,7 +6,6 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -91,7 +90,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/due_date_tv"
                         android:text="DUE DATE"
                         android:layout_alignParentLeft="true"
                         android:textStyle="bold"
@@ -118,7 +116,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/renew_count_tv"
                         android:text="@string/counter_text"
                         android:textStyle="bold"
                         android:textSize="@dimen/data_size"
@@ -128,7 +125,6 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/relative_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/rel_lay_margin"
@@ -140,9 +136,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/data_size"
                         android:text="ACC NO :"
-                        android:textStyle="bold"
-                        android:id="@+id/AcNO"
-                        />
+                        android:textStyle="bold" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -190,7 +184,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="FINE :"
-                android:id="@+id/fine_amt_tv"
                 android:layout_centerInParent="true"
                 android:textStyle="bold"
                 android:textSize="@dimen/data_size"
