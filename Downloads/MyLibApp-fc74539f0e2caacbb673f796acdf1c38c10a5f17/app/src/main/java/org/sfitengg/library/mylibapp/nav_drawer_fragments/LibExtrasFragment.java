@@ -27,6 +27,7 @@ public class LibExtrasFragment extends Fragment {
     private RecyclerView.Adapter adapter;
     private List<Url> dataSet;
     private LinearLayout parent;
+    public static final String institute_repo_link = "http://sfitengg.org/library_inst_repo.php";
 
 
     @Nullable
@@ -52,7 +53,7 @@ public class LibExtrasFragment extends Fragment {
     }
 
     private void initialiseUrlNames(List<Url> dataSet) {
-        dataSet.add(new Url("http://sfitengg.org/library_inst_repo.php", "Institute Repository"));
+        dataSet.add(new Url(institute_repo_link, "Institute Repository"));
         dataSet.add(new Url("http://www.sfitengg.org/library_virt_ref.php", "Virtual Reference"));
         dataSet.add(new Url("http://www.sfitengg.org/library_resources.php", "Library Resources"));
         dataSet.add(new Url("http://www.sfitengg.org/library_digital.php", "Digital Library"));

@@ -118,6 +118,9 @@ public class WebViewActivity extends AppCompatActivity {
                     }
 
 
+                    if(url.equals(LibExtrasFragment.institute_repo_link)){
+                        builder.append("<i><b>Note : The links in this page can accessed only by using IntraNet.</b></i>");
+                    }
                     // Finally send the data back to UI thread to draw webview
                     runOnUiThread(new Runnable() {
                         @Override

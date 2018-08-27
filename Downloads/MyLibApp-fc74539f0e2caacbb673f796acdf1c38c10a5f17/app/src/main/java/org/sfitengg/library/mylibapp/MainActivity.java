@@ -63,7 +63,8 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     private DrawerLayout mDrawerLayout;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
-
+    private View headerView;
+    private TextView nameHeader;
 
     // SharedPreferences
     SharedPreferences sharedPreferences;
@@ -98,8 +99,6 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
     Map<String, String> cookies;
     List<Book> bookList;
-    GoGoGadget gForBooks;
-
 
     //constants for encoding  books into strings.
     String attributeSeperator = "======";
@@ -186,8 +185,8 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
         //region Set the username in nav drawer header
         String user_name = sharedPreferences.getString(KEY_USER_NAME, null);
-        View headerView = nvDrawer.getHeaderView(0);
-        TextView nameHeader = headerView.findViewById(R.id.header_name);
+        headerView = nvDrawer.getHeaderView(0);
+        nameHeader = headerView.findViewById(R.id.header_name);
         if(user_name != null)
             nameHeader.setText(user_name);
         else
@@ -406,6 +405,9 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                                     editor.clear();
                                     editor.apply();
 
+                                    if(nameHeader != null){
+                                        nameHeader.setText("Guest");
+                                    }
                                     // Show LoggerInFragment
                                     getSupportFragmentManager()
                                             .beginTransaction()

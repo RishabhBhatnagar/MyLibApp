@@ -58,8 +58,13 @@ public class FaqFragment extends Fragment {
         questionAndAnswers.add(new QuestionAndAnswer("WHY IS MY RE-ISSUE CHECKBOX DISABLED ? ", "There are two reasons for this. " +
                 "a) You cannot re-issue the books on the same day you issued/re-issued those books." +
                 "b)Once you cross the due date you cannot re-issue the books", color("#EBF200")));//yellow
-        questionAndAnswers.add(new QuestionAndAnswer("DOES THIS APP REQUIRE AN ACTIVE INTERNET CONNECTION ?", "Without Internet you'll still be able to use some basic functions of the app and also be able to view your issued books",color("#37F200")));//green
-        questionAndAnswers.add(new QuestionAndAnswer("WHY DOES AN ERROR APPEAR ?", "Error will be displayed if you are not connected to the internet or when the Library servers are down", color("#ed044e")));//red
+        questionAndAnswers.add(new QuestionAndAnswer("does this app require an active Internet connection ?", "Without Internet you'll still be able to use some basic functions of the app and also be able to view your issued books",color("#37F200")));//green
+        questionAndAnswers.add(new QuestionAndAnswer(
+                "App does not allow me to re-issue even when the book  is re-issuable.",
+                "Try clearing the app data and cache. If that doesn't work, simply re-install the application.",
+                color("#ff33f2")
+        ));
+        questionAndAnswers.add(new QuestionAndAnswer("WHY does an error appear ?", "Error will be displayed if you are not connected to the internet or when the Library servers are down", color("#ed044e")));//red
         questionAndAnswers.add(new QuestionAndAnswer("HOW MANY TIMES CAN I RE-ISSUE THE BOOKS ?", " You can re-issue the books 3 times. (Limit applicable to only BE students)", color("#00C9FF"))); //blue
         // questionAndAnswers.add(new QuestionAndAnswer("WHEN WILL THE APP START NOTIFYING ME OF THE SUBMISSION DATE ?", "The app will remind the user of the submission date from 3 days prior to the due date", color("#89f07f")));
         questionAndAnswers.add(new QuestionAndAnswer("CAN I LOG IN WITH THE SAME PID ON MULTIPLE DEVICES ?", " Yes", color("#EBF200")));//yellow
