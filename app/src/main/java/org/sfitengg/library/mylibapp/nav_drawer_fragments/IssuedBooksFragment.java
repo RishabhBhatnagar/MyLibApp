@@ -1,7 +1,6 @@
 package org.sfitengg.library.mylibapp.nav_drawer_fragments;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -40,7 +39,7 @@ private static final String KEY_BOOKS = "books";
     private final List<Book> bookList = new ArrayList<>();
     private BooksAdapter mBooksAdapter;
     private static int numberOfBooksSelected = 0;
-    private Button reIssueButtton;
+    private Button reIssueButton;
     private SwipeRefreshLayout swipeLayout;
 
 
@@ -62,7 +61,7 @@ private static final String KEY_BOOKS = "books";
         View view = inflater.inflate(R.layout.frag_issued_books, container, false);
         Objects.requireNonNull(getActivity()).setRequestedOrientation(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        reIssueButtton = view.findViewById(R.id.re_issue_button);
+        reIssueButton = view.findViewById(R.id.re_issue_button);
         swipeLayout =  view.findViewById(R.id.swiperefresh);
         swipeLayout.setColorSchemeColors(Color.RED,Color.BLUE,Color.YELLOW);
 
@@ -88,7 +87,7 @@ private static final String KEY_BOOKS = "books";
             bookList.add(b);
         }
 
-        // Setup the recyclerview
+        // Setup the recycler-view
         RecyclerView recyclerView = view.findViewById(R.id.issued_books_recycler_view);
         mBooksAdapter = new BooksAdapter(bookList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
@@ -112,7 +111,7 @@ private static final String KEY_BOOKS = "books";
 
 
 
-        reIssueButtton.setOnClickListener(new View.OnClickListener() {
+        reIssueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 List<Book> booksToReissue = mBooksAdapter.getBooks();
@@ -153,7 +152,7 @@ private static final String KEY_BOOKS = "books";
         }
 
 
-        public class MyViewHolder extends RecyclerView.ViewHolder{
+        class MyViewHolder extends RecyclerView.ViewHolder{
 
             final TextView tv_title;
             final TextView tv_duedate;
@@ -174,16 +173,16 @@ private static final String KEY_BOOKS = "books";
                     numberOfBooksSelected -= 1;
                     reissueCheckBox.setChecked(false);
                     if(numberOfBooksSelected==0){
-                        reIssueButtton.setEnabled(false);
-                        reIssueButtton.setBackgroundResource(R.drawable.disable);
+                        reIssueButton.setEnabled(false);
+                        reIssueButton.setBackgroundResource(R.drawable.disable);
 
                     }
                 }
                 else{
                     numberOfBooksSelected += 1;
                     reissueCheckBox.setChecked(true);
-                    reIssueButtton.setEnabled(true);
-                    reIssueButtton.setBackgroundResource(R.drawable.shape);
+                    reIssueButton.setEnabled(true);
+                    reIssueButton.setBackgroundResource(R.drawable.shape);
 
                 }
                 if(numberOfBooksSelected<1){
@@ -208,10 +207,10 @@ private static final String KEY_BOOKS = "books";
 
 
 
-                reIssueButtton.setEnabled(false);
-                reIssueButtton.setBackgroundResource(R.drawable.disable);
+                reIssueButton.setEnabled(false);
+                reIssueButton.setBackgroundResource(R.drawable.disable);
 
-                //region onclicklistener reissue
+                //region onClickListener reissue
                 reissueCheckBox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

@@ -19,10 +19,6 @@ import org.sfitengg.library.mylibapp.R;
 
 import java.util.Objects;
 
-/**
- * Created by vinay-deshmukh <vinay_deshmukh@outlook.com> on 30-07-2018.
- */
-
 public class LoggerInFragment extends Fragment {
 
     private EditText et_pid;
@@ -62,7 +58,7 @@ public class LoggerInFragment extends Fragment {
         txt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setData(Uri.parse("http://115.248.171.105:82/webopac/chgpas.asp"));
+                browserIntent.setData(Uri.parse(getString(R.string.webopac_pswd_change)));
                 startActivity(browserIntent);
             }
         });
@@ -73,7 +69,7 @@ public class LoggerInFragment extends Fragment {
         txt1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setData(Uri.parse("http://115.248.171.105:82/webopac/chgpas.asp"));
+                browserIntent.setData(Uri.parse(getString(R.string.webopac_pswd_change)));
                 startActivity(browserIntent);
             }
         });

@@ -2,6 +2,8 @@ package org.sfitengg.library.mylibapp;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,6 +24,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,11 +57,13 @@ import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_SERVER_UNREACHABLE;
 public class MainActivity extends AppCompatActivity implements MyCallback{
 
     private static final String KEY_USER_NAME = "username";
-    private static final String titleSharedPrefs = "my_prefs";
+    protected static final String titleSharedPrefs = "my_prefs";
     private static final String KEY_PID = "pid";
     private static final String KEY_PWD = "pwd";
-    private static final String BOOKS_STRING_TAG = "bst";
+    protected static final String BOOKS_STRING_TAG = "bst";
     private static final String NO_BOOKS_BORROWED = "none";
+    protected static String attributeSeperator = "======";
+    private static String bookSeperator = "#";
     private DrawerLayout mDrawerLayout;
     private NavigationView nvDrawer;
     private TextView nameHeader;
@@ -68,8 +73,8 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     private SharedPreferences.Editor editor;
 
     // Obtain the data holder object
-    private final DataHolder dataHolder = DataHolder.getDataHolder();
-    private final Handler handler = new Handler();
+    private static final DataHolder dataHolder = DataHolder.getDataHolder();
+    private static final Handler handler = new Handler();
 
     private Dialog loadingDialog;
     private AlertDialog reissueSuccessDialog;
@@ -93,11 +98,6 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     }
 
     private List<Book> bookList;
-
-    //constants for encoding  books into strings.
-    private final String attributeSeperator = "======";
-    private final String bookSeperator = "#";
-
 
     private String pid;
     private String pwd;
@@ -270,6 +270,14 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         }
     }
 
+    protected void updateWidget(){
+        Intent intent = new Intent(this, LibraryWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), LibraryWidget.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        sendBroadcast(intent);
+    }
+
     private String bookToString(Book book){
         String result =
                 book.getAcc_no() + attributeSeperator +
@@ -291,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         return result;
     }
 
-    private List<Book> stringToBooks(String booksListsString) {
+    protected static List<Book> stringToBooks(String booksListsString) {
         List<Book> bL = new ArrayList<>();
         if(booksListsString.equals(NO_BOOKS_BORROWED)){
             // Since no books are available, set list to null
@@ -303,33 +311,35 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
                 Book book = new Book();
                 List<String> attributes= Arrays.asList(bookString.split(attributeSeperator));
-                book.setAcc_no(attributes.get(0));
-                book.setDueDate(attributes.get(1));
-                book.setFineAmount(attributes.get(2));
-                book.setRenewCount(attributes.get(3));
-                book.setReservations(attributes.get(4));
-                book.setTitle(attributes.get(5));
 
-                if(attributes.get(6).equals("true")){
-                    // if true is written in string
-                    book.setCanRenew(true);
-                }
-                else{
-                    book.setCanRenew(false);
-                }
+                if( attributes.size() > 5 ) {
+                    book.setAcc_no(attributes.get(0));
+                    book.setDueDate(attributes.get(1));
+                    book.setFineAmount(attributes.get(2));
+                    book.setRenewCount(attributes.get(3));
+                    book.setReservations(attributes.get(4));
+                    book.setTitle(attributes.get(5));
 
-                if(attributes.size() > 7) {
-                    // If more than 7 elements exist, ie if the input tags are present
-                    // Get inp tags back
-                    Element inp_acc = Jsoup.parse(attributes.get(7)).select("input").first();
-                    Element inp_med = Jsoup.parse(attributes.get(8)).select("input").first();
-                    Element inp_chk = Jsoup.parse(attributes.get(9)).select("input").first();
+                    if (attributes.get(6).equals("true")) {
+                        // if true is written in string
+                        book.setCanRenew(true);
+                    } else {
+                        book.setCanRenew(false);
+                    }
 
-                    book.setInp_accno(inp_acc);
-                    book.setInp_media(inp_med);
-                    book.setInp_chk(inp_chk);
+                    if (attributes.size() > 7) {
+                        // If more than 7 elements exist, ie if the input tags are present
+                        // Get inp tags back
+                        Element inp_acc = Jsoup.parse(attributes.get(7)).select("input").first();
+                        Element inp_med = Jsoup.parse(attributes.get(8)).select("input").first();
+                        Element inp_chk = Jsoup.parse(attributes.get(9)).select("input").first();
+
+                        book.setInp_accno(inp_acc);
+                        book.setInp_media(inp_med);
+                        book.setInp_chk(inp_chk);
+                    }
+                    bL.add(book);
                 }
-                bL.add(book);
             }
         }
         return bL;
@@ -381,9 +391,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
                 if(null != sharedPreferences.getString(KEY_USER_NAME, null)) {
                     // Set positive negative buttons, when user is logged in
-
                     signOut.setTitle("Do you want to sign out?");
-
                     //region Set Positive Button for signOut
                     signOut.setButton(DialogInterface.BUTTON_POSITIVE,
                             "YES",
@@ -397,6 +405,9 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                                     // TODO: Maybe only clear the two keys, instead of clearing the shared prefs
                                     editor.clear();
                                     editor.apply();
+
+                                    updateWidget();
+
 
                                     if(nameHeader != null){
                                         nameHeader.setText("Guest");
@@ -436,12 +447,10 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                                 }
                             });
                     //endregion
-
                 }
                 else {
                     // When user is not logged in
                     signOut.setTitle("You are not logged in!");
-
                     //region OK button for doing nothing
                     signOut.setButton(DialogInterface.BUTTON_NEUTRAL,
                             "OK",
@@ -528,6 +537,8 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     @Override
     public void sendBooksToCaller(List<Book> books) {
         // This method will be executed after onCreate finishes
+
+        updateWidget();
 
         bookList = books;
         setLoadingDialog(false);

@@ -6,6 +6,7 @@
     <string name="rishabh_linkedin">https://www.linkedin.com/in/rishabhbhatnagar/</string>
     <string name="sunny_linkedin">https://www.linkedin.com/in/sunny-dsouza-87868a130/</string>
     <string name="mandar_lnkedin">https://www.linkedin.com/in/mandar-acharekar-538459149/</string>
-    <string name="no_books_issued">You have not issued \\nany books from the library\\n\\n\" +                     \"Please issue books \\nto see them here! \\n\\n</string>
+    <string name="no_books_issued">You have not issued \nany books from the library\n\n                      Please issue books \nto see them here! \n\n</string>
+    <string name="webopac_pswd_change">http://115.248.171.105:82/webopac/chgpas.asp</string>
 
 </resources>
