@@ -1,6 +1,5 @@
 package org.sfitengg.library.mylibapp.nav_drawer_fragments;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
@@ -19,9 +18,6 @@ import org.sfitengg.library.mylibapp.R;
 
 public class AboutFragment extends Fragment {
 
-
-    @SuppressLint("SetTextI18n")
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_about, container, false);
@@ -46,8 +42,11 @@ public class AboutFragment extends Fragment {
 
 
 
-        data.setText("This application helps you in showing you your due date, keep track the number of days left to return the books you have issued. You can also re-issue the books via the app itself  "
-                );
+        data.setText("This application helps you in showing you " +
+                "your due date, keep track the number of days left " +
+                "to return the books you have issued. " +
+                "You can also re-issue the books via the app itself. "
+        );
 
         name1.setText("1. Vinay Deshmukh");
         name2.setText("2. Rishabh Bhatnagar");
@@ -59,7 +58,7 @@ public class AboutFragment extends Fragment {
         name1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setData(Uri.parse("https://www.linkedin.com/in/vinay-deshmukh-0baa7b148/"));
+                browserIntent.setData(Uri.parse(getString(R.string.vinay_linkedin)));
                 startActivity(browserIntent);
             }
         });
@@ -69,7 +68,7 @@ public class AboutFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                intent.setData(Uri.parse("https://www.linkedin.com/in/vinay-deshmukh-0baa7b148/"));
+                intent.setData(Uri.parse(getString(R.string.vinay_linkedin)));
                 startActivity(intent);
             }
         });
@@ -77,7 +76,7 @@ public class AboutFragment extends Fragment {
         name2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setData(Uri.parse("https://www.linkedin.com/in/rishabh-bhatnagar-b9929a150/"));
+                browserIntent.setData(Uri.parse(getString(R.string.rishabh_linkedin)));
                 startActivity(browserIntent);
             }
         });
@@ -86,7 +85,7 @@ public class AboutFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                intent.setData(Uri.parse("https://www.linkedin.com/in/rishabh-bhatnagar-b9929a150/"));
+                intent.setData(Uri.parse(getString(R.string.rishabh_linkedin)));
                 startActivity(intent);
             }
         });
@@ -94,7 +93,7 @@ public class AboutFragment extends Fragment {
          name3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setData(Uri.parse("https://www.linkedin.com/in/sunny-dsouza-87868a130/"));
+                browserIntent.setData(Uri.parse(getString(R.string.sunny_linkedin)));
                 startActivity(browserIntent);
             }
         });
@@ -103,7 +102,7 @@ public class AboutFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                intent.setData(Uri.parse("https://www.linkedin.com/in/sunny-dsouza-87868a130/"));
+                intent.setData(Uri.parse(getString(R.string.sunny_linkedin)));
                 startActivity(intent);
             }
         });
@@ -111,7 +110,7 @@ public class AboutFragment extends Fragment {
         name4.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setData(Uri.parse("https://www.linkedin.com/in/mandar-acharekar-538459149/"));
+                browserIntent.setData(Uri.parse(getString(R.string.mandar_lnkedin)));
                 startActivity(browserIntent);
             }
         });
@@ -120,7 +119,7 @@ public class AboutFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                intent.setData(Uri.parse("https://www.linkedin.com/in/mandar-acharekar-538459149/"));
+                intent.setData(Uri.parse(getString(R.string.mandar_lnkedin)));
                 startActivity(intent);
             }
         });

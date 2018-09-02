@@ -2,5 +2,9 @@
     <string name="app_name">SFIT Library</string>
 
     <string name="counter_text">COUNTER</string>
+    <string name="vinay_linkedin">https://www.linkedin.com/in/vinay-deshmukh-0baa7b148/</string>
+    <string name="rishabh_linkedin">https://www.linkedin.com/in/rishabhbhatnagar/</string>
+    <string name="sunny_linkedin">https://www.linkedin.com/in/sunny-dsouza-87868a130/</string>
+    <string name="mandar_lnkedin">https://www.linkedin.com/in/mandar-acharekar-538459149/</string>
 
 </resources>
