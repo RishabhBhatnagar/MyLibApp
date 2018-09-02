@@ -27,8 +27,8 @@ public class GoGoGadget implements Runnable {
     private final static int TIMEOUT = 10000; // milliseconds
 
     // References to Calling activity
-    private MyCallback myCallback;
-    private Handler handler; // Handler object needed to post messages to calling activity
+    private final MyCallback myCallback;
+    private final Handler handler; // Handler object needed to post messages to calling activity
 
     // Books to be reissued
     // Only for SEND_REISSUE case
@@ -36,10 +36,10 @@ public class GoGoGadget implements Runnable {
 
     // Urls to be accessed
     // They are passed in a Bundle to Constructor
-    private String gUrlMainPage;
-    private String gUrlLoginFormAction;
-    private String gUrlOutDocs;
-    private String gUrlOutForm;
+    private final String gUrlMainPage;
+    private final String gUrlLoginFormAction;
+    private final String gUrlOutDocs;
+    private final String gUrlOutForm;
     // Keys to access the Bundle
     public static final String keyMainPage = "main";
     public static final String keyLoginForm = "login";
@@ -63,7 +63,7 @@ public class GoGoGadget implements Runnable {
     // that final handler section can call the error handler
 
     // This object will return results to Main
-    private Bundle result;
+    private final Bundle result;
     // Keys for result bundle
     private static final String rKeyName = "name";
     private static final String rKeyListBooks = "listBooks";
@@ -81,10 +81,10 @@ public class GoGoGadget implements Runnable {
 
     // Valid resultCodes
     // 1) Result was obtained
-    public static final int RETURN_NAME = 23;
-    public static final int RETURN_LIST_BOOKS = 24;
-    public static final int RETURN_NO_BORROWED_BOOKS = 25;
-    public static final int RETURN_POST_TO_REISSUE_SUCCESS = 26;
+    private static final int RETURN_NAME = 23;
+    private static final int RETURN_LIST_BOOKS = 24;
+    private static final int RETURN_NO_BORROWED_BOOKS = 25;
+    private static final int RETURN_POST_TO_REISSUE_SUCCESS = 26;
     // 2) Error was obtained
     public static final int ERROR_NOT_LOGGED_IN = 52;
     public static final int ERROR_INCORRECT_PID_OR_PASSWORD = 53;
@@ -106,10 +106,10 @@ public class GoGoGadget implements Runnable {
 //        this.cookies = cookies;
 //    }
 
-    public Map<String, String> getCookies() {
+/*    public Map<String, String> getCookies() {
         return this.cookies;
     }
-
+*/
     GoGoGadget(MyCallback myCallback, Bundle bundleURLs, int action, Handler handler) {
 
         this.myCallback = myCallback;
@@ -353,7 +353,6 @@ public class GoGoGadget implements Runnable {
                         Element fineAmount = elList.get(i * 7 + 3);
                         book.setInp_accno(docOutDocs.select(fineAmount.cssSelector() + " + input").first());
                         book.setInp_media(docOutDocs.select(fineAmount.cssSelector() + " + input + input").first());
-                        String fineCSS = fineAmount.cssSelector();
 
                         book.setRenewCount(   elList.get(i * 7 + 4).text().trim());
                         book.setReservations( elList.get(i * 7 + 5).text().trim());
@@ -422,7 +421,6 @@ public class GoGoGadget implements Runnable {
         for(Book book : this.booksToReissue){
             // for each book, attach it's input tags to POST request
             if(book.isInpNull()){
-                String a = book.toString();
                 continue;
             }
 
@@ -446,9 +444,6 @@ public class GoGoGadget implements Runnable {
                 e.printStackTrace();
                 String a = sb.toString();
             }
-
-            String shit = "shit";
-
         }// Book loop
 
 

@@ -17,15 +17,16 @@ import android.widget.TextView;
 import org.sfitengg.library.mylibapp.MainActivity;
 import org.sfitengg.library.mylibapp.R;
 
+import java.util.Objects;
+
 /**
  * Created by vinay-deshmukh <vinay_deshmukh@outlook.com> on 30-07-2018.
  */
 
 public class LoggerInFragment extends Fragment {
 
-    EditText et_pid;
-    EditText et_pwd;
-    Button btn_login_submit;
+    private EditText et_pid;
+    private EditText et_pwd;
 
     @Nullable
     @Override
@@ -38,7 +39,7 @@ public class LoggerInFragment extends Fragment {
 
         et_pid = rootLayout.findViewById(R.id.et_pid);
         et_pwd = rootLayout.findViewById(R.id.et_pwd);
-        btn_login_submit = rootLayout.findViewById(R.id.btn_login_submit);
+        Button btn_login_submit = rootLayout.findViewById(R.id.btn_login_submit);
 
 
         //region btn_login_submit OnClickListener
@@ -49,7 +50,7 @@ public class LoggerInFragment extends Fragment {
                 String pid = et_pid.getText().toString();
                 String pwd = et_pwd.getText().toString();
 
-                ((MainActivity)getActivity()).startLoginFromFragment(pid, pwd);
+                ((MainActivity) Objects.requireNonNull(getActivity())).startLoginFromFragment(pid, pwd);
 
             }
         });

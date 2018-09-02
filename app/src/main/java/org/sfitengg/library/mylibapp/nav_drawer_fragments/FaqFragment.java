@@ -18,11 +18,12 @@ import org.sfitengg.library.mylibapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 class QuestionAndAnswer{
-    private String question;
-    private String answer;
-    private int hrColor;
+    private final String question;
+    private final String answer;
+    private final int hrColor;
     QuestionAndAnswer(String question, String answer, int hrColor) {
         this.question = question;
         this.answer = answer;
@@ -45,7 +46,7 @@ public class FaqFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_faq, container, false);
-        getActivity().setRequestedOrientation(
+        Objects.requireNonNull(getActivity()).setRequestedOrientation(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         List<QuestionAndAnswer> questionAndAnswers = new ArrayList<>();
@@ -86,7 +87,7 @@ public class FaqFragment extends Fragment {
 
 
 class QnAAdapter extends RecyclerView.Adapter<QnAAdapter.QnAViewHolder>{
-    private List<QuestionAndAnswer> qnAs;
+    private final List<QuestionAndAnswer> qnAs;
     QnAAdapter(List<QuestionAndAnswer> qnAs) {
         this.qnAs = qnAs;
     }
@@ -107,11 +108,11 @@ class QnAAdapter extends RecyclerView.Adapter<QnAAdapter.QnAViewHolder>{
         return qnAs.size();
     }
     public class QnAViewHolder extends RecyclerView.ViewHolder{
-        TextView questionTv;
-        TextView answerTv;
-        LinearLayout hr;
+        final TextView questionTv;
+        final TextView answerTv;
+        final LinearLayout hr;
 
-        public QnAViewHolder(View itemView) {
+        QnAViewHolder(View itemView) {
             super(itemView);
             questionTv = itemView.findViewById(R.id.questionTv);
             answerTv = itemView.findViewById(R.id.answerTv);

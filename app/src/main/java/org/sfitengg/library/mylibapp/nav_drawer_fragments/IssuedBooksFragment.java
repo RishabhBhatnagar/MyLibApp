@@ -31,17 +31,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class IssuedBooksFragment extends Fragment {
 
-private static String KEY_BOOKS = "books";
-    List<Book> bookList = new ArrayList<>();
-    private RecyclerView recyclerView;
+private static final String KEY_BOOKS = "books";
+    private final List<Book> bookList = new ArrayList<>();
     private BooksAdapter mBooksAdapter;
     private static int numberOfBooksSelected = 0;
-    Button reIssueButtton;
-    SwipeRefreshLayout swipeLayout;
+    private Button reIssueButtton;
+    private SwipeRefreshLayout swipeLayout;
 
 
     public static IssuedBooksFragment newInstance(List<Book> bookList){
@@ -60,7 +60,7 @@ private static String KEY_BOOKS = "books";
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_issued_books, container, false);
-        getActivity().setRequestedOrientation(
+        Objects.requireNonNull(getActivity()).setRequestedOrientation(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         reIssueButtton = view.findViewById(R.id.re_issue_button);
         swipeLayout =  view.findViewById(R.id.swiperefresh);
@@ -69,7 +69,7 @@ private static String KEY_BOOKS = "books";
 
         Bundle args = getArguments();
 
-        List<Parcelable> parcelBooks = args.getParcelableArrayList(KEY_BOOKS);
+        List<Parcelable> parcelBooks = Objects.requireNonNull(args).getParcelableArrayList(KEY_BOOKS);
 
         if(parcelBooks == null){
             // if user has no books borrowed
@@ -77,8 +77,7 @@ private static String KEY_BOOKS = "books";
             TextView textView = new TextView(getActivity());
             textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             textView.setTextAppearance(getActivity(), R.style.TextAppearance_AppCompat_Medium);
-            textView.setText("You have not issued \nany books from the library\n\n" +
-                    "Please issue books \nto see them here! \n\n");
+            textView.setText(getString(R.string.no_books_issued));
 
             return textView;
         }
@@ -90,8 +89,8 @@ private static String KEY_BOOKS = "books";
         }
 
         // Setup the recyclerview
-        recyclerView = view.findViewById(R.id.issued_books_recycler_view);
-        mBooksAdapter = new BooksAdapter(bookList, view.getContext());
+        RecyclerView recyclerView = view.findViewById(R.id.issued_books_recycler_view);
+        mBooksAdapter = new BooksAdapter(bookList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -129,19 +128,18 @@ private static String KEY_BOOKS = "books";
         return view;
     }
 
-    void myUpdateOperation(){
+    private void myUpdateOperation(){
 
-        ((MainActivity)getActivity()).startGetOutDocsAndCreateBooks();
+        ((MainActivity) Objects.requireNonNull(getActivity())).startGetOutDocsAndCreateBooks();
         swipeLayout.setRefreshing(false);
     }
 
     // private since we only need it inside this class
     private class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.MyViewHolder> {
 
-        private final Context context;
-        private List<Book> bookList;
+        private final List<Book> bookList;
         private boolean anyBookSelected = false;
-        private boolean selectedList[];
+        private final boolean[] selectedList;
 
 
         private List<Book> getBooks(){
@@ -157,16 +155,20 @@ private static String KEY_BOOKS = "books";
 
         public class MyViewHolder extends RecyclerView.ViewHolder{
 
-            public TextView tv_title,tv_duedate,tv_fine,tv_reissue_count,tv_acc;
-            public RelativeLayout relativeLayout;
-            public CheckBox reissueCheckBox;
+            final TextView tv_title;
+            final TextView tv_duedate;
+            final TextView tv_fine;
+            final TextView tv_reissue_count;
+            final TextView tv_acc;
+            final RelativeLayout relativeLayout;
+            final CheckBox reissueCheckBox;
             private boolean selected = false;
-            public TextView tv_daysLeft;
+            final TextView tv_daysLeft;
 
 
 
 
-            public void Onclick(){
+            void Onclick(){
 
                 if(selected){
                     numberOfBooksSelected -= 1;
@@ -192,7 +194,7 @@ private static String KEY_BOOKS = "books";
             }
 
 
-            public MyViewHolder(final View view) {
+            MyViewHolder(final View view) {
                 super(view);
                 tv_daysLeft=view.findViewById(R.id.days_left);
                 tv_title = view.findViewById(R.id.name);
@@ -256,9 +258,8 @@ private static String KEY_BOOKS = "books";
 
         }
 
-        public BooksAdapter(List<Book> books, Context context){
+        BooksAdapter(List<Book> books){
             bookList = books;
-            this.context = context;
             selectedList = new boolean[books.size()];
             for(int i = 0; i<selectedList.length; i++){
                 selectedList[i] = false;
@@ -277,7 +278,7 @@ private static String KEY_BOOKS = "books";
 
        int DaysLeft=0;
         @SuppressLint("SimpleDateFormat")// added supress lint to take care of "US date format" which is mm/dd/yyyy
-        public String daysleft(int position) {
+        String daysleft(int position) {
             String daysLeft="";
             Book currentBook = bookList.get(position);
             SimpleDateFormat myFormat = new SimpleDateFormat("dd/MM/yyyy");

@@ -1,8 +1,8 @@
 package org.sfitengg.library.mylibapp.data;
 
 public class Url {
-    private String url;
-    private String name;
+    private final String url;
+    private final String name;
 
     //name is the name of that list view in inflated recyclerView.
 

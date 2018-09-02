@@ -8,9 +8,6 @@ import org.sfitengg.library.mylibapp.GoGoGadget;
 public class DataHolder {
     // Using a singleton design pattern, since we only need one instance for this class
 
-    // To set data for flask server, set this boolean to true
-    private boolean testing = false;
-
     // Single instance for DataHolder that will be shared throughout the application
     private static DataHolder dataHolder;
 
@@ -27,7 +24,7 @@ public class DataHolder {
     // Url where reissue form is sent
     private static String urlOutFormAction = "http://115.248.171.105:82/webopac/l_renew1.asp";
 
-    private Bundle bundleURLs;
+    private final Bundle bundleURLs;
 
     public Bundle getBundleURLs() {
         return bundleURLs;
@@ -35,6 +32,7 @@ public class DataHolder {
 
     private DataHolder() {
 
+        boolean testing = false;
         if (testing) {
             urlMainPage = "http://192.168.1.59:5000/";
             urlLoginFormAction = urlMainPage + "userpage";

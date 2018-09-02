@@ -27,7 +27,7 @@
                 android:endColor="@color/colorPrimary"
                 android:alpha="140"
                 android:type="linear"
-                /> />
+                />
         </shape>
     </item>
 

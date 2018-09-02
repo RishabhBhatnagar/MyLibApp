@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_INCORRECT_PID_OR_PASSWORD;
 import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_NOT_LOGGED_IN;
@@ -52,34 +53,28 @@ import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_SERVER_UNREACHABLE;
 
 public class MainActivity extends AppCompatActivity implements MyCallback{
 
-    public static final String KEY_COOKIES = "cookies";
-    public static final String KEY_USER_NAME = "username";
-    public static final String titleSharedPrefs = "my_prefs";
-    public static final String KEY_PID = "pid";
-    public static final String KEY_PWD = "pwd";
-    protected static final String BOOKS_STRING_TAG = "bst";
-    public static final String NO_BOOKS_BORROWED = "none";
-    protected static final String SKIPPED = "skipped";
+    private static final String KEY_USER_NAME = "username";
+    private static final String titleSharedPrefs = "my_prefs";
+    private static final String KEY_PID = "pid";
+    private static final String KEY_PWD = "pwd";
+    private static final String BOOKS_STRING_TAG = "bst";
+    private static final String NO_BOOKS_BORROWED = "none";
     private DrawerLayout mDrawerLayout;
-    private Toolbar toolbar;
     private NavigationView nvDrawer;
-    private View headerView;
     private TextView nameHeader;
 
     // SharedPreferences
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     // Obtain the data holder object
-    DataHolder dataHolder = DataHolder.getDataHolder();
-    Handler handler = new Handler();
+    private final DataHolder dataHolder = DataHolder.getDataHolder();
+    private final Handler handler = new Handler();
 
-    // Loading Dialog
-    AlertDialog.Builder alertDialogBuilder;
-    Dialog loadingDialog;
-    AlertDialog reissueSuccessDialog;
-    AlertDialog signOut;
-    AlertDialog loginFailedDialog;
+    private Dialog loadingDialog;
+    private AlertDialog reissueSuccessDialog;
+    private AlertDialog signOut;
+    private AlertDialog loginFailedDialog;
     private static final String feedback_url = "https://docs.google.com/forms/d/e/1FAIpQLScuO2G5us3_psE8MxA4bWv1A5wnmtm80xj62y8aLuIsLUEGVg/viewform";
 
     @Override
@@ -97,16 +92,15 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         }
     }
 
-    Map<String, String> cookies;
-    List<Book> bookList;
+    private List<Book> bookList;
 
     //constants for encoding  books into strings.
-    String attributeSeperator = "======";
-    String bookSeperator = "#";
+    private final String attributeSeperator = "======";
+    private final String bookSeperator = "#";
 
 
-    String pid;
-    String pwd;
+    private String pid;
+    private String pwd;
     public void startLoginFromFragment(String pid, String pwd){
         // This method will be called from LoggerInFragment
         // It will start the login process
@@ -117,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         this.pid = pid;
         this.pwd = pwd;
 
-        GoGoGadget goGoGadget = new GoGoGadget((MyCallback) this,
+        GoGoGadget goGoGadget = new GoGoGadget(this,
             dataHolder.getBundleURLs(),
             GoGoGadget.LOGIN_AND_GET_COOKIES,
             handler);
@@ -134,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
 
         //region Create a loadingDialog instance for the activity to show during network operations
-        alertDialogBuilder = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(R.layout.loading_dialog);
         loadingDialog = alertDialogBuilder.create();
         loadingDialog.setCancelable(false);
@@ -142,10 +136,10 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         //endregion
 
         //region Setup a Toolbar to replace the ActionBar
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         //endregion
 
@@ -185,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
 
         //region Set the username in nav drawer header
         String user_name = sharedPreferences.getString(KEY_USER_NAME, null);
-        headerView = nvDrawer.getHeaderView(0);
+        View headerView = nvDrawer.getHeaderView(0);
         nameHeader = headerView.findViewById(R.id.header_name);
         if(user_name != null)
             nameHeader.setText(user_name);
@@ -374,9 +368,8 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
             case R.id.option_feedback:{
                 newFragmentToPutInFrame = null;
 
-                String url = feedback_url;
                 Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
+                i.setData(Uri.parse(feedback_url));
                 startActivity(i);
                 menu.getItem(0).setChecked(true);
 
@@ -498,7 +491,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         // Start loading dialog
         setLoadingDialog(true);
 
-        GoGoGadget gSendReissue = new GoGoGadget((MyCallback)this,
+        GoGoGadget gSendReissue = new GoGoGadget(this,
                 dataHolder.getBundleURLs(),
                 GoGoGadget.SEND_REISSUE,
                 handler,
@@ -514,7 +507,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         // Start a indefinite loading dialog
         setLoadingDialog(true);
 
-        GoGoGadget gGetDocs = new GoGoGadget((MyCallback)this,
+        GoGoGadget gGetDocs = new GoGoGadget(this,
                 dataHolder.getBundleURLs(),
                 GoGoGadget.GET_OUT_DOCS,
                 handler);
@@ -658,16 +651,20 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                 loginFailedDialog = new AlertDialog.Builder(this).create();
                 loginFailedDialog.setCanceledOnTouchOutside(false);
                 loginFailedDialog.setCancelable(true);
-                if ( errorCode == ERROR_NO_INTERNET) {
-                    loginFailedDialog.setTitle("You are not connected to the Internet");
-                    loginFailedDialog.setMessage("Please connect to the Internet and try again.");
+                switch (errorCode) {
+                    case ERROR_NO_INTERNET:
+                        loginFailedDialog.setTitle("You are not connected to the Internet");
+                        loginFailedDialog.setMessage("Please connect to the Internet and try again.");
 
-                } else if ( errorCode == ERROR_SERVER_UNREACHABLE) {
-                    loginFailedDialog.setTitle("Connection to the server failed!");
-                    loginFailedDialog.setMessage("Server is unreachable.");
-                } else if ( errorCode == ERROR_INCORRECT_PID_OR_PASSWORD) {
-                    loginFailedDialog.setTitle("The PID/password that you entered was incorrect!");
-                    loginFailedDialog.setMessage("Please try again!");
+                        break;
+                    case ERROR_SERVER_UNREACHABLE:
+                        loginFailedDialog.setTitle("Connection to the server failed!");
+                        loginFailedDialog.setMessage("Server is unreachable.");
+                        break;
+                    case ERROR_INCORRECT_PID_OR_PASSWORD:
+                        loginFailedDialog.setTitle("The PID/password that you entered was incorrect!");
+                        loginFailedDialog.setMessage("Please try again!");
+                        break;
                 }
 
                 //endregion
@@ -723,13 +720,12 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         ConnectivityManager cm =
                 (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
+        NetworkInfo activeNetwork = Objects.requireNonNull(cm).getActiveNetworkInfo();
+        return activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
-        return isConnected;
     }
 
-    public static void hideKeyboard(Activity activity) {
+    private static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
         View view = activity.getCurrentFocus();
@@ -737,7 +733,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         if (view == null) {
             view = new View(activity);
         }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        Objects.requireNonNull(imm).hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
 

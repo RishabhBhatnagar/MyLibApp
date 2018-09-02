@@ -20,6 +20,7 @@ import org.sfitengg.library.mylibapp.data.UrlAdapter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class WebViewActivity extends AppCompatActivity {
 
@@ -45,10 +46,10 @@ public class WebViewActivity extends AppCompatActivity {
         setContentView(R.layout.loading_screen);
 
 
-        String url = getIntent().getExtras().getString(UrlAdapter.K_URL);
+        String url = Objects.requireNonNull(getIntent().getExtras()).getString(UrlAdapter.K_URL);
         ArrayList<String> urlStrings = getIntent().getExtras().getStringArrayList(UrlAdapter.K_URL_LIST);
 
-        if(url.equals("") || url == null || urlStrings == null){
+        if(url.equals("") || urlStrings == null){
             Toast.makeText(this, "Url could not be loaded.", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -144,13 +145,12 @@ public class WebViewActivity extends AppCompatActivity {
         webView.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
     }
 
-    public boolean isConnectedToInternet() {
+    private boolean isConnectedToInternet() {
         ConnectivityManager cm =
                 (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
+        NetworkInfo activeNetwork = Objects.requireNonNull(cm).getActiveNetworkInfo();
+        return activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
-        return isConnected;
     }
 }

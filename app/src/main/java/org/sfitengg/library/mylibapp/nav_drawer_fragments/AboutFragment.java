@@ -16,12 +16,14 @@ import android.widget.TextView;
 
 import org.sfitengg.library.mylibapp.R;
 
+import java.util.Objects;
+
 public class AboutFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_about, container, false);
-        getActivity().setRequestedOrientation(
+        Objects.requireNonNull(getActivity()).setRequestedOrientation(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         TextView name1 = view.findViewById(R.id.name1);
         TextView name2 = view.findViewById(R.id.name2);
