@@ -46,9 +46,8 @@ public class AboutFragment extends Fragment {
 
 
 
-        data.setText(
-                R.string.about_app_data
-        );
+        data.setText("This application helps you in showing you your due date, keep track the number of days left to return the books you have issued. You can also re-issue the books via the app itself  "
+                );
 
         name1.setText("1. Vinay Deshmukh");
         name2.setText("2. Rishabh Bhatnagar");
@@ -87,7 +86,7 @@ public class AboutFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                intent.setData(Uri.parse("https://www.linkedin.com/in/RishabhBhatnagar/"));
+                intent.setData(Uri.parse("https://www.linkedin.com/in/rishabh-bhatnagar-b9929a150/"));
                 startActivity(intent);
             }
         });

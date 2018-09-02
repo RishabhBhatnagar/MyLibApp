@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
@@ -65,10 +65,10 @@ public class WebViewActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
-                                // Dismiss the dialog to prevent window leak
+                                // Dimiss the dialog to prevent window leak
                                 dialogInterface.dismiss();
 
-                                // Go back to MainActivity
+                                // Go back to MainActiviyt
                                 finish();
                             }
                         });
@@ -101,7 +101,7 @@ public class WebViewActivity extends AppCompatActivity {
                             e.attr("href", absUrl);
                         }
 
-                        //now we process the images
+                        //now we process the imgs
                         select = singleDiv.select("img");
                         for (Element e : select){
                             e.attr("src", e.absUrl("src"));
@@ -118,6 +118,9 @@ public class WebViewActivity extends AppCompatActivity {
                     }
 
 
+                    if(url.equals(LibExtrasFragment.institute_repo_link)){
+                        builder.append("<i><b>Note : The links in this page can accessed only by using IntraNet.</b></i>");
+                    }
                     // Finally send the data back to UI thread to draw webview
                     runOnUiThread(new Runnable() {
                         @Override
@@ -141,12 +144,13 @@ public class WebViewActivity extends AppCompatActivity {
         webView.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
     }
 
-    private boolean isConnectedToInternet() {
+    public boolean isConnectedToInternet() {
         ConnectivityManager cm =
                 (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null &&
+        boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
+        return isConnected;
     }
 }

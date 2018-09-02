@@ -17,13 +17,13 @@ import java.util.List;
 
 public class UrlAdapter extends RecyclerView.Adapter<UrlAdapter.UrlViewHolder> {
 
-    private final Context context;
-    private final List<Url> urlList;
+    private Context context;
+    private List<Url> urlList;
 
     public static final String K_URL = "url";
-    private static final String K_NAME = "name1";
+    public static final String K_NAME = "name1";
     public static final String K_URL_LIST = "urllist1";
-    private static final String K_URL_NAMES = "urlnames1";
+    public static final String K_URL_NAMES = "urlnames1";
 
     public UrlAdapter(Context context, List<Url> urlList) {
         this.context = context;
@@ -40,15 +40,14 @@ public class UrlAdapter extends RecyclerView.Adapter<UrlAdapter.UrlViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final UrlViewHolder holder, int position) {
-        final int pos = position;
+    public void onBindViewHolder(@NonNull final UrlViewHolder holder, final int position) {
         holder.textView.setText(urlList.get(position).getName());
 
         holder.textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = urlList.get(pos).getUrl();
-                String name = urlList.get(pos).getName();
+                String url = urlList.get(position).getUrl();
+                String name = urlList.get(position).getName();
                 loadUrl(url, name);
             }
         });
@@ -61,7 +60,7 @@ public class UrlAdapter extends RecyclerView.Adapter<UrlAdapter.UrlViewHolder> {
 
     class UrlViewHolder extends RecyclerView.ViewHolder{
 
-        final TextView textView;
+        TextView textView;
 
         UrlViewHolder(View itemView) {
             super(itemView);

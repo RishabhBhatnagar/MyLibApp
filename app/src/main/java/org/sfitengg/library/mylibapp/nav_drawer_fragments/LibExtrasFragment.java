@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+
 
 import org.sfitengg.library.mylibapp.R;
 import org.sfitengg.library.mylibapp.data.Url;
@@ -21,19 +23,21 @@ import java.util.List;
 
 public class LibExtrasFragment extends Fragment {
 
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private List<Url> dataSet;
+    private LinearLayout parent;
+    public static final String institute_repo_link = "http://sfitengg.org/library_inst_repo.php";
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_lib_extras, container, false);
         getActivity().setRequestedOrientation(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        RecyclerView recyclerView;
-        List<Url> dataSet;
-        RecyclerView.Adapter adapter;
-
-
         recyclerView = view.findViewById(R.id.recyclerView);
+        parent = view.findViewById(R.id.parent);
         //getting recycler view ready.
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -49,7 +53,7 @@ public class LibExtrasFragment extends Fragment {
     }
 
     private void initialiseUrlNames(List<Url> dataSet) {
-        dataSet.add(new Url("http://sfitengg.org/library_inst_repo.php", "Institute Repository"));
+        dataSet.add(new Url(institute_repo_link, "Institute Repository"));
         dataSet.add(new Url("http://www.sfitengg.org/library_virt_ref.php", "Virtual Reference"));
         dataSet.add(new Url("http://www.sfitengg.org/library_resources.php", "Library Resources"));
         dataSet.add(new Url("http://www.sfitengg.org/library_digital.php", "Digital Library"));

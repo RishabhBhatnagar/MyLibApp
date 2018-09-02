@@ -91,7 +91,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="DUE DATE"
-                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
                         android:textStyle="bold"
                         android:textSize="@dimen/data_size"
 
@@ -100,6 +100,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
                         android:textStyle="bold"
                         android:id="@+id/days_left"
                         android:gravity="center"
@@ -118,7 +119,7 @@
                         android:text="@string/counter_text"
                         android:textStyle="bold"
                         android:textSize="@dimen/data_size"
-                        android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp"
                         android:layout_centerHorizontal="true"
                         />
                 </RelativeLayout>
@@ -197,7 +198,7 @@
                 android:textSize="@dimen/data_size"
                 android:textColor="#000"
                 android:id="@+id/fine_amt"
-                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginTop="3.5dp"
                 />
 

@@ -4,18 +4,22 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 
+import org.jsoup.nodes.Element;
+import org.sfitengg.library.mylibapp.data.Book;
+
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.sfitengg.library.mylibapp.data.Book;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Created by vinay on 14-06-2018.
+ */
 public class GoGoGadget implements Runnable {
     // Thread class to do Network requests
 
@@ -23,8 +27,8 @@ public class GoGoGadget implements Runnable {
     private final static int TIMEOUT = 10000; // milliseconds
 
     // References to Calling activity
-    private final MyCallback myCallback;
-    private final Handler handler; // Handler object needed to post messages to calling activity
+    private MyCallback myCallback;
+    private Handler handler; // Handler object needed to post messages to calling activity
 
     // Books to be reissued
     // Only for SEND_REISSUE case
@@ -32,10 +36,10 @@ public class GoGoGadget implements Runnable {
 
     // Urls to be accessed
     // They are passed in a Bundle to Constructor
-    private final String gUrlMainPage;
-    private final String gUrlLoginFormAction;
-    private final String gUrlOutDocs;
-    private final String gUrlOutForm;
+    private String gUrlMainPage;
+    private String gUrlLoginFormAction;
+    private String gUrlOutDocs;
+    private String gUrlOutForm;
     // Keys to access the Bundle
     public static final String keyMainPage = "main";
     public static final String keyLoginForm = "login";
@@ -59,7 +63,7 @@ public class GoGoGadget implements Runnable {
     // that final handler section can call the error handler
 
     // This object will return results to Main
-    private final Bundle result;
+    private Bundle result;
     // Keys for result bundle
     private static final String rKeyName = "name";
     private static final String rKeyListBooks = "listBooks";
@@ -77,10 +81,10 @@ public class GoGoGadget implements Runnable {
 
     // Valid resultCodes
     // 1) Result was obtained
-    private static final int RETURN_NAME = 23;
-    private static final int RETURN_LIST_BOOKS = 24;
-    private static final int RETURN_NO_BORROWED_BOOKS = 25;
-    private static final int RETURN_POST_TO_REISSUE_SUCCESS = 26;
+    public static final int RETURN_NAME = 23;
+    public static final int RETURN_LIST_BOOKS = 24;
+    public static final int RETURN_NO_BORROWED_BOOKS = 25;
+    public static final int RETURN_POST_TO_REISSUE_SUCCESS = 26;
     // 2) Error was obtained
     public static final int ERROR_NOT_LOGGED_IN = 52;
     public static final int ERROR_INCORRECT_PID_OR_PASSWORD = 53;
@@ -92,6 +96,18 @@ public class GoGoGadget implements Runnable {
     private void setErrorServerUnreachable() {
         // Call this method in the catch blocks of each web request
         resultCode = ERROR_SERVER_UNREACHABLE;
+    }
+
+//    private void setCookies(Map<String, String> cookies) {
+//        // Use this method to setCookies for all GoGoGadget objects
+//        // except the first
+//        // Since the cookies member for the very first successful
+//        // GoGoGadget object, has to be used for successive logins
+//        this.cookies = cookies;
+//    }
+
+    public Map<String, String> getCookies() {
+        return this.cookies;
     }
 
     GoGoGadget(MyCallback myCallback, Bundle bundleURLs, int action, Handler handler) {
@@ -337,6 +353,8 @@ public class GoGoGadget implements Runnable {
                         Element fineAmount = elList.get(i * 7 + 3);
                         book.setInp_accno(docOutDocs.select(fineAmount.cssSelector() + " + input").first());
                         book.setInp_media(docOutDocs.select(fineAmount.cssSelector() + " + input + input").first());
+                        String fineCSS = fineAmount.cssSelector();
+
                         book.setRenewCount(   elList.get(i * 7 + 4).text().trim());
                         book.setReservations( elList.get(i * 7 + 5).text().trim());
 
@@ -404,6 +422,7 @@ public class GoGoGadget implements Runnable {
         for(Book book : this.booksToReissue){
             // for each book, attach it's input tags to POST request
             if(book.isInpNull()){
+                String a = book.toString();
                 continue;
             }
 
@@ -411,8 +430,12 @@ public class GoGoGadget implements Runnable {
             Element inp_media = book.getInp_media();
             Element inp_chk = book.getInp_chk();
 
+            StringBuilder sb = new StringBuilder();
             try {
                 for(Element tag : new Element[]{inp_accno, inp_media, inp_chk}) {
+
+                    sb.append("name = ").append(tag.attr("name")).append("\n");
+                    sb.append("value = ").append(tag.attr("value")).append("\n\n");
 
                     // Send cookie data for all user input tags
                     connToReissue.data(tag.attr("name"), tag.attr("value"));
@@ -421,7 +444,10 @@ public class GoGoGadget implements Runnable {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                String a = sb.toString();
             }
+
+            String shit = "shit";
 
         }// Book loop
 

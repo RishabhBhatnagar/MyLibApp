@@ -2,8 +2,5 @@
     <string name="app_name">SFIT Library</string>
 
     <string name="counter_text">COUNTER</string>
-    <string name="about_app_data">This application helps you in showing you your due date, keep track the number of days left to return the books you have issued. You can also re-issue the books via the app itself</string>
-    <string name="login_logo">Logo of college / book will come here</string>
-    <string name="linkedin_imgview">linked in image view</string>
 
 </resources>

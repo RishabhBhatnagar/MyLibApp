@@ -71,8 +71,9 @@
                     android:autoLink="web"
                     android:id="@+id/img1"
                     android:clickable="true"
-                    android:contentDescription="@string/linkedin_imgview"
-                    android:focusable="true" />
+
+                    android:focusable="true"
+                    />
 
 
             </LinearLayout>
@@ -81,7 +82,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <TextView
                     android:textSize="20sp"
@@ -99,15 +101,15 @@
                     android:autoLink="web"
                     android:id="@+id/img2"
                     android:clickable="true"
-                    android:contentDescription="@string/linkedin_imgview"
+
                     android:focusable="true" />
 
 
-            </LinearLayout>
-            <LinearLayout
+            </LinearLayout><LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
             <TextView
                 android:textSize="20sp"
@@ -125,16 +127,16 @@
                 android:autoLink="web"
                 android:id="@+id/img3"
                 android:clickable="true"
-                android:contentDescription="@string/linkedin_imgview"
+
                 android:focusable="true"
                 />
 
 
-        </LinearLayout>
-            <LinearLayout
+        </LinearLayout><LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
             <TextView
                 android:textSize="20sp"
@@ -151,7 +153,6 @@
                 android:src="@drawable/links"
                 android:autoLink="web"
                 android:id="@+id/img4"
-                android:contentDescription="@string/linkedin_imgview"
                 android:clickable="true"
                 android:focusable="true"
                 />

@@ -1,6 +1,7 @@
 package org.sfitengg.library.mylibapp.nav_drawer_fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,8 +23,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.sfitengg.library.mylibapp.MainActivity;
-import org.sfitengg.library.mylibapp.R;
 import org.sfitengg.library.mylibapp.data.Book;
+import org.sfitengg.library.mylibapp.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,12 +35,13 @@ import java.util.concurrent.TimeUnit;
 
 public class IssuedBooksFragment extends Fragment {
 
-private static final String KEY_BOOKS = "books";
-    private final List<Book> bookList = new ArrayList<>();
+private static String KEY_BOOKS = "books";
+    List<Book> bookList = new ArrayList<>();
+    private RecyclerView recyclerView;
     private BooksAdapter mBooksAdapter;
     private static int numberOfBooksSelected = 0;
-    private Button reIssueButton;
-    private SwipeRefreshLayout swipeLayout;
+    Button reIssueButtton;
+    SwipeRefreshLayout swipeLayout;
 
 
     public static IssuedBooksFragment newInstance(List<Book> bookList){
@@ -60,8 +62,7 @@ private static final String KEY_BOOKS = "books";
         View view = inflater.inflate(R.layout.frag_issued_books, container, false);
         getActivity().setRequestedOrientation(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        RecyclerView recyclerView;
-        reIssueButton = view.findViewById(R.id.re_issue_button);
+        reIssueButtton = view.findViewById(R.id.re_issue_button);
         swipeLayout =  view.findViewById(R.id.swiperefresh);
         swipeLayout.setColorSchemeColors(Color.RED,Color.BLUE,Color.YELLOW);
 
@@ -76,7 +77,8 @@ private static final String KEY_BOOKS = "books";
             TextView textView = new TextView(getActivity());
             textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             textView.setTextAppearance(getActivity(), R.style.TextAppearance_AppCompat_Medium);
-            textView.setText("You have not issued \nany books from the library\n\n Please issue books \nto see them here! \n\n");
+            textView.setText("You have not issued \nany books from the library\n\n" +
+                    "Please issue books \nto see them here! \n\n");
 
             return textView;
         }
@@ -89,7 +91,7 @@ private static final String KEY_BOOKS = "books";
 
         // Setup the recyclerview
         recyclerView = view.findViewById(R.id.issued_books_recycler_view);
-        mBooksAdapter = new BooksAdapter(bookList);
+        mBooksAdapter = new BooksAdapter(bookList, view.getContext());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -111,7 +113,7 @@ private static final String KEY_BOOKS = "books";
 
 
 
-        reIssueButton.setOnClickListener(new View.OnClickListener() {
+        reIssueButtton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 List<Book> booksToReissue = mBooksAdapter.getBooks();
@@ -127,7 +129,7 @@ private static final String KEY_BOOKS = "books";
         return view;
     }
 
-    private void myUpdateOperation(){
+    void myUpdateOperation(){
 
         ((MainActivity)getActivity()).startGetOutDocsAndCreateBooks();
         swipeLayout.setRefreshing(false);
@@ -136,9 +138,10 @@ private static final String KEY_BOOKS = "books";
     // private since we only need it inside this class
     private class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.MyViewHolder> {
 
-        private final List<Book> bookList;
+        private final Context context;
+        private List<Book> bookList;
         private boolean anyBookSelected = false;
-        private final boolean[] selectedList;
+        private boolean selectedList[];
 
 
         private List<Book> getBooks(){
@@ -152,37 +155,33 @@ private static final String KEY_BOOKS = "books";
         }
 
 
-        class MyViewHolder extends RecyclerView.ViewHolder{
+        public class MyViewHolder extends RecyclerView.ViewHolder{
 
-            private final TextView tv_title;
-            private final TextView tv_duedate;
-            private final TextView tv_fine;
-            private final TextView tv_reissue_count;
-            private final TextView tv_acc;
-            private final RelativeLayout relativeLayout;
-            private final CheckBox reissueCheckBox;
+            public TextView tv_title,tv_duedate,tv_fine,tv_reissue_count,tv_acc;
+            public RelativeLayout relativeLayout;
+            public CheckBox reissueCheckBox;
             private boolean selected = false;
-            private final TextView tv_daysLeft;
+            public TextView tv_daysLeft;
 
 
 
 
-            private void Onclick(){
+            public void Onclick(){
 
                 if(selected){
                     numberOfBooksSelected -= 1;
                     reissueCheckBox.setChecked(false);
                     if(numberOfBooksSelected==0){
-                        reIssueButton.setEnabled(false);
-                        reIssueButton.setBackgroundResource(R.drawable.disable);
+                        reIssueButtton.setEnabled(false);
+                        reIssueButtton.setBackgroundResource(R.drawable.disable);
 
                     }
                 }
                 else{
                     numberOfBooksSelected += 1;
                     reissueCheckBox.setChecked(true);
-                    reIssueButton.setEnabled(true);
-                    reIssueButton.setBackgroundResource(R.drawable.shape);
+                    reIssueButtton.setEnabled(true);
+                    reIssueButtton.setBackgroundResource(R.drawable.shape);
 
                 }
                 if(numberOfBooksSelected<1){
@@ -193,7 +192,7 @@ private static final String KEY_BOOKS = "books";
             }
 
 
-            MyViewHolder(final View view) {
+            public MyViewHolder(final View view) {
                 super(view);
                 tv_daysLeft=view.findViewById(R.id.days_left);
                 tv_title = view.findViewById(R.id.name);
@@ -207,8 +206,8 @@ private static final String KEY_BOOKS = "books";
 
 
 
-                reIssueButton.setEnabled(false);
-                reIssueButton.setBackgroundResource(R.drawable.disable);
+                reIssueButtton.setEnabled(false);
+                reIssueButtton.setBackgroundResource(R.drawable.disable);
 
                 //region onclicklistener reissue
                 reissueCheckBox.setOnClickListener(new View.OnClickListener() {
@@ -257,8 +256,9 @@ private static final String KEY_BOOKS = "books";
 
         }
 
-        BooksAdapter(List<Book> books){
+        public BooksAdapter(List<Book> books, Context context){
             bookList = books;
+            this.context = context;
             selectedList = new boolean[books.size()];
             for(int i = 0; i<selectedList.length; i++){
                 selectedList[i] = false;
@@ -277,8 +277,7 @@ private static final String KEY_BOOKS = "books";
 
        int DaysLeft=0;
         @SuppressLint("SimpleDateFormat")// added supress lint to take care of "US date format" which is mm/dd/yyyy
-
-        String daysleft(int position) {
+        public String daysleft(int position) {
             String daysLeft="";
             Book currentBook = bookList.get(position);
             SimpleDateFormat myFormat = new SimpleDateFormat("dd/MM/yyyy");
