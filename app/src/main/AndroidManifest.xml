@@ -25,6 +25,20 @@
 
         </activity>
         <activity android:name=".nav_drawer_fragments.WebViewActivity" />
+
+        <receiver android:name=".LibraryWidget"
+            android:enabled="true"
+            android:exported="true"
+            android:label="Library Widget">
+            <intent-filter>
+                <action
+                    android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider_info"/>
+        </receiver>
+
     </application>
 
 </manifest>
