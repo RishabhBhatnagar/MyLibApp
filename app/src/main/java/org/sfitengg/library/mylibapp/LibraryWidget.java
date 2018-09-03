@@ -68,6 +68,7 @@ public class LibraryWidget extends AppWidgetProvider implements MyCallback{
     private static final DataHolder dataHolder = DataHolder.getDataHolder();
     private static final Handler handler = new Handler();
     private boolean updateRequired = true;
+    private Context context;
 
     @Override
     public void postToOutDocsSuccess() {
@@ -180,12 +181,12 @@ public class LibraryWidget extends AppWidgetProvider implements MyCallback{
 
     @Override
     public boolean isConnectedToInternet() {
-        //ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        //NetworkInfo activeNetwork = Objects.requireNonNull(cm).getActiveNetworkInfo();
-        //return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        return true;
+        NetworkInfo activeNetwork = Objects.requireNonNull(cm).getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
     }
 
 
@@ -197,6 +198,7 @@ public class LibraryWidget extends AppWidgetProvider implements MyCallback{
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        this.context = context;
         if(updateRequired) {
 
 
