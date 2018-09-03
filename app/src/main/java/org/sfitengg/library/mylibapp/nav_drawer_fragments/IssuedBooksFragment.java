@@ -66,6 +66,12 @@ private static final String KEY_BOOKS = "books";
         swipeLayout.setColorSchemeColors(Color.RED,Color.BLUE,Color.YELLOW);
 
 
+        MainActivity mainActivity = ((MainActivity) getActivity());
+        if(mainActivity.isConnectedToInternet() && !mainActivity.LOGIN_IN_THIS_RUN){
+            myUpdateOperation();
+            mainActivity.LOGIN_IN_THIS_RUN = true;
+        }
+
         Bundle args = getArguments();
 
         List<Parcelable> parcelBooks = Objects.requireNonNull(args).getParcelableArrayList(KEY_BOOKS);

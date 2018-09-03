@@ -24,7 +24,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,7 +44,6 @@ import org.sfitengg.library.mylibapp.nav_drawer_fragments.LoggerInFragment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_INCORRECT_PID_OR_PASSWORD;
@@ -62,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     private static final String KEY_PWD = "pwd";
     protected static final String BOOKS_STRING_TAG = "bst";
     private static final String NO_BOOKS_BORROWED = "none";
+    public boolean LOGIN_IN_THIS_RUN = false;
     protected static String attributeSeperator = "======";
     private static String bookSeperator = "#";
     private DrawerLayout mDrawerLayout;
@@ -124,8 +123,6 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         setContentView(R.layout.activity_main);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-
 
         //region Create a loadingDialog instance for the activity to show during network operations
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -250,13 +247,14 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
             // If no previous logged in user
             // Start login fragment
 
+            LOGIN_IN_THIS_RUN = true;
+
             // Find the menu item for Issued Books
             MenuItem menuItemIssuedBooks =
                     nvDrawer.getMenu().findItem(R.id.frag_issued_books);
 
             // Highlight it in the drawer
             menuItemIssuedBooks.setChecked(true);
-
 
             // Insert the fragment by replacing any existing fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -516,6 +514,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         // Start a indefinite loading dialog
         setLoadingDialog(true);
 
+        Toast.makeText(this, "getting docs", Toast.LENGTH_SHORT).show();
         GoGoGadget gGetDocs = new GoGoGadget(this,
                 dataHolder.getBundleURLs(),
                 GoGoGadget.GET_OUT_DOCS,
@@ -527,10 +526,12 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         // Sauce for dialog creation, and this setter method:
         // https://stackoverflow.com/a/14853439/9485900
 
-        if (show) {
-            loadingDialog.show();
-        } else {
-            loadingDialog.dismiss();
+        if(loadingDialog != null) {
+            if (show) {
+                loadingDialog.show();
+            } else {
+                loadingDialog.dismiss();
+            }
         }
     }
 

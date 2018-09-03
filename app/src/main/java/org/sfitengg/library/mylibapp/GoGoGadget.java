@@ -169,7 +169,7 @@ public class GoGoGadget implements Runnable {
                 //region Get Outstanding Documents Page
                 try {
 
-                    // Get fresh cookies by loggin in again
+                    // Get fresh cookies by login in again
                     methodLoginAndGetCookies();
                     // Actually get the documents and return the books
                     methodGetOutDocs();
