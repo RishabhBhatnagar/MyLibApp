@@ -17,9 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by vinay on 14-06-2018.
- */
 public class GoGoGadget implements Runnable {
     // Thread class to do Network requests
 

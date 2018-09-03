@@ -278,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         sendBroadcast(intent);
     }
 
-    private String bookToString(Book book){
+    protected static String bookToString(Book book){
         String result =
                 book.getAcc_no() + attributeSeperator +
                 book.getDueDate() + attributeSeperator +
