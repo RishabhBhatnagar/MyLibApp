@@ -268,14 +268,6 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         }
     }
 
-    protected void updateWidget(){
-        Intent intent = new Intent(this, LibraryWidget.class);
-        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), LibraryWidget.class));
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-        sendBroadcast(intent);
-    }
-
     protected static String bookToString(Book book){
         String result =
                 book.getAcc_no() + attributeSeperator +
@@ -404,9 +396,6 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
                                     editor.clear();
                                     editor.apply();
 
-                                    updateWidget();
-
-
                                     if(nameHeader != null){
                                         nameHeader.setText("Guest");
                                     }
@@ -514,7 +503,7 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
         // Start a indefinite loading dialog
         setLoadingDialog(true);
 
-        Toast.makeText(this, "getting docs", Toast.LENGTH_SHORT).show();
+
         GoGoGadget gGetDocs = new GoGoGadget(this,
                 dataHolder.getBundleURLs(),
                 GoGoGadget.GET_OUT_DOCS,
@@ -538,8 +527,6 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     @Override
     public void sendBooksToCaller(List<Book> books) {
         // This method will be executed after onCreate finishes
-
-        updateWidget();
 
         bookList = books;
         setLoadingDialog(false);
