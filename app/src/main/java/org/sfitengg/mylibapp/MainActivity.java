@@ -1,9 +1,7 @@
-package org.sfitengg.library.mylibapp;
+package org.sfitengg.mylibapp;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,24 +31,24 @@ import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
-import org.sfitengg.library.mylibapp.data.Book;
-import org.sfitengg.library.mylibapp.data.DataHolder;
-import org.sfitengg.library.mylibapp.nav_drawer_fragments.AboutFragment;
-import org.sfitengg.library.mylibapp.nav_drawer_fragments.FaqFragment;
-import org.sfitengg.library.mylibapp.nav_drawer_fragments.IssuedBooksFragment;
-import org.sfitengg.library.mylibapp.nav_drawer_fragments.LibExtrasFragment;
-import org.sfitengg.library.mylibapp.nav_drawer_fragments.LoggerInFragment;
+import org.sfitengg.mylibapp.data.Book;
+import org.sfitengg.mylibapp.data.DataHolder;
+import org.sfitengg.mylibapp.nav_drawer_fragments.AboutFragment;
+import org.sfitengg.mylibapp.nav_drawer_fragments.FaqFragment;
+import org.sfitengg.mylibapp.nav_drawer_fragments.IssuedBooksFragment;
+import org.sfitengg.mylibapp.nav_drawer_fragments.LibExtrasFragment;
+import org.sfitengg.mylibapp.nav_drawer_fragments.LoggerInFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_INCORRECT_PID_OR_PASSWORD;
-import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_NOT_LOGGED_IN;
-import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_NO_INTERNET;
-import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_POST_TO_REISSUE_FAILED;
-import static org.sfitengg.library.mylibapp.GoGoGadget.ERROR_SERVER_UNREACHABLE;
+import static org.sfitengg.mylibapp.GoGoGadget.ERROR_INCORRECT_PID_OR_PASSWORD;
+import static org.sfitengg.mylibapp.GoGoGadget.ERROR_NOT_LOGGED_IN;
+import static org.sfitengg.mylibapp.GoGoGadget.ERROR_NO_INTERNET;
+import static org.sfitengg.mylibapp.GoGoGadget.ERROR_POST_TO_REISSUE_FAILED;
+import static org.sfitengg.mylibapp.GoGoGadget.ERROR_SERVER_UNREACHABLE;
 
 public class MainActivity extends AppCompatActivity implements MyCallback{
 
@@ -61,8 +59,8 @@ public class MainActivity extends AppCompatActivity implements MyCallback{
     protected static final String BOOKS_STRING_TAG = "bst";
     private static final String NO_BOOKS_BORROWED = "none";
     public boolean LOGIN_IN_THIS_RUN = false;
-    protected static String attributeSeperator = "======";
-    private static String bookSeperator = "#";
+    protected static final String attributeSeperator = "======";
+    private static final String bookSeperator = "#";
     private DrawerLayout mDrawerLayout;
     private NavigationView nvDrawer;
     private TextView nameHeader;

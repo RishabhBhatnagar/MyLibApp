@@ -1,4 +1,4 @@
-package org.sfitengg.library.mylibapp.nav_drawer_fragments;
+package org.sfitengg.mylibapp.nav_drawer_fragments;
 
 import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
@@ -21,9 +21,9 @@ import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.sfitengg.library.mylibapp.MainActivity;
-import org.sfitengg.library.mylibapp.data.Book;
-import org.sfitengg.library.mylibapp.R;
+import org.sfitengg.mylibapp.MainActivity;
+import org.sfitengg.mylibapp.data.Book;
+import org.sfitengg.mylibapp.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

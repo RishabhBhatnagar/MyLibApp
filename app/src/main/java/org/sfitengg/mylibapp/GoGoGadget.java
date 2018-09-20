@@ -1,11 +1,11 @@
-package org.sfitengg.library.mylibapp;
+package org.sfitengg.mylibapp;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 
 import org.jsoup.nodes.Element;
-import org.sfitengg.library.mylibapp.data.Book;
+import org.sfitengg.mylibapp.data.Book;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;

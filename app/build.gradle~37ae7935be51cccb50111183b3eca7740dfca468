@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "org.sfitengg.library.mylibapp"
+        applicationId "org.sfitengg.mylibapp"
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1

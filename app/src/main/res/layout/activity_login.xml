@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.sfitengg.library.mylibapp.nav_drawer_fragments.LoggerInFragment"
+    tools:context="org.sfitengg.mylibapp.nav_drawer_fragments.LoggerInFragment"
     android:orientation="vertical"
 
 
@@ -27,7 +27,7 @@
 
                 android:layout_marginBottom="24dp"
                 android:layout_gravity="center_horizontal"
-                android:contentDescription="TODO" />
+                android:contentDescription="Logo of application" />
 
 
             <!--  PID Label -->

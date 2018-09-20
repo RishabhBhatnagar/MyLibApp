@@ -1,4 +1,4 @@
-package org.sfitengg.library.mylibapp.nav_drawer_fragments;
+package org.sfitengg.mylibapp.nav_drawer_fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,8 +15,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.sfitengg.library.mylibapp.R;
-import org.sfitengg.library.mylibapp.data.UrlAdapter;
+import org.sfitengg.mylibapp.R;
+import org.sfitengg.mylibapp.data.UrlAdapter;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package org.sfitengg.library.mylibapp.nav_drawer_fragments;
+package org.sfitengg.mylibapp.nav_drawer_fragments;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -14,8 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.sfitengg.library.mylibapp.MainActivity;
-import org.sfitengg.library.mylibapp.R;
+import org.sfitengg.mylibapp.MainActivity;
+import org.sfitengg.mylibapp.R;
 
 import java.util.Objects;
 

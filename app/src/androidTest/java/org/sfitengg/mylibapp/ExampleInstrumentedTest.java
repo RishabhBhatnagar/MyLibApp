@@ -1,4 +1,4 @@
-package org.sfitengg.library.mylibapp;
+package org.sfitengg.mylibapp;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.vinay.mylibapp", appContext.getPackageName());
+        assertEquals("org.sfitengg.mylibapp", appContext.getPackageName());
     }
 }

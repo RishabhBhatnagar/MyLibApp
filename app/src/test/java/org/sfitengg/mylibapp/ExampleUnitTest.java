@@ -1,4 +1,4 @@
-package org.sfitengg.library.mylibapp;
+package org.sfitengg.mylibapp;
 
 import org.junit.Test;
 

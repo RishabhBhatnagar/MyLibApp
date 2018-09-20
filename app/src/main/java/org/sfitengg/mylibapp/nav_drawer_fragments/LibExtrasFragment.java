@@ -1,4 +1,4 @@
-package org.sfitengg.library.mylibapp.nav_drawer_fragments;
+package org.sfitengg.mylibapp.nav_drawer_fragments;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -11,12 +11,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 
-import org.sfitengg.library.mylibapp.R;
-import org.sfitengg.library.mylibapp.data.Url;
-import org.sfitengg.library.mylibapp.data.UrlAdapter;
+import org.sfitengg.mylibapp.R;
+import org.sfitengg.mylibapp.data.Url;
+import org.sfitengg.mylibapp.data.UrlAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

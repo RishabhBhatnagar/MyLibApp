@@ -6,7 +6,7 @@
     android:background="@color/main_activity_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.sfitengg.library.mylibapp.MainActivity">
+    tools:context="org.sfitengg.mylibapp.MainActivity">
 
     <!--Contents of the screen-->
     <LinearLayout

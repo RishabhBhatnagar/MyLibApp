@@ -1,6 +1,6 @@
-package org.sfitengg.library.mylibapp;
+package org.sfitengg.mylibapp;
 
-import org.sfitengg.library.mylibapp.data.Book;
+import org.sfitengg.mylibapp.data.Book;
 
 import java.util.List;
 

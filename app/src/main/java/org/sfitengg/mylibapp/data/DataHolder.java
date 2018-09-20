@@ -1,8 +1,8 @@
-package org.sfitengg.library.mylibapp.data;
+package org.sfitengg.mylibapp.data;
 
 import android.os.Bundle;
 
-import org.sfitengg.library.mylibapp.GoGoGadget;
+import org.sfitengg.mylibapp.GoGoGadget;
 
 
 public class DataHolder {

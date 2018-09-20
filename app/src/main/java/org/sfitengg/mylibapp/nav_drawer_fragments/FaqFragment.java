@@ -1,4 +1,4 @@
-package org.sfitengg.library.mylibapp.nav_drawer_fragments;
+package org.sfitengg.mylibapp.nav_drawer_fragments;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.sfitengg.library.mylibapp.R;
+import org.sfitengg.mylibapp.R;
 
 import java.util.ArrayList;
 import java.util.List;

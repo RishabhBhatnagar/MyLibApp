@@ -1,4 +1,4 @@
-package org.sfitengg.library.mylibapp.data;
+package org.sfitengg.mylibapp.data;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.sfitengg.library.mylibapp.R;
-import org.sfitengg.library.mylibapp.nav_drawer_fragments.WebViewActivity;
+import org.sfitengg.mylibapp.R;
+import org.sfitengg.mylibapp.nav_drawer_fragments.WebViewActivity;
 
 import java.util.ArrayList;
 import java.util.List;

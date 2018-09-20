@@ -1,4 +1,4 @@
-package org.sfitengg.library.mylibapp.data;
+package org.sfitengg.mylibapp.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
