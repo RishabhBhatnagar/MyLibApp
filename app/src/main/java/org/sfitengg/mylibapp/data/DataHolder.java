@@ -12,17 +12,19 @@ public class DataHolder {
     private static DataHolder dataHolder;
 
     // Main Page where login Form is present
-    private static String urlMainPage = "http://115.248.171.105:82/webopac/";
+    // previous page was here:
+    // private static String urlMainPage = "http://115.248.171.105:82/webopac/";
+    private static String urlMainPage = "http://114.143.70.90:82/webopac/";
 
     // Complete url to the form action attribute
     // where we send a POST
     private static String urlLoginFormAction = urlMainPage + "opac.asp?m_firsttime=Y&m_memchk_flg=T";
 
     // Url of docs page
-    private static String urlOutDocsPage = "http://115.248.171.105:82/webopac/l_renew.asp";
+    private static String urlOutDocsPage = urlMainPage + "l_renew.asp";
 
     // Url where reissue form is sent
-    private static String urlOutFormAction = "http://115.248.171.105:82/webopac/l_renew1.asp";
+    private static String urlOutFormAction = urlMainPage + "l_renew1.asp";
 
     private final Bundle bundleURLs;
 
